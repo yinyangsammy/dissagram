@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Delete Diss 💀 Dissagram{% endblock %}
+
+{% block extra_css %}
+<style>
+.delete-page {
+    padding: 4rem 0 6rem;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+}
+
+.delete-card {
+    background: #0f0f0f;
+    border: 2px solid #3b0e0e;
+    border-radius: 16px;
+    overflow: hidden;
+    max-width: 520px;
+    margin: 0 auto;
+    box-shadow: 0 20px 60px rgba(192,57,43,0.12);
+}
+
+.delete-card-header {
+    background: #0d0d0d;
+    border-bottom: 1px solid #1e1e1e;
+    padding: 1.5rem 1.8rem 1.2rem;
+    text-align: center;
+}
+
+.delete-skull {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+}
+
+.delete-title {
+    font-family: "Bangers", cursive;
+    font-size: 2.2rem;
+    letter-spacing: 3px;
+    color: #c0392b;
+    line-height: 1;
+}
+
+.delete-card-body {
+    padding: 1.5rem 1.8rem;
+}
+
+/* What's being deleted */
+.diss-summary {
+    background: #0d0d0d;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.diss-summary-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    background: #111;
+    border: 1px solid #1e1e1e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.diss-summary-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+
+.diss-summary-info {
+    flex: 1;
+}
+
+.diss-summary-name {
+    font-family: "Bangers", cursive;
+    font-size: 1.1rem;
+    letter-spacing: 1.5px;
+    color: #f0f0f0;
+    line-height: 1.2;
+    margin-bottom: 3px;
+}
+
+.diss-summary-meta {
+    font-size: 0.75rem;
+    color: #666;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Warning text */
+.delete-warning {
+    font-size: 0.88rem;
+    color: #888;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.delete-warning strong {
+    color: #e88080;
+}
+
+/* Buttons */
+.delete-actions {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.btn-confirm-delete {
+    font-family: "Bangers", cursive;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    padding: 12px 28px;
+    border-radius: 9px;
+    background: #c0392b;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.15s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-confirm-delete:hover {
+    background: #e74c3c;
+    transform: translateY(-2px);
+}
+
+.btn-cancel-delete {
+    font-family: "Bangers", cursive;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    padding: 12px 28px;
+    border-radius: 9px;
+    background: transparent;
+    color: #888;
+    border: 1.5px solid #2a2a2a;
+    cursor: pointer;
+    width: 100%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-cancel-delete:hover {
+    border-color: #d4a017;
+    color: #d4a017;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container delete-page">
+<div class="col-12">
+
+    <div class="delete-card">
+
+        <div class="delete-card-header">
+            <span class="delete-skull">💀</span>
+            <div class="delete-title">Delete This Diss?</div>
+        </div>
+
+        <div class="delete-card-body">
+
+            <!-- What's being deleted -->
+            {% if diss.target_archetype %}
+            <div class="diss-summary">
+                <div class="diss-summary-avatar">
+                    {% if diss.target_archetype.avatar %}
+                        <img src="{{ diss.target_archetype.avatar.url }}"
+                             alt="{{ diss.target_archetype.name }}">
+                    {% else %}
+                        {{ diss.target_archetype.emoji }}
+                    {% endif %}
+                </div>
+                <div class="diss-summary-info">
+                    <div class="diss-summary-name">
+                        {{ diss.target_archetype.name|upper }}
+                    </div>
+                    <div class="diss-summary-meta">
+                        {% if diss.roast_style %}
+                        <span>{{ diss.roast_style.emoji }} {{ diss.roast_style.name }}</span>
+                        {% endif %}
+                        <span>{{ diss.selected_lines.count }} burn{{ diss.selected_lines.count|pluralize }}</span>
+                        <span>{{ diss.created_on|date:"d M Y" }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="delete-warning">
+                This burn will be gone <strong>forever</strong>.<br>
+                There is no undo. No recovery. No riposte.
+            </div>
+
+            <div class="delete-actions">
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-confirm-delete">
+                        <i class="fas fa-trash"></i> Yes, Delete It
+                    </button>
+                </form>
+                <a href="{% url 'disses:my_disses' %}" class="btn-cancel-delete">
+                    <i class="fas fa-arrow-left"></i> Cancel — Keep the Burn
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</div>
+{% endblock %}

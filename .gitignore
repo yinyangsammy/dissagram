@@ -1,0 +1,85 @@
+# -----------------------
+# Keys & Secrets
+# -----------------------
+.env
+env.py
+
+# -----------------------
+# Local database
+# -----------------------
+db.sqlite3
+db.sqlite3-journal
+
+# -----------------------
+# Python cache
+# -----------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Python cache everywhere
+**/__pycache__/
+
+# PyCharm / VS Code extras
+.idea/
+
+# Environment variables alt naming
+.env.*
+
+# -----------------------
+# Virtual Environment
+# -----------------------
+.venv/
+venv/
+env/
+
+# -----------------------
+# VS Code
+# -----------------------
+.vscode/
+
+# -----------------------
+# Media / uploads
+# -----------------------
+media/
+
+# -----------------------
+# Static collectstatic
+# -----------------------
+/media/
+
+# -----------------------
+# Logs
+# -----------------------
+*.log
+
+# -----------------------
+# OS junk
+# -----------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------
+# Pytest / coverage (future safe)
+# -----------------------
+.coverage
+htmlcov/
+
+# -----------------------
+# Node (future safe if you add JS build)
+# -----------------------
+node_modules/
+
+# -----------------------
+# Migrations cache
+# -----------------------
+*.sqlite3
+
+# Django collectstatic
+staticfiles/
+
+
+# VS Code history (if you use the "Local History" extension)
+.history/
+

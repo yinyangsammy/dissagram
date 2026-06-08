@@ -1,0 +1,715 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Orders — Dissagram{% endblock %}
+
+{% block content %}
+
+<style>
+/* ═══════════════════════════════════════
+   ORDER HISTORY PAGE
+   Dissagram dark aesthetic
+═══════════════════════════════════════ */
+
+/* ── TOAST ── */
+.diss-toast-wrap {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.diss-toast {
+    background: #111;
+    border: 1.5px solid #d4a017;
+    color: #f0f0f0;
+    font-family: 'Bangers', cursive;
+    font-size: 1.05rem;
+    letter-spacing: 1.5px;
+    padding: 14px 22px;
+    border-radius: 10px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: toastIn 0.35s cubic-bezier(.4,0,.2,1) forwards;
+    max-width: 340px;
+}
+.diss-toast.toast-success { border-color: #27ae60; }
+.diss-toast.toast-info    { border-color: #2980b9; }
+.diss-toast.toast-error   { border-color: #c0392b; }
+.diss-toast.toast-out {
+    animation: toastOut 0.3s ease forwards;
+}
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes toastOut {
+    to { opacity: 0; transform: translateY(20px); }
+}
+
+/* ── PAGE LAYOUT ── */
+.history-page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.5rem 1.2rem 5rem;
+}
+
+/* ── HEADER ── */
+.history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.history-header h1 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(2rem, 6vw, 3rem);
+    color: #e8621a;
+    letter-spacing: 3px;
+    margin: 0;
+    line-height: 1;
+}
+.history-back-btn {
+    font-family: 'Bangers', cursive;
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
+    color: #888;
+    border: 1.5px solid #333;
+    padding: 8px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+}
+.history-back-btn:hover {
+    color: #d4a017;
+    border-color: #d4a017;
+    text-decoration: none;
+}
+
+/* ── STATS BAR ── */
+.history-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+/* ── STAT PILL COLOUR VARIANTS ── */
+.stat-pill.stat-total {
+    border-color: #2980b9;
+}
+.stat-pill.stat-total .stat-val { color: #2980b9; }
+
+.stat-pill.stat-owned {
+    border-color: #27ae60;
+}
+.stat-pill.stat-owned .stat-val { color: #27ae60; }
+
+.stat-pill.stat-spent {
+    border-color: #e8621a;
+}
+.stat-pill.stat-spent .stat-val { color: #e8621a; }
+
+.stat-pill.stat-gifted {
+    border-color: #9b59b6;
+}
+.stat-pill.stat-gifted .stat-val { color: #9b59b6; }
+
+.stat-pill {
+    background: #0d0d0d;
+    border: 1.5px solid #1e1e1e;  /* base border always present */
+    border-radius: 10px;
+    padding: 0.8rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 110px;
+}
+/* Colour variants just override the border-color */
+.stat-pill.stat-total  { border-color: #2980b9; }
+.stat-pill.stat-owned  { border-color: #27ae60; }
+.stat-pill.stat-spent  { border-color: #e8621a; }
+.stat-pill.stat-gifted { border-color: #9b59b6; }
+
+.stat-pill.stat-total  .stat-val { color: #2980b9; }
+.stat-pill.stat-owned  .stat-val { color: #27ae60; }
+.stat-pill.stat-spent  .stat-val { color: #e8621a; }
+.stat-pill.stat-gifted .stat-val { color: #9b59b6; }
+
+/* ── BUTTON COLOUR VARIANTS ── */
+.order-btn.btn-view {
+    border-color: #27ae60;
+    color: #27ae60;
+}
+.order-btn.btn-view:hover {
+    border-color: #2ecc71;
+    color: #2ecc71;
+}
+
+.order-btn.btn-cancel {
+    border-color: #d4a017;
+    color: #d4a017;
+}
+.order-btn.btn-cancel:hover {
+    border-color: #f0b429;
+    color: #f0b429;
+}
+
+.order-btn.btn-uncancel {
+    border-color: #2980b9;
+    color: #2980b9;
+}
+.order-btn.btn-uncancel:hover {
+    border-color: #3498db;
+    color: #3498db;
+}
+
+.order-btn.btn-delete {
+    border-color: #c0392b;
+    color: #c0392b;
+}
+.order-btn.btn-delete:hover {
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+/* ── EMPTY STATE ── */
+.history-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #0d0d0d;
+    border: 1.5px dashed #2a2a2a;
+    border-radius: 16px;
+}
+.history-empty .empty-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+.history-empty h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 1.6rem;
+    color: #444;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+.history-empty p {
+    color: #555;
+    font-size: 0.88rem;
+    margin-bottom: 1.5rem;
+}
+.btn-get-pack {
+    display: inline-block;
+    background: linear-gradient(135deg, #e8621a, #c0392b);
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    padding: 12px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+.btn-get-pack:hover {
+    opacity: 0.88;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* ── ORDER CARDS ── */
+.order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.order-card {
+    background: #0d0d0d;
+    border: 1.5px solid #1e1e1e;
+    border-radius: 14px;
+    padding: 1.4rem 1.6rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem 1.6rem;
+    align-items: start;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    animation: cardIn 0.35s ease both;
+}
+.order-card:hover {
+    border-color: #2a2a2a;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.order-card.status-complete {
+    border-left: 3px solid #27ae60;
+}
+.order-card.status-pending {
+    border-left: 3px solid #d4a017;
+}
+.order-card.status-failed {
+    border-left: 3px solid #c0392b;
+}
+.order-card.status-refunded {
+    border-left: 3px solid #2980b9;
+}
+
+@keyframes cardIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* staggered animation */
+.order-card:nth-child(1) { animation-delay: 0.05s; }
+.order-card:nth-child(2) { animation-delay: 0.10s; }
+.order-card:nth-child(3) { animation-delay: 0.15s; }
+.order-card:nth-child(4) { animation-delay: 0.20s; }
+.order-card:nth-child(5) { animation-delay: 0.25s; }
+
+/* ── ORDER CARD LEFT ── */
+.order-card-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+.order-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.order-pkg-name {
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    color: #f0f0f0;
+    letter-spacing: 1.5px;
+}
+.order-status-badge {
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+}
+.badge-complete  { background: #0e2e0e; color: #27ae60; }
+.badge-pending   { background: #2e2300; color: #d4a017; }
+.badge-failed    { background: #2e0e0e; color: #c0392b; }
+.badge-refunded  { background: #0e1a2e; color: #2980b9; }
+
+.order-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.order-meta-item {
+    font-size: 0.78rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.order-meta-item .mi {
+    color: #333;
+}
+
+/* ── UNLOCK PILLS ── */
+.unlock-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+.unlock-pill {
+    font-size: 0.72rem;
+    color: #888;
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.unlock-pill.premium {
+    border-color: #3a1a5e;
+    color: #9b59b6;
+}
+
+/* ── GIFTED BADGE ── */
+.gifted-tag {
+    font-size: 0.72rem;
+    background: #1a0a2e;
+    color: #9b59b6;
+    border: 1px solid #3a1a5e;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ── ORDER CARD RIGHT ── */
+.order-card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+.order-amount {
+    font-family: 'Bangers', cursive;
+    font-size: 1.6rem;
+    color: #e8621a;
+    letter-spacing: 1px;
+    line-height: 1;
+}
+.order-actions {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+.order-btn {
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 5px 14px;
+    border-radius: 6px;
+    border: 1.5px solid #333;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    text-decoration: none;
+    font-family: 'Bangers', cursive;
+}
+.order-btn:hover {
+    border-color: #d4a017;
+    color: #d4a017;
+    text-decoration: none;
+}
+.order-btn.danger:hover {
+    border-color: #c0392b;
+    color: #c0392b;
+}
+
+/* ── CONFIRM MODAL ── */
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+.modal-backdrop.open {
+    display: flex;
+}
+.modal-box {
+    background: #111;
+    border: 1.5px solid #c0392b;
+    border-radius: 14px;
+    padding: 2rem 2.2rem;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    animation: toastIn 0.25s ease;
+}
+.modal-box h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 1.6rem;
+    color: #f0f0f0;
+    letter-spacing: 2px;
+    margin-bottom: 0.6rem;
+}
+.modal-box p {
+    color: #888;
+    font-size: 0.88rem;
+    margin-bottom: 1.6rem;
+    line-height: 1.5;
+}
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.modal-confirm {
+    background: #c0392b;
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    letter-spacing: 1.5px;
+    padding: 9px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.modal-confirm:hover { opacity: 0.85; }
+.modal-cancel-btn {
+    background: transparent;
+    color: #888;
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    letter-spacing: 1.5px;
+    padding: 9px 24px;
+    border-radius: 8px;
+    border: 1.5px solid #333;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+.modal-cancel-btn:hover {
+    border-color: #888;
+    color: #f0f0f0;
+}
+</style>
+
+<!-- TOASTS -->
+{% if messages %}
+<div class="diss-toast-wrap" id="toast-wrap">
+    {% for message in messages %}
+    <div class="diss-toast toast-{{ message.tags }}" role="alert">
+        {% if message.tags == 'success' %}✅
+        {% elif message.tags == 'error' %}❌
+        {% else %}ℹ️{% endif %}
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="history-page">
+
+    <!-- HEADER -->
+    <div class="history-header">
+        <h1>⚡ MY ORDERS</h1>
+        <a href="{% url 'orders:packages' %}" class="history-back-btn">
+            🔥 GET MORE PACKS
+        </a>
+    </div>
+
+    <!-- STATS BAR -->
+    {% if past_orders %}
+    <div class="history-stats">
+        <div class="stat-pill stat-total">
+    <span class="stat-val">{{ total_orders }}</span>
+    <span class="stat-label">Total Orders</span>
+    </div>
+    <div class="stat-pill stat-owned">
+        <span class="stat-val">{{ complete_orders }}</span>
+        <span class="stat-label">Packs Owned</span>
+    </div>
+    <div class="stat-pill stat-spent">
+        <span class="stat-val">£{{ total_spent }}</span>
+        <span class="stat-label">Total Spent</span>
+    </div>
+    {% if gifted_count %}
+    <div class="stat-pill stat-gifted">
+        <span class="stat-val">{{ gifted_count }}</span>
+        <span class="stat-label">Packs Gifted</span>
+    </div>
+    {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- ORDER LIST -->
+    {% if past_orders %}
+    <div class="order-list">
+        {% for order in past_orders %}
+        <div class="order-card status-{{ order.status }}">
+
+            <!-- LEFT -->
+            <div class="order-card-left">
+                <div class="order-title-row">
+                    <span class="order-pkg-name">
+                        {{ order.package.name|default:"Pack" }}
+                    </span>
+                    <span class="order-status-badge badge-{{ order.status }}">
+                        {{ order.get_status_display }}
+                    </span>
+                    {% if order.gifted_to %}
+                    <span class="gifted-tag">
+                        🎁 Gifted to {{ order.gifted_to.username }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div class="order-meta-row">
+                    <span class="order-meta-item">
+                        <span class="mi">📅</span>
+                        {{ order.created_on|date:"d M Y" }}
+                    </span>
+                    <span class="order-meta-item">
+                        <span class="mi">#</span>
+                        Order {{ order.pk }}
+                    </span>
+                    {% if order.stripe_payment_id %}
+                    <span class="order-meta-item">
+                        <span class="mi">💳</span>
+                        {{ order.stripe_payment_id|truncatechars:18 }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- What the pack unlocked -->
+                {% if order.package and order.status == 'complete' %}
+                <div class="unlock-pills">
+                    <span class="unlock-pill">
+                        🎴 {{ order.package.archetype_count }} Archetypes
+                    </span>
+                    <span class="unlock-pill">
+                        🎭 {{ order.package.roast_style_count }} Roast Styles
+                    </span>
+                    {% if order.package.premium_category_count %}
+                    <span class="unlock-pill premium">
+                        🧠 {{ order.package.premium_category_count }} Premium
+                        Categor{{ order.package.premium_category_count|pluralize:"y,ies" }}
+                    </span>
+                    {% endif %}
+                    {% if order.package.includes_leaderboard %}
+                    <span class="unlock-pill">
+                        🏆 Leaderboard
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {% if order.gift_message %}
+                <div class="order-meta-item" style="margin-top:4px; font-style:italic; color:#666;">
+                    "{{ order.gift_message }}"
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- RIGHT -->
+            <div class="order-card-right">
+                <div class="order-amount">£{{ order.amount_paid }}</div>
+                <div class="order-actions">
+    <a href="{% url 'orders:order_detail' order.pk %}"
+   class="order-btn btn-view">View</a>
+   {% if order.status == 'pending' or order.status == 'failed' %}
+<form method="POST"
+      action="{% url 'orders:toggle_cancel' order.pk %}"
+      style="margin:0;">
+    {% csrf_token %}
+    {% if order.status == 'pending' %}
+    <button type="submit" class="order-btn btn-cancel">
+        ✕ Cancel
+    </button>
+    {% else %}
+    <button type="submit" class="order-btn btn-uncancel">
+        ↩ Uncancel
+    </button>
+    {% endif %}
+</form>
+{% endif %}
+        {% if order.status == 'failed' or order.status == 'pending' %}
+    <button class="order-btn btn-delete"
+        onclick="openDeleteModal({{ order.pk }})">
+    🗑 Delete
+</button>
+    {% endif %}
+</div>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <!-- EMPTY STATE -->
+    <div class="history-empty">
+        <div class="empty-icon">📦</div>
+        <h3>NO ORDERS YET</h3>
+        <p>You haven't purchased any packs yet.<br>
+           Get your first one and unlock the full arsenal.</p>
+        <a href="{% url 'orders:packages' %}" class="btn-get-pack">
+            🔥 GET YOUR FIRST PACK
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- CANCEL CONFIRMATION MODAL -->
+<div class="modal-backdrop" id="cancel-modal">
+    <div class="modal-box">
+        <h3>⚠️ CANCEL ORDER?</h3>
+        <p>This will cancel the pending order.<br>
+           No charge has been made — this just removes it from your history.</p>
+        <div class="modal-actions">
+            <form method="POST" id="cancel-form" style="margin:0;">
+                {% csrf_token %}
+                <button type="submit" class="modal-confirm">Yes, Cancel</button>
+            </form>
+            <button class="modal-cancel-btn"
+                    onclick="closeCancelModal()">
+                Keep It
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE CONFIRMATION MODAL -->
+<div class="modal-backdrop" id="delete-modal">
+    <div class="modal-box" style="border-color:#c0392b;">
+        <h3>🗑 DELETE ORDER?</h3>
+        <p>This permanently removes this order from your history.<br>
+           This cannot be undone.</p>
+        <div class="modal-actions">
+            <form method="POST" id="delete-form" style="margin:0;">
+                {% csrf_token %}
+                <button type="submit" class="modal-confirm">
+                    Yes, Delete
+                </button>
+            </form>
+            <button class="modal-cancel-btn"
+                    onclick="closeDeleteModal()">
+                Keep It
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ── TOAST AUTO-DISMISS ── */
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".diss-toast").forEach(toast => {
+        setTimeout(() => {
+            toast.classList.add("toast-out");
+            setTimeout(() => toast.remove(), 350);
+        }, 4000);
+    });
+});
+
+/* ── CANCEL MODAL ── */
+function openCancelModal(orderId) {
+    const form = document.getElementById("cancel-form");
+    form.action = `/orders/order/${orderId}/cancel/`;
+    document.getElementById("cancel-modal").classList.add("open");
+}
+function openDeleteModal(orderId) {
+    const form = document.getElementById("delete-form");
+    form.action = `/orders/order/${orderId}/delete/`;
+    document.getElementById("delete-modal").classList.add("open");
+}
+function closeDeleteModal() {
+    document.getElementById("delete-modal").classList.remove("open");
+}
+document.getElementById("delete-modal").addEventListener("click", (e) => {
+    if (e.target === e.currentTarget) closeDeleteModal();
+});
+function closeCancelModal() {
+    document.getElementById("cancel-modal").classList.remove("open");
+}
+// Close on backdrop click
+document.getElementById("cancel-modal").addEventListener("click", (e) => {
+    if (e.target === e.currentTarget) closeCancelModal();
+});
+</script>
+
+{% endblock %}

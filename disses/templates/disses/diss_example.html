@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5 text-center">
+      <p class="arena-text">
+            THE INTERNET'S ARCHETYPE COMBAT ARENA
+        </p>
+    <h1>🔥 Example Diss</h1>
+    <p class="lead">Here's what a commissioned diss looks like...</p>
+
+    <div class="card mx-auto mt-4" style="max-width:600px;">
+        <div class="card-body">
+            <h5 class="card-title">Target: The Meeting Scheduler</h5>
+            <h6 class="card-subtitle mb-3 text-muted">
+                Style: Shakespearean Savage
+            </h6>
+            <p class="card-text fst-italic">
+                "Hark, thou schedulest meetings as a man possessed,
+                filling calendars like a raccoon trapped in Outlook,
+                each invite a fresh tragedy upon thy colleagues' souls."
+            </p>
+            <hr>
+            <a href="{% url 'disses:diss_create' %}"
+               class="btn btn-danger">
+                🔥 Commission Your Own
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

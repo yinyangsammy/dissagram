@@ -1,0 +1,196 @@
+/* =========================
+   DISSAGRAM — BASE STYLES
+========================= */
+
+body {
+    font-family: "Lato", sans-serif;
+    background: #0a0a0a;
+    color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+
+/* LOGO */
+.logo {
+    font-family: "Bangers", cursive;
+    font-size: 3.5rem;
+    letter-spacing: 3px;
+    color: #ff4500 !important;
+    margin: 0 auto;
+}
+
+.logo h1 {
+    font-size: 4rem;
+}
+
+.logo span {
+color: white;
+text-align: center;
+font-size: 2.2rem;
+}
+
+/* FOOTER */
+.site-footer {
+    background: #111;
+    color: #888;
+    font-size: 1.2rem;
+}
+
+.site-footer a {
+    color: #888;
+    margin: 0 10px;
+    font-size: 2rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.site-footer a:hover {
+    color: #ff4500;
+}
+
+.hero-section {
+    position: relative;
+    min-height: 150vh;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,0.45),
+            rgba(0,0,0,0.45)
+        ),
+        url("../images/dissagram-home-hero.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+
+    max-width: 650px;
+
+    padding-top: 8vh;
+    padding-bottom: 8vh;
+}
+
+.arena-text {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ffb38a;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 400;
+}
+
+.hero-logo {
+    font-size: clamp(4rem, 8vw, 7rem);
+    font-family: "Bangers", cursive;
+    color: #ff4500;
+
+    line-height: 0.95;
+
+    margin-bottom: 2rem;
+
+    text-shadow:
+        0 0 12px rgba(255,69,0,0.35);
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.hero-buttons .btn {
+    padding: 0.9rem 1.8rem;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+        margin: 0 auto;
+}
+
+.hero-buttons .btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,0.35);
+}
+
+
+.btn-danger:hover {
+    background-color: #fff !important;
+    color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+}
+
+.manifesto-section {
+    background: #050505;
+
+    padding: 8rem 1rem;
+
+    text-align: center;
+}
+
+.manifesto-section p {
+    font-size: 1.9rem;
+
+    margin-bottom: 2rem;
+
+    color: #dddddd;
+}
+
+.manifesto-section h2 {
+    margin-top: 4rem;
+
+    font-size: clamp(2.5rem, 6vw, 5rem);
+
+    font-weight: 700;
+
+    color: #ff4500;
+
+    text-transform: uppercase;
+
+    letter-spacing: 2px;
+}
+
+.hero-section {
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    max-width: 620px;
+}
+
+.hero-tagline {
+  font-size: clamp(2.8rem, 2.5vw, 5rem);
+  line-height: 2.5;
+  font-weight: 700;
+  margin-bottom: 39rem;
+  color: #a0a2a8;
+  text-shadow: 1px 1px black;
+  text-align: center;
+  /*background: rgba(255, 255, 255, 0.06);*/
+  background: rgb(44 41 41 / 65%);
+  border-radius: 12px;
+  padding: 15px;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: 0.3s;
+}

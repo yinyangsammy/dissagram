@@ -1,0 +1,1154 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if editing %}Edit Diss{% else %}Build Your Diss{% endif %} 🔥 Dissagram{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ================================================
+   DISS FORM — Archetype Carousel + Dropdowns
+   Inherits dark theme from base (bg #0a0a0a)
+   Uses Bangers (already in base) + Lato
+================================================ */
+
+.diss-form-page {
+    padding: 3rem 0 5rem;
+}
+
+/* ── PAGE HEADER ── */
+.diss-form-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.diss-form-header h1 {
+    font-family: "Bangers", cursive;
+    font-size: clamp(3rem, 7vw, 5rem);
+    color: #ff4500;
+    letter-spacing: 3px;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+}
+
+.diss-form-header .subtitle {
+    font-size: 1rem;
+    color: #888;
+    font-style: italic;
+}
+
+/* ── STEP INDICATOR ── */
+.step-track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 2.5rem;
+}
+
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: #555;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+
+.step-item.active  { color: #ff4500; }
+.step-item.done    { color: #d4a017; }
+
+.step-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.3s;
+}
+
+.step-item.active .step-num  { border-color: #ff4500; color: #ff4500; }
+.step-item.done .step-num    {
+    border-color: #d4a017;
+    background: #d4a017;
+    color: #0a0a0a;
+}
+
+.step-sep {
+    width: 40px;
+    height: 1px;
+    background: #222;
+    margin: 0 4px;
+}
+
+/* ── SECTION LABELS ── */
+.diss-section-label {
+    font-family: "Bangers", cursive;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: #ff4500;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.diss-section-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #222;
+}
+
+/* ── CAROUSEL ── */
+.carousel-outer {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    /* fade edges */
+    mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 6%,
+        black 94%,
+        transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 6%,
+        black 94%,
+        transparent 100%
+    );
+}
+
+.carousel-track {
+    display: flex;
+    gap: 16px;
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+    will-change: transform;
+    padding: 4px 2px 12px; /* room for shadow */
+}
+
+/* ── ARCHETYPE CARD ── */
+.arch-card {
+    flex: 0 0 200px;
+    border-radius: 14px;
+    border: 2px solid #222;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    background: #111;
+    user-select: none;
+}
+
+.arch-card:hover {
+    border-color: #444;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.arch-card.selected {
+    border-color: #d4a017;
+    transform: translateY(-6px);
+    box-shadow: 0 0 0 3px rgba(212,160,23,0.25), 0 10px 30px rgba(0,0,0,0.6);
+}
+
+/* Top half: header band */
+.arch-card-header {
+    padding: 10px 12px 6px;
+    text-align: center;
+    background: #0d0d0d;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.arch-card-name {
+    font-family: "Bangers", cursive;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    color: #f0f0f0;
+    line-height: 1.1;
+}
+
+.arch-card-emoji {
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+}
+
+/* Bottom half: card body — this is the "spliced half" */
+.arch-card-body {
+    padding: 8px 10px 10px;
+    background: #111;
+}
+
+.arch-card-traits-label {
+    font-family: "Bangers", cursive;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    color: #d4a017;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.arch-card-trait {
+    font-size: 0.68rem;
+    color: #888;
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    line-height: 1.4;
+    margin-bottom: 2px;
+}
+
+.arch-card-trait::before {
+    content: "•";
+    color: #d4a017;
+    flex-shrink: 0;
+}
+
+.arch-card-stars {
+    display: flex;
+    gap: 3px;
+    margin-top: 7px;
+    justify-content: center;
+}
+
+.arch-star { font-size: 12px; color: #333; }
+.arch-star.on { color: #c0392b; }
+
+/* Difficulty pill */
+.arch-diff-pill {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-family: "Bangers", cursive;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-top: 5px;
+    background: #1a1a1a;
+    color: #666;
+}
+
+/* ── CAROUSEL CONTROLS ── */
+.carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 1rem;
+}
+
+.carousel-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid #333;
+    background: #111;
+    color: #f0f0f0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.carousel-btn:hover:not(:disabled) {
+    border-color: #d4a017;
+    background: #1a1a1a;
+}
+
+.carousel-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+.carousel-dots { display: flex; gap: 6px; }
+
+.c-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #333;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.c-dot.active {
+    background: #d4a017;
+    transform: scale(1.35);
+}
+
+/* ── SELECTED BADGE ── */
+.selected-badge-wrap {
+    text-align: center;
+    min-height: 32px;
+    margin-bottom: 1.5rem;
+}
+
+.selected-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #d4a017;
+    color: #0a0a0a;
+    font-family: "Bangers", cursive;
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
+    padding: 5px 16px;
+    border-radius: 20px;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: opacity 0.25s, transform 0.25s;
+}
+
+.selected-badge.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── FORM SECTIONS (revealed progressively) ── */
+.diss-step-section {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.diss-step-section.revealed {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+/* ── FIELD GROUPS ── */
+.diss-field-group {
+    margin-bottom: 1.5rem;
+}
+
+.diss-field-label {
+    font-family: "Bangers", cursive;
+    font-size: 1.1rem;
+    letter-spacing: 1.5px;
+    color: #f0f0f0;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.diss-field-hint {
+    font-size: 0.78rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+/* ── CUSTOM SELECTS ── */
+.diss-select {
+    width: 100%;
+    padding: 10px 36px 10px 14px;
+    border-radius: 8px;
+    border: 1.5px solid #2a2a2a;
+    background: #111;
+    color: #f0f0f0;
+    font-family: "Lato", sans-serif;
+    font-size: 0.92rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.diss-select:focus {
+    outline: none;
+    border-color: #d4a017;
+    box-shadow: 0 0 0 3px rgba(212,160,23,0.12);
+}
+
+.diss-select option { background: #111; color: #f0f0f0; }
+
+.diss-select.error { border-color: #c0392b; }
+
+/* ── DISS LINES (checkboxes) ── */
+.disslines-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.dissline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1.5px solid #1e1e1e;
+    border-radius: 8px;
+    background: #0d0d0d;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.dissline-item:hover { border-color: #333; background: #111; }
+
+.dissline-item:has(input:checked) {
+    border-color: #d4a017;
+    background: #111;
+}
+
+.dissline-item input[type="checkbox"] {
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: #d4a017;
+    width: 15px;
+    height: 15px;
+}
+
+.dissline-content { flex: 1; }
+
+.dissline-text {
+    font-size: 0.88rem;
+    color: #ccc;
+    line-height: 1.5;
+}
+
+.dissline-type-badge {
+    display: inline-block;
+    font-family: "Bangers", cursive;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    padding: 1px 8px;
+    border-radius: 20px;
+    margin-bottom: 4px;
+}
+
+/* replace the three type classes with these */
+.type-Diss\.Line        { background: #0c3a5e; color: #6bb3e8; }
+.type-Internal\.Monologue { background: #2e1f00; color: #d4a017; }
+.type-LinkedIn\.Endorsement { background: #0e3b1a; color: #6be8a0; }
+
+.disslines-placeholder {
+    text-align: center;
+    padding: 28px 20px;
+    color: #444;
+    font-size: 0.85rem;
+    font-style: italic;
+    border: 1.5px dashed #222;
+    border-radius: 8px;
+}
+
+/* ── TEXTAREA ── */
+.diss-note {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1.5px solid #2a2a2a;
+    background: #111;
+    color: #f0f0f0;
+    font-family: "Lato", sans-serif;
+    font-size: 0.92rem;
+    resize: vertical;
+    min-height: 90px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.diss-note:focus {
+    outline: none;
+    border-color: #d4a017;
+    box-shadow: 0 0 0 3px rgba(212,160,23,0.12);
+}
+
+.diss-note::placeholder { color: #444; }
+
+/* ── VISIBILITY TOGGLE ── */
+.visibility-toggle {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.vis-option {
+    flex: 1;
+    min-width: 140px;
+    padding: 10px 14px;
+    border: 1.5px solid #222;
+    border-radius: 8px;
+    background: #0d0d0d;
+    color: #888;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s;
+}
+
+.vis-option:hover { border-color: #333; color: #ccc; }
+.vis-option.chosen { border-color: #d4a017; color: #d4a017; background: #111; }
+
+.vis-option i { font-size: 1rem; }
+
+/* ── FORM ERRORS ── */
+.diss-errors {
+    background: rgba(192, 57, 43, 0.12);
+    border: 1px solid rgba(192,57,43,0.3);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 1.5rem;
+    color: #e88080;
+    font-size: 0.88rem;
+}
+
+.diss-errors ul { margin: 0; padding-left: 1rem; }
+
+/* ── SUBMIT BUTTON ── */
+.submit-section {
+    text-align: center;
+    padding-top: 1rem;
+}
+
+.diss-submit-btn {
+    font-family: "Bangers", cursive;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    padding: 14px 52px;
+    border: none;
+    border-radius: 12px;
+    background: #d4a017;
+    color: #0a0a0a;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.diss-submit-btn:hover {
+    background: #f5c842;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(212,160,23,0.35);
+}
+
+.diss-submit-btn:active { transform: scale(0.98); }
+
+/* ── STYLE AVATAR GRID ── */
+.style-avatar-grid {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.style-avatar-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 2px solid #222;
+    background: #0d0d0d;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    min-width: 90px;
+    height: 250px;
+    user-select: none;
+}
+
+.style-avatar-card:hover {
+    border-color: #444;
+    transform: translateY(-3px);
+}
+
+.style-avatar-card.selected {
+    border-color: #d4a017;
+    transform: translateY(-4px);
+    box-shadow: 0 0 0 3px rgba(212,160,23,0.2);
+}
+
+.style-avatar-card.locked {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+.style-avatar-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #333;
+    transition: border-color 0.2s;
+}
+
+.style-avatar-card.selected .style-avatar-img {
+    border-color: #d4a017;
+}
+
+.style-avatar-emoji {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border: 2px solid #333;
+}
+
+.style-avatar-name {
+    font-family: "Bangers", cursive;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: #888;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.style-avatar-card.selected .style-avatar-name {
+    color: #d4a017;
+}
+
+.style-lock-icon {
+    font-size: 0.7rem;
+    color: #555;
+}
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container diss-form-page">
+<div class="row">
+<div class="col-lg-8 mx-auto">
+
+<!-- ── PAGE HEADER ── -->
+<div class="diss-form-header">
+    <h1>{% if editing %}Edit Your Diss{% else %}Build Your Diss{% endif %}</h1>
+    <p class="subtitle">Choose your target. Pick your style. Load the burn lines. Fire.</p>
+</div>
+
+<!-- ── STEP TRACKER ── -->
+<div class="step-track">
+    <div class="step-item active" id="step-1">
+        <div class="step-num">1</div>
+        <span>Pick Target</span>
+    </div>
+    <div class="step-sep"></div>
+    <div class="step-item" id="step-2">
+        <div class="step-num">2</div>
+        <span>Roast Style</span>
+    </div>
+    <div class="step-sep"></div>
+    <div class="step-item" id="step-3">
+        <div class="step-num">3</div>
+        <span>Burn Lines</span>
+    </div>
+    <div class="step-sep"></div>
+    <div class="step-item" id="step-4">
+        <div class="step-num">4</div>
+        <span>Finish</span>
+    </div>
+</div>
+
+<!-- ── FORM ERRORS ── -->
+{% if form.errors %}
+<div class="diss-errors">
+    <strong>⚠️ Fix these before firing:</strong>
+    <ul>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<!-- ═══════════════════════════════════════
+     FORM
+═══════════════════════════════════════ -->
+<form method="POST" id="diss-form">
+{% csrf_token %}
+
+<!-- Hidden inputs — populated by JS before submit -->
+<input type="hidden" name="target_archetype" id="id_target_archetype"
+       value="{{ form.target_archetype.value|default:'' }}">
+<input type="hidden" name="roast_style"      id="id_roast_style"
+       value="{{ form.roast_style.value|default:'' }}">
+<input type="hidden" name="status"           id="id_status"      value="draft">
+<input type="hidden" name="is_public"        id="id_is_public"   value="false">
+
+<!-- ═══════════════════════════════════
+     STEP 1 — ARCHETYPE CAROUSEL
+═══════════════════════════════════ -->
+<div class="diss-section-label">
+    <i class="fas fa-crosshairs"></i> Step 1 — Pick Your Target
+</div>
+
+<div class="carousel-outer">
+    <div class="carousel-track" id="carousel-track"></div>
+</div>
+
+<div class="carousel-controls">
+    <button type="button" class="carousel-btn" id="carousel-prev" disabled aria-label="Previous">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <div class="carousel-dots" id="carousel-dots"></div>
+    <button type="button" class="carousel-btn" id="carousel-next" aria-label="Next">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+</div>
+
+<div class="selected-badge-wrap">
+    <div class="selected-badge" id="selected-badge">
+        <i class="fas fa-crosshairs"></i>
+        <span id="selected-badge-name">—</span>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════
+     STEP 2 — ROAST STYLE
+═══════════════════════════════════ -->
+<div class="diss-step-section" id="section-style">
+
+    <div class="diss-section-label">
+        <i class="fas fa-skull"></i> Step 2 — Roast Style
+    </div>
+
+    <div class="diss-field-group">
+        <label class="diss-field-label">Choose Your Voice</label>
+        <div class="diss-field-hint">The persona and register of your diss</div>
+
+        <!-- Avatar grid — replaces dropdown -->
+        <div class="style-avatar-grid" id="style-avatar-grid"></div>
+
+        <!-- Selected style badge -->
+        <div class="selected-style-wrap" id="selected-style-wrap" style="display:none; margin-top:1rem;">
+            <div class="selected-badge visible" id="selected-style-badge">
+                <i class="fas fa-fire"></i>
+                <span id="selected-style-name">—</span>
+            </div>
+        </div>
+
+        <!-- Hidden input still needed for form submit -->
+        <input type="hidden" id="roast-style-select" name="roast_style_hidden">
+    </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════
+     STEP 3 — DISS LINES
+═══════════════════════════════════ -->
+<div class="diss-step-section" id="section-lines">
+
+    <div class="diss-section-label">
+        <i class="fas fa-fire"></i> Step 3 — Pick Your Burn Lines
+    </div>
+
+    <div class="diss-field-group">
+        <div class="diss-field-hint">Select at least one. Deploy responsibly.</div>
+        <div class="disslines-list" id="disslines-list">
+            <div class="disslines-placeholder">
+                Select a roast style above to load your arsenal
+            </div>
+        </div>
+    </div>
+
+</div><!-- /section-lines -->
+
+
+<!-- ═══════════════════════════════════
+     STEP 4 — FINISH
+═══════════════════════════════════ -->
+<div class="diss-step-section" id="section-finish">
+
+    <div class="diss-section-label">
+        <i class="fas fa-pen-nib"></i> Step 4 — Final Touches
+    </div>
+
+    <!-- Custom Note -->
+    <div class="diss-field-group">
+        <label class="diss-field-label" for="id_custom_note">
+            Custom Note <span style="font-size:0.75rem; color:#555; font-family: Lato, sans-serif; font-weight: 400;">(optional)</span>
+        </label>
+        <div class="diss-field-hint">Personal context, a finishing line, or the receipts.</div>
+        {{ form.custom_note }}
+    </div>
+
+    <!-- Visibility -->
+    <div class="diss-field-group">
+        <label class="diss-field-label">Visibility</label>
+        <div class="diss-field-hint">Draft stays private. Published appears on the Roast Feed.</div>
+
+        <div class="visibility-toggle">
+            <div class="vis-option chosen" id="vis-draft" onclick="setVisibility('draft', false)">
+                <i class="fas fa-lock"></i>
+                <div>
+                    <div style="font-weight:700; font-size:0.9rem;">Draft</div>
+                    <div style="font-size:0.75rem; color:#666;">Just for me</div>
+                </div>
+            </div>
+            <div class="vis-option" id="vis-published" onclick="setVisibility('published', true)">
+                <i class="fas fa-globe"></i>
+                <div>
+                    <div style="font-weight:700; font-size:0.9rem;">Published</div>
+                    <div style="font-size:0.75rem; color:#666;">Share on Roast Feed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-section">
+        <button type="submit" class="diss-submit-btn" id="submit-btn">
+            <i class="fas fa-flame"></i> Fire the Diss
+        </button>
+    </div>
+
+</div><!-- /section-finish -->
+
+</form>
+
+</div><!-- /col -->
+</div><!-- /row -->
+</div><!-- /container -->
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+/* =====================================================
+   DATA FROM DJANGO
+===================================================== */
+const ARCHETYPES   = {{ archetypes_json|safe }};
+const ROAST_STYLES = {{ roast_styles_json|safe }};
+
+/* Pre-selected values (edit mode) */
+const INIT_ARCHETYPE_ID  = {{ selected_archetype_id|default:"null" }};
+const INIT_ROAST_STYLE_ID = {{ selected_roast_style_id|default:"null" }};
+const INIT_LINE_IDS       = {{ selected_line_ids|default:"[]"|safe }};
+
+/* =====================================================
+   STATE
+===================================================== */
+let selectedArchetype = null;
+let currentCarouselIdx = 0;
+const CARDS_VISIBLE = 3;
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+const track       = document.getElementById("carousel-track");
+const dotsEl      = document.getElementById("carousel-dots");
+const prevBtn     = document.getElementById("carousel-prev");
+const nextBtn     = document.getElementById("carousel-next");
+const badge       = document.getElementById("selected-badge");
+const badgeName   = document.getElementById("selected-badge-name");
+const styleSelect = document.getElementById("roast-style-select");
+const linesList   = document.getElementById("disslines-list");
+
+const sectionStyle  = document.getElementById("section-style");
+const sectionLines  = document.getElementById("section-lines");
+const sectionFinish = document.getElementById("section-finish");
+
+const step1 = document.getElementById("step-1");
+const step2 = document.getElementById("step-2");
+const step3 = document.getElementById("step-3");
+const step4 = document.getElementById("step-4");
+
+const hiddenArchetype = document.getElementById("id_target_archetype");
+const hiddenStyle     = document.getElementById("id_roast_style");
+const hiddenStatus    = document.getElementById("id_status");
+const hiddenPublic    = document.getElementById("id_is_public");
+
+/* =====================================================
+   CAROUSEL BUILD
+===================================================== */
+function diffStars(n) {
+    return [1,2,3,4,5].map(i =>
+        `<span class="arch-star${i<=n?" on":""}">★</span>`
+    ).join("");
+}
+
+function buildCarousel() {
+    track.innerHTML = "";
+
+    ARCHETYPES.forEach((arch, idx) => {
+        const card = document.createElement("div");
+        card.className = "arch-card";
+        card.dataset.id = arch.id;
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-label", `Select ${arch.name}`);
+
+        const traitsHtml = arch.traits.slice(0,3).map(t =>
+            `<div class="arch-card-trait">${t}</div>`
+        ).join("");
+
+        const avatarHtml = arch.avatar_url
+            ? `<img src="${arch.avatar_url}" alt="${arch.name}" class="arch-card-avatar"
+                    style="width:100%;height:300px;object-fit:cover;display:block;">`
+            : `<div style="width:100%;height:300px;display:flex;align-items:center;
+                           justify-content:center;font-size:3.5rem;background:#0d0d0d;">
+                   ${arch.emoji}
+               </div>`;
+
+        card.innerHTML = `
+            ${avatarHtml}
+            <div class="arch-card-header">
+                <div class="arch-card-name">${arch.emoji} ${arch.name}</div>
+                <div class="arch-card-stars">${diffStars(arch.difficulty)}</div>
+                <div class="arch-diff-pill">${arch.difficulty_label}</div>
+            </div>
+            <div class="arch-card-body">
+                <div class="arch-card-traits-label">Traits</div>
+                ${traitsHtml}
+            </div>
+        `;
+
+        card.addEventListener("click", () => pickArchetype(arch.id));
+        card.addEventListener("keydown", e => {
+            if (e.key === "Enter" || e.key === " ") pickArchetype(arch.id);
+        });
+
+        track.appendChild(card);
+    });
+
+    /* Dots */
+    dotsEl.innerHTML = "";
+    const maxDots = Math.max(1, ARCHETYPES.length - CARDS_VISIBLE + 1);
+    for (let i = 0; i < ARCHETYPES.length; i++) {
+        const dot = document.createElement("div");
+        dot.className = `c-dot${i === 0 ? " active" : ""}`;
+        dot.addEventListener("click", () => moveTo(i));
+        dotsEl.appendChild(dot);
+    }
+
+    updateTrack();
+}
+
+function cardWidth() {
+    const c = track.querySelector(".arch-card");
+    return c ? c.offsetWidth + 16 : 216;
+}
+
+function updateTrack() {
+    const max = Math.max(0, ARCHETYPES.length - CARDS_VISIBLE);
+    currentCarouselIdx = Math.max(0, Math.min(currentCarouselIdx, max));
+    track.style.transform = `translateX(-${currentCarouselIdx * cardWidth()}px)`;
+    prevBtn.disabled = currentCarouselIdx === 0;
+    nextBtn.disabled = currentCarouselIdx >= max;
+    document.querySelectorAll(".c-dot").forEach((d, i) =>
+        d.classList.toggle("active", i === currentCarouselIdx)
+    );
+}
+
+function moveTo(i) { currentCarouselIdx = i; updateTrack(); }
+
+prevBtn.addEventListener("click", () => { currentCarouselIdx--; updateTrack(); });
+nextBtn.addEventListener("click", () => { currentCarouselIdx++; updateTrack(); });
+window.addEventListener("resize", updateTrack);
+
+/* =====================================================
+   PICK ARCHETYPE
+===================================================== */
+function pickArchetype(id) {
+    selectedArchetype = ARCHETYPES.find(a => a.id === id);
+    if (!selectedArchetype) return;
+
+    /* Card highlight */
+    document.querySelectorAll(".arch-card").forEach(c =>
+        c.classList.toggle("selected", parseInt(c.dataset.id) === id)
+    );
+
+    /* Badge */
+    badgeName.textContent = selectedArchetype.name;
+    badge.classList.add("visible");
+
+    /* Hidden input */
+    hiddenArchetype.value = id;
+
+    /* Steps */
+    step1.classList.add("done");
+    step1.classList.remove("active");
+    step2.classList.add("active");
+
+    /* Reveal style section */
+    sectionStyle.classList.add("revealed");
+    sectionLines.classList.remove("revealed");
+    sectionFinish.classList.remove("revealed");
+
+    /* Reset downstream */
+    styleSelect.value = "";
+    linesList.innerHTML = `<div class="disslines-placeholder">Select a roast style above to load your arsenal</div>`;
+    hiddenStyle.value = "";
+
+    /* Build roast style options filtered to this archetype */
+    buildStyleSelect(selectedArchetype.roast_style_ids);
+
+    /* Scroll to style section */
+    setTimeout(() => sectionStyle.scrollIntoView({ behavior: "smooth", block: "nearest" }), 100);
+}
+
+/* =====================================================
+   ROAST STYLE SELECT
+===================================================== */
+function buildStyleSelect(allowedIds) {
+    const grid = document.getElementById("style-avatar-grid");
+    grid.innerHTML = "";
+
+    const filtered = allowedIds.length
+        ? ROAST_STYLES.filter(s => allowedIds.includes(s.id))
+        : ROAST_STYLES;
+
+    filtered.forEach(s => {
+        const card = document.createElement("div");
+        card.className = "style-avatar-card";
+        card.dataset.styleId = s.id;
+
+        const imgHtml = s.avatar_url
+            ? `<img src="${s.avatar_url}" alt="${s.name}" class="style-avatar-img">`
+            : `<div class="style-avatar-emoji">${s.emoji}</div>`;
+
+        card.innerHTML = `
+            ${imgHtml}
+            <div class="style-avatar-name">${s.name}</div>
+        `;
+
+        card.addEventListener("click", () => {
+            // Update selected state
+            grid.querySelectorAll(".style-avatar-card").forEach(c =>
+                c.classList.remove("selected")
+            );
+            card.classList.add("selected");
+
+            // Update hidden input + trigger line filtering
+            document.getElementById("roast-style-select").value = s.id;
+            hiddenStyle.value = s.id;
+
+            // Show selected badge
+            document.getElementById("selected-style-name").textContent = s.name;
+            document.getElementById("selected-style-wrap").style.display = "block";
+
+            // Trigger the lines section
+            pickRoastStyle(s.id);
+        });
+
+        grid.appendChild(card);
+    });
+}
+
+function pickRoastStyle(sid) {
+    sid = parseInt(sid);
+    step2.classList.add("done");
+    step2.classList.remove("active");
+    step3.classList.add("active");
+
+    if (!sid || !selectedArchetype) {
+        linesList.innerHTML = `<div class="disslines-placeholder">Select a roast style above to load your arsenal</div>`;
+        sectionLines.classList.remove("revealed");
+        sectionFinish.classList.remove("revealed");
+        return;
+    }
+
+    const lines = selectedArchetype.diss_lines.filter(l =>
+        !l.roast_style_id || l.roast_style_id === sid
+    );
+
+    renderDissLines(lines);
+    sectionLines.classList.add("revealed");
+    sectionFinish.classList.add("revealed");
+    step4.classList.add("active");
+
+    setTimeout(() => sectionLines.scrollIntoView({ behavior: "smooth", block: "nearest" }), 100);
+}
+
+/* =====================================================
+   DISS LINES
+===================================================== */
+function renderDissLines(lines) {
+    if (!lines.length) {
+        linesList.innerHTML = `<div class="disslines-placeholder">
+            No approved lines for this combination yet — add some via the admin panel.
+        </div>`;
+        return;
+    }
+
+    linesList.innerHTML = lines.map(line => `
+        <label class="dissline-item">
+            <input type="checkbox"
+                   name="selected_lines"
+                   value="${line.id}"
+                   ${INIT_LINE_IDS.includes(line.id) ? "checked" : ""}>
+            <div class="dissline-content">
+                <span class="dissline-type-badge type-${line.type}">${line.type}</span>
+                <div class="dissline-text">${line.content}</div>
+            </div>
+        </label>
+    `).join("");
+}
+
+/* =====================================================
+   VISIBILITY TOGGLE
+===================================================== */
+function setVisibility(status, isPublic) {
+    hiddenStatus.value = status;
+    hiddenPublic.value = isPublic ? "true" : "false";
+    document.getElementById("vis-draft").classList.toggle("chosen", status === "draft");
+    document.getElementById("vis-published").classList.toggle("chosen", status === "published");
+}
+
+/* =====================================================
+   FORM SUBMIT GUARD
+===================================================== */
+document.getElementById("diss-form").addEventListener("submit", function(e) {
+    if (!hiddenArchetype.value) {
+        e.preventDefault();
+        alert("Please select a target archetype first!");
+        return;
+    }
+    if (!hiddenStyle.value) {
+    e.preventDefault();
+    const grid = document.getElementById("style-avatar-grid");
+    grid.style.outline = "1.5px solid #c0392b";
+    setTimeout(() => grid.style.outline = "", 1500);
+    return;
+    }
+    const checked = document.querySelectorAll("input[name='selected_lines']:checked");
+    if (!checked.length) {
+        e.preventDefault();
+        linesList.style.outline = "1.5px solid #c0392b";
+        setTimeout(() => linesList.style.outline = "", 1500);
+        return;
+    }
+});
+
+/* =====================================================
+   INIT — restore state on edit / POST error
+===================================================== */
+buildCarousel();
+
+if (INIT_ARCHETYPE_ID) {
+    pickArchetype(INIT_ARCHETYPE_ID);
+
+    /* Find the card index and scroll carousel to it */
+    const idx = ARCHETYPES.findIndex(a => a.id === INIT_ARCHETYPE_ID);
+    if (idx >= 0) { moveTo(Math.max(0, idx - 1)); }
+}
+
+if (INIT_ROAST_STYLE_ID) {
+    /* Wait a tick for the select to be built */
+    setTimeout(() => {
+        styleSelect.value = INIT_ROAST_STYLE_ID;
+        styleSelect.dispatchEvent(new Event("change"));
+    }, 50);
+}
+</script>
+{% endblock %}

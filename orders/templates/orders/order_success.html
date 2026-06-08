@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5 text-center">
+    <h1>✅ Diss Commissioned!</h1>
+    <p>Your burn is on its way. They won't know what hit them.</p>
+    <a href="{% url 'disses:my_disses' %}" class="btn btn-danger mt-3">
+        View My Disses
+    </a>
+</div>
+{% endblock %}

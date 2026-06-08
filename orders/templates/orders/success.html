@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Pack Unlocked — Dissagram{% endblock %}
+
+{% block content %}
+<style>
+.success-page {
+    max-width: 560px;
+    margin: 4rem auto;
+    padding: 0 1.2rem;
+    text-align: center;
+}
+.success-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: popIn 0.5s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes popIn {
+    from { transform: scale(0.4); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}
+.success-page h1 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+    color: #27ae60;
+    letter-spacing: 3px;
+    margin-bottom: 0.5rem;
+}
+.success-page .sub {
+    color: #888;
+    font-size: 0.92rem;
+    margin-bottom: 2rem;
+}
+.order-summary-card {
+    background: #0d0d0d;
+    border: 1.5px solid #27ae60;
+    border-radius: 14px;
+    padding: 1.6rem 2rem;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+.order-summary-card h3 {
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    color: #f0f0f0;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+}
+.order-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 0.88rem;
+    color: #aaa;
+}
+.order-summary-row:last-child { border-bottom: none; }
+.order-summary-row strong { color: #f0f0f0; }
+
+.unlocked-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.unlocked-list li {
+    font-size: 0.87rem;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.unlocked-list li .u-icon { color: #27ae60; }
+
+.success-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.btn-fire {
+    background: linear-gradient(135deg, #e8621a, #c0392b);
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+    padding: 13px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+.btn-fire:hover { opacity: 0.88; color: #fff; text-decoration: none; }
+.btn-ghost {
+    background: transparent;
+    color: #888;
+    font-family: 'Bangers', cursive;
+    font-size: 1.05rem;
+    letter-spacing: 1.5px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    border: 1.5px solid #333;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover {
+    border-color: #d4a017;
+    color: #d4a017;
+    text-decoration: none;
+}
+</style>
+
+<div class="success-page">
+    <div class="success-icon">🔥</div>
+    <h1>PACK UNLOCKED!</h1>
+    <p class="sub">Your arsenal just got serious. Time to deploy.</p>
+
+    {% if order %}
+    <div class="order-summary-card">
+        <h3>⚡ ORDER CONFIRMED</h3>
+        <div class="order-summary-row">
+            <span>Pack</span>
+            <strong>{{ order.package.name }}</strong>
+        </div>
+        <div class="order-summary-row">
+            <span>Amount</span>
+            <strong>£{{ order.amount_paid }}</strong>
+        </div>
+        <div class="order-summary-row">
+            <span>Order #</span>
+            <strong>{{ order.pk }}</strong>
+        </div>
+        <div class="order-summary-row">
+            <span>Date</span>
+            <strong>{{ order.created_on|date:"d M Y" }}</strong>
+        </div>
+
+        {% if order.package %}
+        <ul class="unlocked-list">
+            <li>
+                <span class="u-icon">✅</span>
+                {{ order.package.archetype_count }} new Archetypes unlocked
+            </li>
+            <li>
+                <span class="u-icon">✅</span>
+                {{ order.package.roast_style_count }} new Roast Styles unlocked
+            </li>
+            {% if order.package.premium_category_count %}
+            <li>
+                <span class="u-icon">✅</span>
+                {{ order.package.premium_category_count }} Premium Diss
+                Categor{{ order.package.premium_category_count|pluralize:"y,ies" }} unlocked
+            </li>
+            {% endif %}
+            {% if order.package.includes_leaderboard %}
+            <li>
+                <span class="u-icon">✅</span>
+                Leaderboard &amp; Rankings access
+            </li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="success-actions">
+        <a href="{% url 'disses:diss_create' %}" class="btn-fire">
+            🔥 BUILD A DISS
+        </a>
+        <a href="{% url 'orders:history' %}" class="btn-ghost">
+    ⚡ View My Orders
+        </a>
+        </div>
+    </div>
+
+{% endblock %}

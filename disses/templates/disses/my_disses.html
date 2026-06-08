@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Disses 🔥 Dissagram{% endblock %}
+
+{% block extra_css %}
+<style>
+.my-disses-page { padding: 3rem 0 5rem; }
+
+.page-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.page-header h1 {
+    font-family: "Bangers", cursive;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    color: #ff4500;
+    letter-spacing: 3px;
+    margin-bottom: 0.3rem;
+}
+
+.page-header p { color: #666; font-size: 0.95rem; }
+
+/* ── DISS SUMMARY CARD ── */
+.diss-summary-card {
+    background: #0f0f0f;
+    border: 1.5px solid #1e1e1e;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.diss-summary-card:hover {
+    border-color: #d4a017;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+}
+
+.diss-summary-inner {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+}
+
+/* Left colour strip — avatar or emoji */
+.diss-summary-avatar {
+    width: 90px;
+    flex-shrink: 0;
+    background: #0d0d0d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    border-right: 1px solid #1a1a1a;
+    position: relative;
+    overflow: hidden;
+}
+
+.diss-summary-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+
+.diss-summary-content {
+    flex: 1;
+    padding: 14px 16px;
+}
+
+.diss-summary-archetype {
+    font-family: "Bangers", cursive;
+    font-size: 1.3rem;
+    letter-spacing: 1.5px;
+    color: #f0f0f0;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.diss-summary-style {
+    font-size: 0.78rem;
+    color: #d4a017;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.diss-summary-preview {
+    font-size: 0.82rem;
+    color: #666;
+    font-style: italic;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.diss-summary-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.diss-meta-chip {
+    font-size: 0.7rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.dot-draft     { background: #333; }
+.dot-published { background: #d4a017; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #444;
+}
+
+.empty-state .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.empty-state p { font-size: 0.95rem; margin-bottom: 1.5rem; }
+
+/* ── CTA BUTTON ── */
+.btn-create-diss {
+    font-family: "Bangers", cursive;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    padding: 11px 32px;
+    border-radius: 10px;
+    background: #d4a017;
+    color: #0a0a0a;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s, transform 0.15s;
+}
+
+.btn-create-diss:hover {
+    background: #f5c842;
+    color: #0a0a0a;
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container my-disses-page">
+
+    <div class="page-header">
+        <h1>✉️ My Disses</h1>
+        <p>
+            {% if disses %}
+                {{ disses|length }} diss{{ disses|length|pluralize:" ,es" }} loaded and ready to fire.
+            {% else %}
+                You haven't fired any disses yet.
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="row">
+    <div class="col-lg-8 mx-auto">
+
+        <div class="text-center mb-4">
+            <a href="{% url 'disses:diss_create' %}" class="btn-create-diss">
+                <i class="fas fa-plus"></i> Build a New Diss
+            </a>
+        </div>
+
+        {% if disses %}
+            {% for diss in disses %}
+            <a href="{% url 'disses:diss_detail' diss.pk %}" class="diss-summary-card">
+                <div class="diss-summary-inner">
+
+                    <!-- Avatar / Emoji strip -->
+                    <div class="diss-summary-avatar">
+                        {% if diss.target_archetype.avatar %}
+                            <img src="{{ diss.target_archetype.avatar.url }}"
+                                 alt="{{ diss.target_archetype.name }}">
+                        {% else %}
+                            {{ diss.target_archetype.emoji }}
+                        {% endif %}
+                    </div>
+
+                    <!-- Content -->
+                    <div class="diss-summary-content">
+                        <div class="diss-summary-archetype">
+                            {{ diss.target_archetype.name|upper }}
+                        </div>
+
+                        {% if diss.roast_style %}
+                        <div class="diss-summary-style">
+                            <i class="fas fa-fire"></i>
+                            {{ diss.roast_style.name }}
+                            {% if diss.roast_style.tagline %}— {{ diss.roast_style.tagline }}{% endif %}
+                        </div>
+                        {% endif %}
+
+                        <!-- First burn line preview -->
+                        {% with first_line=diss.selected_lines.first %}
+                        {% if first_line %}
+                        <div class="diss-summary-preview">
+                            "{{ first_line.content }}"
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+
+                        <div class="diss-summary-footer">
+                            <div class="diss-meta-chip">
+                                <span class="status-dot dot-{{ diss.status }}"></span>
+                                {{ diss.get_status_display }}
+                            </div>
+                            <div class="diss-meta-chip">
+                                <i class="fas fa-bolt"></i>
+                                {{ diss.selected_lines.count }} line{{ diss.selected_lines.count|pluralize }}
+                            </div>
+                            <div class="diss-meta-chip">
+                                <i class="fas fa-clock"></i>
+                                {{ diss.created_on|date:"d M Y" }}
+                            </div>
+                            {% if diss.is_riposte %}
+                            <div class="diss-meta-chip" style="color: #888;">
+                                <i class="fas fa-reply"></i> Riposte
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+            {% endfor %}
+
+        {% else %}
+            <div class="empty-state">
+                <span class="empty-icon">💀</span>
+                <p>You haven't built any disses yet.<br>
+                Someone out there deserves it. You know who.</p>
+            </div>
+        {% endif %}
+
+    </div>
+    </div>
+</div>
+{% endblock %}

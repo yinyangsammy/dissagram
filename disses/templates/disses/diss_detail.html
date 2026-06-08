@@ -1,0 +1,632 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ diss.target_archetype.name }} Diss by {{ diss.author.username }} 🔥 Dissagram{% endblock %}
+
+{% block meta_description %}A {{ diss.roast_style.name }} diss targeting {{ diss.target_archetype.name }}. Delivered by {{ diss.author.username }} on Dissagram.{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ================================================
+   DISS DETAIL PAGE — Trading Card Aesthetic
+   Dark base from site globals, card-specific below
+================================================ */
+
+.diss-detail-page {
+    padding: 3rem 0 5rem;
+}
+
+/* ── BACK LINK ── */
+.back-nav {
+    margin-bottom: 2rem;
+}
+
+.back-nav a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    transition: color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.back-nav a:hover { color: #d4a017; }
+
+/* ── THE CARD ── */
+.diss-card {
+    background: #0f0f0f;
+    border: 2.5px solid #1e1e1e;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+/* ── CARD TOP BAND — archetype hero ── */
+.diss-card-hero {
+    position: relative;
+    min-height: 1250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    width: 100%;
+}
+
+.hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    margin-bottom: 3rem;
+}
+
+.hero-image-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8rem;
+    background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+}
+
+/* Gradient overlay so text reads over image */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.1) 0%,
+        rgba(0,0,0,0.55) 50%,
+        rgba(0,0,0,0.92) 100%
+    );
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 1.5rem 1.8rem 1.2rem;
+    margin-top: auto;           /* add this line */
+}
+
+.hero-archetype-name {
+    font-family: "Bangers", cursive;
+    font-size: clamp(2.6rem, 6vw, 4rem);
+    letter-spacing: 3px;
+    color: #ffffff;
+    line-height: 1;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.8);
+    margin-bottom: 0.3rem;
+}
+
+/* Difficulty stars */
+.hero-stars {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-bottom: 0.5rem;
+}
+
+.h-star { font-size: 14px; color: #333; }
+.h-star.on { color: #c0392b; }
+
+.hero-diff-pill {
+    display: inline-block;
+    font-family: "Bangers", cursive;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.1);
+    color: #aaa;
+    border: 1px solid rgba(255,255,255,0.12);
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+/* Roast style badge on hero */
+.hero-style-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.2rem;          /* was 0.8rem */
+    color: #d4a017;
+    font-family: "Bangers", cursive;
+    letter-spacing: 2px;
+    background: rgba(212,160,23,0.12);
+    border: 1px solid rgba(212,160,23,0.3);
+    padding: 8px 20px;          /* was 4px 12px */
+    border-radius: 20px;
+}
+
+/* ── CARD BODY ── */
+.diss-card-body {
+    padding: 1.5rem 1.8rem;
+}
+
+/* ── TRAITS / WEAKNESSES COLUMNS ── */
+.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 520px) {
+    .two-col { grid-template-columns: 1fr; }
+}
+
+.trait-block-title {
+    font-family: "Bangers", cursive;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: #d4a017;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.trait-item {
+    font-size: 0.82rem;
+    color: #999;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    line-height: 1.45;
+    margin-bottom: 5px;
+}
+
+.trait-bullet {
+    color: #d4a017;
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    margin-top: 3px;
+}
+
+.weakness-bullet { color: #c0392b; }
+
+/* ── DIVIDER ── */
+.diss-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #2a2a2a, transparent);
+    margin: 1.5rem 0;
+}
+
+/* ── BURN LINES SECTION ── */
+.burn-lines-title {
+    font-family: "Bangers", cursive;
+    font-size: 1.35rem;
+    letter-spacing: 2px;
+    color: #ff4500;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.burn-line-card {
+    background: #0a0a0a;
+    border: 1px solid #1e1e1e;
+    border-left: 3px solid #d4a017;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    transition: border-left-color 0.2s;
+}
+
+.burn-line-card:hover { border-left-color: #ff4500; }
+
+.burn-line-type-badge {
+    display: inline-block;
+    font-family: "Bangers", cursive;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 5px;
+}
+
+.type-trait       { background: #0c3a5e; color: #6bb3e8; }
+.type-weakness    { background: #3b0e0e; color: #e88080; }
+.type-catchphrase { background: #2e1f00; color: #d4a017; }
+
+.burn-line-text {
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    line-height: 1.55;
+    font-style: italic;
+}
+
+/* ── CUSTOM NOTE ── */
+.custom-note-block {
+    background: #0d0d0d;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 1.2rem;
+}
+
+.custom-note-label {
+    font-family: "Bangers", cursive;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.custom-note-text {
+    font-size: 0.9rem;
+    color: #888;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+/* ── CARD FOOTER BAND ── */
+.diss-card-footer {
+    background: #080808;
+    border-top: 1px solid #1a1a1a;
+    padding: 1rem 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.footer-meta {
+    font-size: 0.75rem;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.footer-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: "Bangers", cursive;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.status-draft     { background: #1a1a1a; color: #555; border: 1px solid #222; }
+.status-published { background: rgba(212,160,23,0.12); color: #d4a017; border: 1px solid rgba(212,160,23,0.3); }
+
+/* ── ACTION BUTTONS ── */
+.diss-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-diss-edit {
+    font-family: "Bangers", cursive;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    padding: 10px 28px;
+    border-radius: 8px;
+    background: #d4a017;
+    color: #0a0a0a;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.btn-diss-edit:hover {
+    background: #f5c842;
+    color: #0a0a0a;
+    transform: translateY(-2px);
+}
+
+.btn-diss-delete {
+    font-family: "Bangers", cursive;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    padding: 10px 28px;
+    border-radius: 8px;
+    background: transparent;
+    color: #c0392b;
+    border: 1.5px solid #3b0e0e;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.btn-diss-delete:hover {
+    background: #3b0e0e;
+    color: #e88080;
+    transform: translateY(-2px);
+}
+
+.btn-diss-back {
+    font-family: "Bangers", cursive;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    padding: 10px 28px;
+    border-radius: 8px;
+    background: transparent;
+    color: #555;
+    border: 1.5px solid #222;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.btn-diss-back:hover {
+    border-color: #444;
+    color: #888;
+}
+
+/* ── RIPOSTE CHAIN ── */
+.riposte-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: #888;
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.riposte-badge a { color: #d4a017; text-decoration: none; }
+.riposte-badge a:hover { text-decoration: underline; }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container diss-detail-page">
+
+    <!-- ── BACK NAV ── -->
+    <div class="back-nav">
+        {% if user == diss.author %}
+            <a href="{% url 'disses:my_disses' %}">
+                <i class="fas fa-arrow-left"></i> My Disses
+            </a>
+        {% else %}
+            <a href="{% url 'roasts:roast_feed' %}">
+                <i class="fas fa-arrow-left"></i> Roast Feed
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- ══════════════════════════════════════
+         THE CARD
+    ══════════════════════════════════════ -->
+    <div class="diss-card">
+
+        <!-- ── HERO — archetype image + name ── -->
+        <div class="diss-card-hero">
+
+            {% if diss.target_archetype.avatar %}
+                <img class="hero-image"
+                     src="{{ diss.target_archetype.avatar.url }}"
+                     alt="{{ diss.target_archetype.name }}">
+            {% else %}
+                <div class="hero-image-placeholder">
+                    {{ diss.target_archetype.emoji }}
+                </div>
+            {% endif %}
+
+            <div class="hero-overlay"></div>
+
+            <div class="hero-content">
+
+                {% if diss.is_riposte and diss.parent_diss %}
+                <div class="riposte-badge">
+                    <i class="fas fa-reply"></i>
+                    Riposte to
+                    <a href="{% url 'disses:diss_detail' diss.parent_diss.pk %}">
+                        {{ diss.parent_diss.target_archetype.name }}
+                        by {{ diss.parent_diss.author.username }}
+                    </a>
+                </div>
+                {% endif %}
+
+                <div class="hero-archetype-name">
+                    {{ diss.target_archetype.emoji }}
+                    {{ diss.target_archetype.name|upper }}
+                </div>
+
+                <!-- Stars -->
+                <div class="hero-stars">
+                    {% with diff=diss.target_archetype.difficulty_level %}
+                        {% for i in "12345" %}
+                            <span class="h-star {% if forloop.counter <= 1 and diff == 'easy' %}on
+                                {% elif forloop.counter <= 2 and diff == 'mid' %}on
+                                {% elif forloop.counter <= 3 and diff == 'hard' %}on
+                                {% elif diff == 'legendary' %}on{% endif %}">★</span>
+                        {% endfor %}
+                    {% endwith %}
+                    <span class="hero-diff-pill">
+                        {{ diss.target_archetype.get_difficulty_level_display }}
+                    </span>
+                </div>
+
+                {% if diss.roast_style %}
+        <div style="display:flex; align-items:center; gap:12px; margin-top:0.5rem;">
+            {% if diss.roast_style.avatar %}
+            <img src="{{ diss.roast_style.avatar.url }}"
+                alt="{{ diss.roast_style.name }}"
+                style="width: 225px; height:225px; border-radius:50%;
+                        object-fit:cover; border:2px solid rgba(212,160,23,0.4);">
+            {% endif %}
+            <div class="hero-style-badge">
+                {{ diss.roast_style.emoji }}
+                {{ diss.roast_style.name|upper }}
+                {% if diss.roast_style.tagline %}
+                    &nbsp;—&nbsp;{{ diss.roast_style.tagline }}
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+            </div><!-- /hero-content -->
+        </div><!-- /hero -->
+
+        <!-- ── CARD BODY ── -->
+        <div class="diss-card-body">
+
+            <!-- TRAITS + WEAKNESSES columns -->
+            {% if diss.target_archetype.traits or diss.target_archetype.weaknesses %}
+            <div class="two-col">
+
+                {% if diss.target_archetype.traits %}
+                <div>
+                    <div class="trait-block-title">
+                        <i class="fas fa-eye"></i> Traits
+                    </div>
+                    {% for trait in diss.target_archetype.traits.splitlines %}
+                        {% if trait.strip %}
+                        <div class="trait-item">
+                            <span class="trait-bullet">▸</span>
+                            {{ trait.strip }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if diss.target_archetype.weaknesses %}
+                <div>
+                    <div class="trait-block-title" style="color: #c0392b;">
+                        <i class="fas fa-skull"></i> Weaknesses
+                    </div>
+                    {% for weakness in diss.target_archetype.weaknesses.splitlines %}
+                        {% if weakness.strip %}
+                        <div class="trait-item">
+                            <span class="trait-bullet weakness-bullet">▸</span>
+                            {{ weakness.strip }}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div>
+            {% endif %}
+
+            <div class="diss-divider"></div>
+
+            <!-- BURN LINES -->
+            {% with lines=diss.selected_lines.all %}
+            {% if lines %}
+            <div class="burn-lines-title">
+                <i class="fas fa-bolt"></i> The Burns
+            </div>
+
+            {% for line in lines %}
+            <div class="burn-line-card">
+                <span class="burn-line-type-badge">
+                    {% if line.category %}{{ line.category.emoji }} {{ line.category.name }}{% endif %}
+                </span>
+                <div class="burn-line-text">"{{ line.content }}"</div>
+            </div>
+            {% endfor %}
+
+            {% else %}
+            <p style="color:#444; font-style:italic; font-size:0.85rem; text-align:center; padding: 1rem 0;">
+                No burn lines selected yet.
+                {% if user == diss.author %}
+                    <a href="{% url 'disses:diss_edit' diss.pk %}" style="color:#d4a017;">Edit this diss</a> to add some.
+                {% endif %}
+            </p>
+            {% endif %}
+            {% endwith %}
+
+            <!-- CUSTOM NOTE -->
+            {% if diss.custom_note %}
+            <div class="custom-note-block">
+                <div class="custom-note-label">
+                    <i class="fas fa-pen-nib"></i> Personal Context
+                </div>
+                <div class="custom-note-text">{{ diss.custom_note }}</div>
+            </div>
+            {% endif %}
+
+        </div><!-- /card-body -->
+
+        <!-- ── CARD FOOTER ── -->
+        <div class="diss-card-footer">
+            <div class="footer-meta">
+                <div class="footer-meta-item">
+                    <i class="fas fa-fire" style="color:#ff4500;"></i>
+                    <span>{{ diss.author.username }}</span>
+                </div>
+                <div class="footer-meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>{{ diss.created_on|date:"d M Y" }}</span>
+                </div>
+                {% if diss.selected_lines.count %}
+                <div class="footer-meta-item">
+                    <i class="fas fa-bolt" style="color:#d4a017;"></i>
+                    <span>{{ diss.selected_lines.count }} burn{{ diss.selected_lines.count|pluralize }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <div>
+                <span class="status-pill status-{{ diss.status }}">
+                    {% if diss.status == "published" %}
+                        <i class="fas fa-globe"></i>
+                    {% else %}
+                        <i class="fas fa-lock"></i>
+                    {% endif %}
+                    {{ diss.get_status_display }}
+                </span>
+            </div>
+        </div>
+
+    </div><!-- /diss-card -->
+
+
+    <!-- ── ACTION BUTTONS (author only) ── -->
+    {% if user == diss.author %}
+    <div class="diss-actions">
+        <a href="{% url 'disses:diss_edit' diss.pk %}" class="btn-diss-edit">
+            <i class="fas fa-pen"></i> Edit Diss
+        </a>
+        <a href="{% url 'disses:diss_delete' diss.pk %}" class="btn-diss-delete">
+            <i class="fas fa-trash"></i> Delete
+        </a>
+        <a href="{% url 'disses:my_disses' %}" class="btn-diss-back">
+            <i class="fas fa-list"></i> All My Disses
+        </a>
+    </div>
+    {% endif %}
+
+</div><!-- /container -->
+{% endblock %}

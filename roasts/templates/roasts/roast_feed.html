@@ -1,0 +1,432 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Roast Feed 💀 Dissagram{% endblock %}
+
+{% block extra_css %}
+<style>
+.roast-feed-page { padding: 3rem 0 5rem; }
+
+/* ── PAGE HEADER ── */
+.feed-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.feed-header h1 {
+    font-family: "Bangers", cursive;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    color: #ff4500;
+    letter-spacing: 4px;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+}
+
+.feed-header .arena-text {
+    font-family: "Bangers", cursive;
+    font-size: 0.9rem;
+    letter-spacing: 4px;
+    color: #444;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.feed-header .subtitle {
+    color: #666;
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+/* ── FILTER BAR ── */
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    align-items: center;
+}
+
+.filter-select {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1.5px solid #2a2a2a;
+    background: #111;
+    color: #f0f0f0;
+    font-size: 0.85rem;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+    margin: 0 auto;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #d4a017;
+}
+
+/* ── ARCHETYPE ROAST CARD ── */
+.roast-archetype-card {
+    background: #0f0f0f;
+    border: 1.5px solid #1e1e1e;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+}
+
+.roast-archetype-card:hover {
+    border-color: #ff4500;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 32px rgba(255,69,0,0.15);
+}
+
+.roast-card-hero {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    background: #0d0d0d;
+}
+
+.roast-card-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+}
+
+.roast-card-hero-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+}
+
+.roast-card-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.85) 100%);
+}
+
+.roast-card-hero-name {
+    position: absolute;
+    bottom: 12px;
+    left: 14px;
+    right: 14px;
+    z-index: 1;
+}
+
+.roast-card-hero-name h3 {
+    font-family: "Bangers", cursive;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: #fff;
+    margin: 0;
+    line-height: 1;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+}
+
+.roast-card-hero-name .catchphrase {
+    font-size: 0.72rem;
+    color: #bbb;
+    font-style: italic;
+    margin-top: 2px;
+}
+
+/* Card body */
+.roast-card-body {
+    padding: 12px 14px 14px;
+}
+
+.roast-card-stats {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.roast-stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.roast-stat i { font-size: 0.7rem; }
+.roast-stat.fire { color: #ff4500; }
+.roast-stat.gold { color: #d4a017; }
+
+.diff-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.d-star { font-size: 11px; color: #2a2a2a; }
+.d-star.on { color: #c0392b; }
+
+/* Traits preview */
+.traits-preview {
+    font-size: 0.75rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+.trait-dot {
+    display: inline;
+    color: #d4a017;
+    margin-right: 2px;
+}
+
+.roast-card-footer {
+    padding: 10px 14px;
+    border-top: 1px solid #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pile-on-count {
+    font-family: "Bangers", cursive;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: #ff4500;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pile-on-btn {
+    font-family: "Bangers", cursive;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    background: #d4a017;
+    color: #0a0a0a;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.pile-on-btn:hover { background: #f5c842; }
+
+/* ── EMPTY STATE ── */
+.empty-feed {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #444;
+}
+
+.empty-feed .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+/* ── CTA BANNER ── */
+.cta-banner {
+    background: linear-gradient(135deg, #111, #1a1a1a);
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.cta-banner h3 {
+    font-family: "Bangers", cursive;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: #ff4500;
+    margin-bottom: 0.5rem;
+}
+
+.cta-banner p { color: #666; font-size: 0.9rem; margin-bottom: 1.2rem; }
+
+.btn-fire-diss {
+    font-family: "Bangers", cursive;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    padding: 11px 36px;
+    border-radius: 10px;
+    background: #d4a017;
+    color: #0a0a0a;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s, transform 0.15s;
+}
+
+.btn-fire-diss:hover {
+    background: #f5c842;
+    color: #0a0a0a;
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="container roast-feed-page">
+
+    <!-- ── HEADER ── -->
+    <div class="feed-header">
+        <div class="container py-5 text-center">
+      <p class="arena-text">
+            THE INTERNET'S ARCHETYPE COMBAT ARENA
+        </p>
+    <h1>💀 Roast Feed</h1>
+    <p class="subtitle">The public pile-on. All archetypes. All styles.</p>
+</div>
+
+    <!-- ── FILTER BAR ── -->
+    <form method="GET" class="filter-bar">
+        <select name="archetype" class="filter-select" onchange="this.form.submit()">
+            <option value="">All Archetypes</option>
+            {% for arch in archetypes %}
+            <option value="{{ arch.slug }}"
+                {% if archetype_filter == arch.slug %}selected{% endif %}>
+                {{ arch.emoji }} {{ arch.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <select name="style" class="filter-select" onchange="this.form.submit()">
+            <option value="">All Roast Styles</option>
+            {% for style in roast_styles %}
+            <option value="{{ style.slug }}"
+                {% if style_filter == style.slug %}selected{% endif %}>
+                {{ style.emoji }} {{ style.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        {% if archetype_filter or style_filter %}
+        <a href="{% url 'roasts:roast_feed' %}"
+           style="font-size:0.8rem; color:#666; text-decoration:none; padding: 8px 12px;">
+            <i class="fas fa-times"></i> Clear
+        </a>
+        {% endif %}
+    </form>
+
+    <!-- ── ARCHETYPE ROAST GRID ── -->
+    {% if roasts %}
+    <div class="row g-4">
+        {% for roast in roasts %}
+        <div class="col-sm-6 col-lg-4">
+            <a href="{% url 'roasts:roast_detail' roast.slug %}"
+               class="roast-archetype-card">
+
+                <!-- Hero image / emoji -->
+                <div class="roast-card-hero">
+                    {% if roast.archetype.avatar %}
+                        <img src="{{ roast.archetype.avatar.url }}"
+                             alt="{{ roast.archetype.name }}">
+                    {% else %}
+                        <div class="roast-card-hero-placeholder">
+                            {{ roast.archetype.emoji }}
+                        </div>
+                    {% endif %}
+                    <div class="roast-card-hero-overlay"></div>
+                    <div class="roast-card-hero-name">
+                        <h3>{{ roast.archetype.emoji }} {{ roast.archetype.name|upper }}</h3>
+                        {% if roast.archetype.catchphrase %}
+                        <div class="catchphrase">"{{ roast.archetype.catchphrase }}"</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="roast-card-body">
+                    <div class="roast-card-stats">
+                        <div class="roast-stat fire">
+                            <i class="fas fa-fire"></i>
+                            <span>{{ roast.get_public_disses.count }} diss{{ roast.get_public_disses.count|pluralize:"es" }}</span>
+                        </div>
+                        <div class="roast-stat">
+                            <div class="diff-stars">
+                                {% with diff=roast.archetype.difficulty_level %}
+                                {% for i in "12345" %}
+                                <span class="d-star
+                                    {% if forloop.counter == 1 and diff == 'easy' %}on
+                                    {% elif forloop.counter <= 2 and diff == 'mid' %}on
+                                    {% elif forloop.counter <= 3 and diff == 'hard' %}on
+                                    {% elif diff == 'legendary' %}on{% endif %}">★</span>
+                                {% endfor %}
+                                {% endwith %}
+                            </div>
+                            <span>{{ roast.archetype.get_difficulty_level_display }}</span>
+                        </div>
+                    </div>
+
+                    {% if roast.archetype.traits %}
+                    <div class="traits-preview">
+                        {% for trait in roast.archetype.traits.splitlines|slice:":2" %}
+                            {% if trait.strip %}
+                            <span class="trait-dot">•</span>{{ trait.strip }}{% if not forloop.last %}&nbsp;&nbsp;{% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Footer -->
+                <div class="roast-card-footer">
+                    <div class="pile-on-count">
+                        <i class="fas fa-skull"></i>
+                        Pile On
+                    </div>
+                    <div class="pile-on-btn">
+                        View Roast →
+                    </div>
+                </div>
+
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-feed">
+        <span class="empty-icon">💀</span>
+        <p>No roasts yet. Someone has to go first.</p>
+        {% if user.is_authenticated %}
+        <a href="{% url 'disses:diss_create' %}" class="btn-fire-diss">
+            <i class="fas fa-fire"></i> Fire the First Diss
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- ── CTA BANNER ── -->
+    {% if user.is_authenticated %}
+    <div class="cta-banner">
+        <h3>🔥 Got a Target in Mind?</h3>
+        <p>Pick your archetype. Pick your style. Load the lines. Fire.</p>
+        <a href="{% url 'disses:diss_create' %}" class="btn-fire-diss">
+            <i class="fas fa-plus"></i> Build a Diss
+        </a>
+    </div>
+    {% else %}
+    <div class="cta-banner">
+        <h3>🔥 Want to Pile On?</h3>
+        <p>Sign up to fire your own disses and join the feed.</p>
+        <a href="{% url 'account_signup' %}" class="btn-fire-diss">
+            <i class="fas fa-user-plus"></i> Join the Arena
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
