@@ -13,19 +13,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required
 def checkout(request, package_id):
-    """
-    Create a Stripe Checkout Session for the selected package.
-    Redirects to Stripe-hosted payment page.
-    """
     package = get_object_or_404(Package, pk=package_id, is_active=True)
-
-    # Create a pending order before redirecting to Stripe
-    order = Order.objects.create(
-        user=request.user,
-        package=package,
-        amount_paid=package.price,
-        status="pending",
-    )
 
     try:
         checkout_session = stripe.checkout.Session.create(
@@ -33,7 +21,7 @@ def checkout(request, package_id):
             line_items=[{
                 "price_data": {
                     "currency": "gbp",
-                    "unit_amount": int(package.price * 100),  # Stripe uses pence
+                    "unit_amount": int(package.price * 100),
                     "product_data": {
                         "name": package.name,
                         "description": package.tagline,
@@ -43,11 +31,10 @@ def checkout(request, package_id):
             }],
             mode="payment",
             success_url=request.build_absolute_uri(
-                f"/orders/success/?order_id={order.pk}"
+                f"/orders/success/?session_id={{CHECKOUT_SESSION_ID}}"
             ),
             cancel_url=request.build_absolute_uri("/orders/cancel/"),
             metadata={
-                "order_id": order.pk,
                 "user_id": request.user.pk,
                 "package_id": package.pk,
             }
@@ -55,11 +42,9 @@ def checkout(request, package_id):
         return redirect(checkout_session.url, code=303)
 
     except stripe.error.StripeError as e:
-        order.status = "failed"
-        order.save()
         messages.error(request, f"Payment error: {str(e)}")
         return redirect("orders:packages")
-    
+
 
 @login_required
 def order_history(request):
@@ -86,13 +71,24 @@ def order_history(request):
 
 @login_required
 def checkout_success(request):
-    """
-    Landing page after successful Stripe payment.
-    Order status updated via webhook — this is just the UX confirmation.
-    """
-    order_id = request.GET.get("order_id")
-    order = get_object_or_404(Order, pk=order_id, user=request.user)
-    return render(request, "orders/success.html", {"order": order})
+    session_id = request.GET.get("session_id")
+    try:
+        # Find the order created by webhook
+        order = Order.objects.filter(
+            user=request.user,
+            status="complete",
+            stripe_payment_id__icontains=session_id[:20]
+                if session_id else ""
+        ).latest("created_on")
+    except Order.DoesNotExist:
+        order = None
+
+    messages.success(
+        request, "🔥 Pack unlocked! Your arsenal is ready."
+    )
+    return render(
+        request, "orders/success.html", {"order": order}
+    )
 
 
 @login_required
@@ -133,11 +129,6 @@ def package_list(request):
 
 @csrf_exempt
 def stripe_webhook(request):
-    """
-    Stripe webhook — listens for payment_intent.succeeded
-    and marks the order complete.
-    This is the ONLY place order status should be set to complete.
-    """
     payload = request.body
     sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
 
@@ -150,15 +141,25 @@ def stripe_webhook(request):
 
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
-        order_id = session["metadata"].get("order_id")
+        user_id = session["metadata"].get("user_id")
+        package_id = session["metadata"].get("package_id")
 
-        if order_id:
+        if user_id and package_id:
             try:
-                order = Order.objects.get(pk=order_id)
-                order.status = "complete"
-                order.stripe_payment_id = session.get("payment_intent", "")
-                order.save()
-            except Order.DoesNotExist:
+                from django.contrib.auth.models import User
+                user = User.objects.get(pk=user_id)
+                package = Package.objects.get(pk=package_id)
+
+                Order.objects.create(
+                    user=user,
+                    package=package,
+                    amount_paid=package.price,
+                    status="complete",
+                    stripe_payment_id=session.get(
+                        "payment_intent", ""
+                    ),
+                )
+            except (User.DoesNotExist, Package.DoesNotExist):
                 pass
 
     return HttpResponse(status=200)
