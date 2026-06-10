@@ -146,6 +146,7 @@
     transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
     background: #111;
     user-select: none;
+    position: relative;
 }
 
 .arch-card:hover {
@@ -174,6 +175,17 @@
     letter-spacing: 1px;
     color: #f0f0f0;
     line-height: 1.1;
+    padding: 8px 10px 4px;
+    text-align: center;
+}
+
+.arch-catchphrase {
+    font-size: 0.7rem;
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    padding: 0 10px 8px;
+    line-height: 1.4;
 }
 
 .arch-card-emoji {
@@ -614,6 +626,61 @@
     color: #555;
 }
 
+/* ── LOCKED STATES ── */
+.arch-card.locked {
+    opacity: 0.4;
+    filter: grayscale(1);
+    cursor: not-allowed;
+}
+
+.arch-card.locked:hover {
+    transform: none;
+    border-color: #222;
+    box-shadow: none;
+}
+
+.lock-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.55);
+    border-radius: inherit;
+    gap: 6px;
+    pointer-events: none;
+}
+
+.lock-overlay .lock-icon {
+    font-size: 1.6rem;
+}
+
+.lock-overlay .lock-label {
+    font-family: 'Bangers', cursive;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    color: #d4a017;
+    text-align: center;
+    padding: 0 8px;
+}
+
+/* Same for roast style cards */
+.style-avatar-card.locked:hover {
+    transform: none;
+    border-color: #222;
+}
+
+/* ── LOCK TOAST KEYFRAMES ── */
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toastOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(12px); }
+}
 </style>
 {% endblock %}
 
@@ -831,7 +898,7 @@ const ARCHETYPES   = {{ archetypes_json|safe }};
 const ROAST_STYLES = {{ roast_styles_json|safe }};
 
 /* Pre-selected values (edit mode) */
-const INIT_ARCHETYPE_ID  = {{ selected_archetype_id|default:"null" }};
+const INIT_ARCHETYPE_ID   = {{ selected_archetype_id|default:"null" }};
 const INIT_ROAST_STYLE_ID = {{ selected_roast_style_id|default:"null" }};
 const INIT_LINE_IDS       = {{ selected_line_ids|default:"[]"|safe }};
 
@@ -869,69 +936,126 @@ const hiddenStatus    = document.getElementById("id_status");
 const hiddenPublic    = document.getElementById("id_is_public");
 
 /* =====================================================
-   CAROUSEL BUILD
+   LOCK TOAST
 ===================================================== */
-function diffStars(n) {
-    return [1,2,3,4,5].map(i =>
-        `<span class="arch-star${i<=n?" on":""}">★</span>`
-    ).join("");
+function showLockToast() {
+    /* Remove existing lock toast if present */
+    const existing = document.getElementById("lock-toast");
+    if (existing) existing.remove();
+
+    const toast = document.createElement("div");
+    toast.id = "lock-toast";
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 2rem; right: 2rem;
+        background: #111;
+        border: 1.5px solid #d4a017;
+        color: #f0f0f0;
+        font-family: 'Bangers', cursive;
+        font-size: 1rem;
+        letter-spacing: 1.5px;
+        padding: 14px 22px;
+        border-radius: 10px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: toastIn 0.35s ease forwards;
+    `;
+    toast.innerHTML = `🔒 Get a pack to unlock this!`;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = "toastOut 0.3s ease forwards";
+        setTimeout(() => toast.remove(), 350);
+    }, 1700);
 }
 
+/* =====================================================
+   CAROUSEL BUILD
+===================================================== */
 function buildCarousel() {
     track.innerHTML = "";
 
-    ARCHETYPES.forEach((arch, idx) => {
-        const card = document.createElement("div");
-        card.className = "arch-card";
-        card.dataset.id = arch.id;
-        card.setAttribute("role", "button");
-        card.setAttribute("tabindex", "0");
-        card.setAttribute("aria-label", `Select ${arch.name}`);
-
-        const traitsHtml = arch.traits.slice(0,3).map(t =>
-            `<div class="arch-card-trait">${t}</div>`
-        ).join("");
+    ARCHETYPES.forEach((arch) => {
+        const isLocked = arch.locked;
 
         const avatarHtml = arch.avatar_url
-            ? `<img src="${arch.avatar_url}" alt="${arch.name}" class="arch-card-avatar"
+            ? `<img src="${arch.avatar_url}"
+                    alt="${arch.name}"
                     style="width:100%;height:300px;object-fit:cover;display:block;">`
-            : `<div style="width:100%;height:300px;display:flex;align-items:center;
-                           justify-content:center;font-size:3.5rem;background:#0d0d0d;">
+            : `<div style="width:100%;height:300px;
+                           display:flex;align-items:center;
+                           justify-content:center;
+                           font-size:3.5rem;background:#0d0d0d;">
                    ${arch.emoji}
                </div>`;
 
+        const lockHtml = isLocked ? `
+            <div class="lock-overlay">
+                <span class="lock-icon">🔒</span>
+                <span class="lock-label">Unlock with a Pack</span>
+            </div>` : "";
+
+        const card = document.createElement("div");
+        card.className = `arch-card${isLocked ? " locked" : ""}`;
+        card.dataset.archId = arch.id;
+        if (isLocked) card.dataset.locked = "true";
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", isLocked ? "-1" : "0");
+        card.setAttribute("aria-label",
+            isLocked ? `${arch.name} — locked` : `Select ${arch.name}`
+        );
+
         card.innerHTML = `
             ${avatarHtml}
-            <div class="arch-card-header">
-                <div class="arch-card-name">${arch.emoji} ${arch.name}</div>
-                <div class="arch-card-stars">${diffStars(arch.difficulty)}</div>
-                <div class="arch-diff-pill">${arch.difficulty_label}</div>
-            </div>
-            <div class="arch-card-body">
-                <div class="arch-card-traits-label">Traits</div>
-                ${traitsHtml}
-            </div>
+            ${lockHtml}
+            <div class="arch-card-name">${arch.name}</div>
+            ${arch.catchphrase
+                ? `<div class="arch-catchphrase">"${arch.catchphrase}"</div>`
+                : ""}
         `;
 
-        card.addEventListener("click", () => pickArchetype(arch.id));
+        card.addEventListener("click", () => {
+            if (isLocked) {
+                showLockToast();
+                setTimeout(() => { window.location.href = "/orders/"; }, 1800);
+                return;
+            }
+            selectArchetype(arch, card);
+        });
+
         card.addEventListener("keydown", e => {
-            if (e.key === "Enter" || e.key === " ") pickArchetype(arch.id);
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                if (isLocked) {
+                    showLockToast();
+                    setTimeout(() => { window.location.href = "/orders/"; }, 1800);
+                    return;
+                }
+                selectArchetype(arch, card);
+            }
         });
 
         track.appendChild(card);
     });
 
-    /* Dots */
+    updateCarouselDots();
+    updateTrack();
+}
+
+/* =====================================================
+   CAROUSEL DOTS + TRACK
+===================================================== */
+function updateCarouselDots() {
     dotsEl.innerHTML = "";
-    const maxDots = Math.max(1, ARCHETYPES.length - CARDS_VISIBLE + 1);
     for (let i = 0; i < ARCHETYPES.length; i++) {
         const dot = document.createElement("div");
         dot.className = `c-dot${i === 0 ? " active" : ""}`;
         dot.addEventListener("click", () => moveTo(i));
         dotsEl.appendChild(dot);
     }
-
-    updateTrack();
 }
 
 function cardWidth() {
@@ -957,60 +1081,60 @@ nextBtn.addEventListener("click", () => { currentCarouselIdx++; updateTrack(); }
 window.addEventListener("resize", updateTrack);
 
 /* =====================================================
-   PICK ARCHETYPE
+   SELECT ARCHETYPE  (extracted from pickArchetype)
 ===================================================== */
-function pickArchetype(id) {
-    selectedArchetype = ARCHETYPES.find(a => a.id === id);
-    if (!selectedArchetype) return;
+function selectArchetype(arch, card) {
+    selectedArchetype = arch;
 
     /* Card highlight */
     document.querySelectorAll(".arch-card").forEach(c =>
-        c.classList.toggle("selected", parseInt(c.dataset.id) === id)
+        c.classList.toggle("selected", c === card)
     );
 
     /* Badge */
-    badgeName.textContent = selectedArchetype.name;
+    badgeName.textContent = arch.name;
     badge.classList.add("visible");
 
     /* Hidden input */
-    hiddenArchetype.value = id;
+    hiddenArchetype.value = arch.id;
 
     /* Steps */
     step1.classList.add("done");
     step1.classList.remove("active");
     step2.classList.add("active");
 
-    /* Reveal style section */
+    /* Reveal style section, reset downstream */
     sectionStyle.classList.add("revealed");
     sectionLines.classList.remove("revealed");
     sectionFinish.classList.remove("revealed");
 
-    /* Reset downstream */
     styleSelect.value = "";
     linesList.innerHTML = `<div class="disslines-placeholder">Select a roast style above to load your arsenal</div>`;
     hiddenStyle.value = "";
 
-    /* Build roast style options filtered to this archetype */
-    buildStyleSelect(selectedArchetype.roast_style_ids);
+    buildStyleSelect();
 
-    /* Scroll to style section */
     setTimeout(() => sectionStyle.scrollIntoView({ behavior: "smooth", block: "nearest" }), 100);
+}
+
+/* Keep pickArchetype as a convenience wrapper for init/edit restore */
+function pickArchetype(id) {
+    const arch = ARCHETYPES.find(a => a.id === id);
+    if (!arch || arch.locked) return;
+    const card = track.querySelector(`[data-arch-id="${id}"]`);
+    selectArchetype(arch, card);
 }
 
 /* =====================================================
    ROAST STYLE SELECT
 ===================================================== */
-function buildStyleSelect(allowedIds) {
+function buildStyleSelect() {
     const grid = document.getElementById("style-avatar-grid");
     grid.innerHTML = "";
 
-    const filtered = allowedIds.length
-        ? ROAST_STYLES.filter(s => allowedIds.includes(s.id))
-        : ROAST_STYLES;
-
-    filtered.forEach(s => {
+    ROAST_STYLES.forEach(s => {
         const card = document.createElement("div");
-        card.className = "style-avatar-card";
+        card.className = `style-avatar-card${s.locked ? " locked" : ""}`;
         card.dataset.styleId = s.id;
 
         const imgHtml = s.avatar_url
@@ -1020,24 +1144,23 @@ function buildStyleSelect(allowedIds) {
         card.innerHTML = `
             ${imgHtml}
             <div class="style-avatar-name">${s.name}</div>
+            ${s.locked ? `<div class="style-lock-icon">🔒</div>` : ""}
         `;
 
         card.addEventListener("click", () => {
-            // Update selected state
-            grid.querySelectorAll(".style-avatar-card").forEach(c =>
-                c.classList.remove("selected")
-            );
+            if (s.locked) {
+                showLockToast();
+                setTimeout(() => { window.location.href = "/orders/"; }, 1800);
+                return;
+            }
+            /* Selection logic */
+            grid.querySelectorAll(".style-avatar-card")
+                .forEach(c => c.classList.remove("selected"));
             card.classList.add("selected");
-
-            // Update hidden input + trigger line filtering
             document.getElementById("roast-style-select").value = s.id;
             hiddenStyle.value = s.id;
-
-            // Show selected badge
             document.getElementById("selected-style-name").textContent = s.name;
             document.getElementById("selected-style-wrap").style.display = "block";
-
-            // Trigger the lines section
             pickRoastStyle(s.id);
         });
 
@@ -1115,11 +1238,11 @@ document.getElementById("diss-form").addEventListener("submit", function(e) {
         return;
     }
     if (!hiddenStyle.value) {
-    e.preventDefault();
-    const grid = document.getElementById("style-avatar-grid");
-    grid.style.outline = "1.5px solid #c0392b";
-    setTimeout(() => grid.style.outline = "", 1500);
-    return;
+        e.preventDefault();
+        const grid = document.getElementById("style-avatar-grid");
+        grid.style.outline = "1.5px solid #c0392b";
+        setTimeout(() => grid.style.outline = "", 1500);
+        return;
     }
     const checked = document.querySelectorAll("input[name='selected_lines']:checked");
     if (!checked.length) {
@@ -1137,14 +1260,11 @@ buildCarousel();
 
 if (INIT_ARCHETYPE_ID) {
     pickArchetype(INIT_ARCHETYPE_ID);
-
-    /* Find the card index and scroll carousel to it */
     const idx = ARCHETYPES.findIndex(a => a.id === INIT_ARCHETYPE_ID);
     if (idx >= 0) { moveTo(Math.max(0, idx - 1)); }
 }
 
 if (INIT_ROAST_STYLE_ID) {
-    /* Wait a tick for the select to be built */
     setTimeout(() => {
         styleSelect.value = INIT_ROAST_STYLE_ID;
         styleSelect.dispatchEvent(new Event("change"));

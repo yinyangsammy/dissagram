@@ -4,15 +4,20 @@ from django.contrib.auth.models import User
 
 class RoastCategory(models.Model):
     """
-    Type of roast content.
-    e.g. Internal Monologue, CV Highlights, Psyche Report
+    Category of diss line — e.g. Diss Line, Internal Monologue.
+    Controls which lines are visible at each pack tier.
     """
-
     name = models.CharField(max_length=100)
-    slug = models.SlugField(unique=True)
-    description = models.TextField(blank=True)
     emoji = models.CharField(max_length=10, blank=True)
     display_order = models.PositiveIntegerField(default=0)
+    is_free = models.BooleanField(
+        default=True,
+        help_text="Always visible to free tier users"
+    )
+    required_pack_level = models.IntegerField(
+        default=0,
+        help_text="0=free, 1=Diss Pack+, 2=Burn Pack only"
+    )
 
     class Meta:
         ordering = ["display_order"]
@@ -20,7 +25,7 @@ class RoastCategory(models.Model):
         verbose_name_plural = "Roast Categories"
 
     def __str__(self):
-        return self.name
+        return f"{self.emoji} {self.name}"
 
 
 class RoastStyle(models.Model):

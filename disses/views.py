@@ -7,89 +7,207 @@ from .forms import DissForm
 from .models import Diss, DissLine
 
 
-# ─────────────────────────────────────────────
-# Helper — build the JSON payload the carousel JS needs
-# ─────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════
+# HELPERS — Freemium lock logic
+# ═══════════════════════════════════════════════════════
 
-def _archetype_json(archetypes, diss_lines_qs, roast_styles):
+def _get_user_unlocked_counts(user):
     """
-    Serialise archetypes → JSON for the carousel.
-    Each archetype carries:
-      - basic fields (id, name, emoji, difficulty_level, traits, weaknesses)
-      - roast_style_ids  : IDs of styles that have at least one line for it
-      - diss_lines       : approved lines grouped for JS filtering
+    Returns the maximum archetype + roast_style counts
+    the user has unlocked via completed orders.
+    Uses the highest pack purchased (not additive).
     """
+    from orders.models import Order
 
-    # Map archetype_id → list of style IDs that actually have lines for it
-    style_ids_by_archetype = {}
-    lines_by_archetype = {}
+    if not user.is_authenticated:
+        return 0, 0
 
-    for line in diss_lines_qs.select_related("archetype", "roast_style"):
-        aid = line.archetype_id
-        sid = line.roast_style_id
+    completed_orders = Order.objects.filter(
+        user=user,
+        status="complete"
+    ).select_related("package")
 
-        style_ids_by_archetype.setdefault(aid, set())
-        if sid:
-            style_ids_by_archetype[aid].add(sid)
+    max_archetypes = 0
+    max_roast_styles = 0
 
-        lines_by_archetype.setdefault(aid, [])
-        lines_by_archetype[aid].append({
-            "id": line.id,
-            "type": line.category.name if line.category else "Diss Line",  # ← fixed
-            "content": line.content,
-            "roast_style_id": sid,
-        })
+    for order in completed_orders:
+        if order.package:
+            max_archetypes = max(
+                max_archetypes,
+                order.package.archetype_count
+            )
+            max_roast_styles = max(
+                max_roast_styles,
+                order.package.roast_style_count
+            )
+
+    return max_archetypes, max_roast_styles
+
+
+def _get_user_pack_level(user):
+    """
+    Returns the highest pack level (display_order) the user owns.
+    0 = free tier, 1 = Diss Pack, 2 = Burn Pack.
+    Used to gate premium diss categories.
+    """
+    from orders.models import Order
+
+    if not user.is_authenticated:
+        return 0
+
+    completed = Order.objects.filter(
+        user=user,
+        status="complete"
+    ).select_related("package")
+
+    level = 0
+    for order in completed:
+        if order.package:
+            level = max(level, order.package.display_order)
+
+    return level
+
+
+def _get_accessible_category_names(user):
+    """
+    Returns a set of RoastCategory names the user can see.
+    Free categories always included.
+    Premium categories unlocked by pack level.
+    """
+    from dissers.models import RoastCategory
+
+    pack_level = _get_user_pack_level(user)
+
+    accessible = set(
+        RoastCategory.objects.filter(
+            required_pack_level__lte=pack_level
+        ).values_list("name", flat=True)
+    )
+
+    # Safety fallback — always include free categories
+    free_cats = set(
+        RoastCategory.objects.filter(
+            is_free=True
+        ).values_list("name", flat=True)
+    )
+
+    return accessible | free_cats
+
+
+def _archetype_json(archetypes, user):
+    """
+    Builds the JSON payload for the archetype carousel.
+    Includes locked state and filtered diss lines per archetype.
+    """
+    max_archetypes, _ = _get_user_unlocked_counts(user)
+    accessible_categories = _get_accessible_category_names(user)
 
     data = []
-    for arch in archetypes:
-        traits = [t.strip() for t in arch.traits.splitlines() if t.strip()]
-        weaknesses = [w.strip() for w in arch.weaknesses.splitlines() if w.strip()]
+    paid_count = 0
 
-        # Difficulty → integer for star rendering
-        diff_map = {"easy": 1, "mid": 2, "hard": 3, "legendary": 5}
-        diff_int = diff_map.get(arch.difficulty_level, 2)
+    for a in archetypes:
+        # Free archetypes always unlocked
+        if a.is_free:
+            locked = False
+        else:
+            paid_count += 1
+            locked = paid_count > max_archetypes
 
-        # Avatar URL — empty string if no image uploaded yet
-        avatar_url = arch.avatar.url if arch.avatar else ""
+        # Build disslines filtered by accessible categories
+        lines_by_style = {}
+        for line in a.diss_lines.filter(
+            status="approved"
+        ).select_related("roast_style", "category").order_by("display_order"):
+
+            cat_name = line.category.name if line.category else "Diss Line"
+
+            # Skip lines in categories the user hasn't unlocked
+            if cat_name not in accessible_categories:
+                continue
+
+            sid = line.roast_style_id
+            if sid not in lines_by_style:
+                lines_by_style[sid] = []
+
+            lines_by_style[sid].append({
+                "id": line.id,
+                "type": cat_name,
+                "content": line.content,
+                "roast_style_id": sid,
+            })
+
+        # Flatten disslines into a single list
+        all_lines = [
+            line
+            for lines in lines_by_style.values()
+            for line in lines
+        ]
 
         data.append({
-            "id": arch.id,
-            "name": arch.name,
-            "emoji": arch.emoji,
-            "difficulty": diff_int,
-            "difficulty_label": arch.get_difficulty_level_display(),
-            "traits": traits[:3],          # top 3 for the card preview
-            "weaknesses": weaknesses[:3],
-            "avatar_url": avatar_url,
-            "roast_style_ids": list(style_ids_by_archetype.get(arch.id, [])),
-            "diss_lines": lines_by_archetype.get(arch.id, []),
+            "id": a.id,
+            "name": a.name,
+            "slug": a.slug,
+            "emoji": a.emoji or "",
+            "avatar_url": a.avatar.url if a.avatar else "",
+            "traits": [
+                t.strip() for t in (a.traits or "").splitlines()
+                if t.strip()
+            ][:3],
+            "catchphrase": a.catchphrase or "",
+            "difficulty": a.difficulty_level or "mid",
+            "difficulty_label": a.get_difficulty_level_display(),
+            "is_free": a.is_free,
+            "locked": locked,
+            "diss_lines": all_lines,
         })
 
     return json.dumps(data)
 
 
-def _roast_style_json(roast_styles):
-    return json.dumps([
-        {
+def _roast_style_json(roast_styles, user):
+    """
+    Builds the JSON payload for the roast style selector.
+    Includes locked state per style.
+    """
+    _, max_roast_styles = _get_user_unlocked_counts(user)
+
+    data = []
+    paid_count = 0
+
+    for s in roast_styles:
+        if s.is_free:
+            locked = False
+        else:
+            paid_count += 1
+            locked = paid_count > max_roast_styles
+
+        data.append({
             "id": s.id,
             "name": s.name,
-            "emoji": s.emoji,
-            "tagline": s.tagline,
+            "emoji": s.emoji or "",
+            "tagline": s.tagline or "",
             "avatar_url": s.avatar.url if s.avatar else "",
-        }
-        for s in roast_styles
-    ])
+            "is_free": s.is_free,
+            "locked": locked,
+        })
+
+    return json.dumps(data)
 
 
-# ─────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════
 # VIEWS
-# ─────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════
 
 def diss_example(request):
+    """Public example page — no login required."""
     return render(request, "disses/diss_example.html")
 
 
 def my_disses(request):
+    """
+    Shows the logged-in user's own disses.
+    Anonymous users see an empty list.
+    """
     disses = []
     if request.user.is_authenticated:
         disses = (
@@ -104,14 +222,15 @@ def my_disses(request):
 
 @login_required
 def diss_create(request):
+    """
+    Main diss builder — step-by-step carousel form.
+    Archetype → RoastStyle → DissLines → Save.
+    Locked content determined by user's purchased packs.
+    """
     archetypes = TargetArchetype.objects.all().order_by("display_order")
     roast_styles = RoastStyle.objects.all().order_by("display_order")
-    diss_lines_qs = DissLine.objects.filter(status="approved").select_related(
-        "archetype", "roast_style"
-    )
 
     if request.method == "POST":
-        # Resolve archetype instance for scoped queryset
         archetype_id = request.POST.get("target_archetype")
         archetype_obj = None
         if archetype_id:
@@ -126,7 +245,7 @@ def diss_create(request):
             diss = form.save(commit=False)
             diss.author = request.user
             diss.save()
-            form.save_m2m()  # save selected_lines M2M
+            form.save_m2m()
             messages.success(
                 request,
                 f"🔥 Diss locked and loaded against "
@@ -138,9 +257,8 @@ def diss_create(request):
 
     context = {
         "form": form,
-        "archetypes_json": _archetype_json(archetypes, diss_lines_qs, roast_styles),
-        "roast_styles_json": _roast_style_json(roast_styles),
-        # Pass raw querysets too (for non-JS fallback if ever needed)
+        "archetypes_json": _archetype_json(archetypes, request.user),
+        "roast_styles_json": _roast_style_json(roast_styles, request.user),
         "archetypes": archetypes,
         "roast_styles": roast_styles,
     }
@@ -149,13 +267,14 @@ def diss_create(request):
 
 @login_required
 def diss_edit(request, pk):
+    """
+    Edit an existing diss — restores carousel state from saved values.
+    Only the author can edit their own diss.
+    """
     diss = get_object_or_404(Diss, pk=pk, author=request.user)
 
     archetypes = TargetArchetype.objects.all().order_by("display_order")
     roast_styles = RoastStyle.objects.all().order_by("display_order")
-    diss_lines_qs = DissLine.objects.filter(status="approved").select_related(
-        "archetype", "roast_style"
-    )
 
     if request.method == "POST":
         archetype_id = request.POST.get("target_archetype")
@@ -179,11 +298,11 @@ def diss_edit(request, pk):
         "form": form,
         "diss": diss,
         "editing": True,
-        "archetypes_json": _archetype_json(archetypes, diss_lines_qs, roast_styles),
-        "roast_styles_json": _roast_style_json(roast_styles),
+        "archetypes_json": _archetype_json(archetypes, request.user),
+        "roast_styles_json": _roast_style_json(roast_styles, request.user),
         "archetypes": archetypes,
         "roast_styles": roast_styles,
-        # Pre-selected IDs for JS to restore the carousel state on edit
+        # Pre-selected IDs — used by JS to restore carousel on edit
         "selected_archetype_id": diss.target_archetype_id or "",
         "selected_roast_style_id": diss.roast_style_id or "",
         "selected_line_ids": list(
@@ -194,8 +313,11 @@ def diss_edit(request, pk):
 
 
 def diss_detail(request, pk):
+    """
+    Public diss detail page.
+    Non-public disses only visible to their author.
+    """
     diss = get_object_or_404(Diss, pk=pk)
-    # Non-public disses only visible to their author
     if not diss.is_public and diss.author != request.user:
         from django.http import Http404
         raise Http404
@@ -204,6 +326,10 @@ def diss_detail(request, pk):
 
 @login_required
 def diss_delete(request, pk):
+    """
+    Delete a diss — POST only, with confirmation template.
+    Only the author can delete their own diss.
+    """
     diss = get_object_or_404(Diss, pk=pk, author=request.user)
     if request.method == "POST":
         diss.delete()

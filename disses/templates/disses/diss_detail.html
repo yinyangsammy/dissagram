@@ -24,7 +24,7 @@
 .back-nav a {
     color: #666;
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 1.5rem;
     letter-spacing: 0.5px;
     transition: color 0.15s;
     display: inline-flex;
@@ -45,30 +45,23 @@
     margin: 0 auto;
 }
 
-/* ── CARD TOP BAND — archetype hero ── */
+/* ── CARD TOP — image only, no overlay needed ── */
 .diss-card-hero {
     position: relative;
-    min-height: 1250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
     overflow: hidden;
     width: 100%;
 }
 
 .hero-image {
-    position: absolute;
-    inset: 0;
     width: 100%;
-    height: 100%;
+    display: block;
     object-fit: cover;
     object-position: top center;
-    margin-bottom: 3rem;
 }
 
 .hero-image-placeholder {
-    position: absolute;
-    inset: 0;
+    width: 100%;
+    min-height: 480px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -76,34 +69,20 @@
     background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
 }
 
-/* Gradient overlay so text reads over image */
-.hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.1) 0%,
-        rgba(0,0,0,0.55) 50%,
-        rgba(0,0,0,0.92) 100%
-    );
-    z-index: 1;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 1.5rem 1.8rem 1.2rem;
-    margin-top: auto;           /* add this line */
+/* ── ARCHETYPE NAME STRIP ── */
+.archetype-name-strip {
+    padding: 16px 22px 14px;
+    background: #0a0a0a;
+    border-bottom: 2px solid #1a1a1a;
 }
 
 .hero-archetype-name {
     font-family: "Bangers", cursive;
-    font-size: clamp(2.6rem, 6vw, 4rem);
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
     letter-spacing: 3px;
     color: #ffffff;
     line-height: 1;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.8);
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.4rem;
 }
 
 /* Difficulty stars */
@@ -111,7 +90,6 @@
     display: flex;
     align-items: center;
     gap: 3px;
-    margin-bottom: 0.5rem;
 }
 
 .h-star { font-size: 14px; color: #333; }
@@ -124,26 +102,104 @@
     letter-spacing: 1.5px;
     padding: 3px 10px;
     border-radius: 20px;
-    background: rgba(255,255,255,0.1);
-    color: #aaa;
-    border: 1px solid rgba(255,255,255,0.12);
-    margin-left: 6px;
+    background: rgba(255,255,255,0.07);
+    color: #888;
+    border: 1px solid rgba(255,255,255,0.1);
+    margin-left: 8px;
     vertical-align: middle;
 }
 
-/* Roast style badge on hero */
-.hero-style-badge {
-    display: inline-flex;
+/* ── ROAST STYLE STRIP (below hero) ── */
+.roast-style-strip {
+    display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 1.2rem;          /* was 0.8rem */
-    color: #d4a017;
+    gap: 18px;
+    padding: 18px 22px;
+    background: linear-gradient(135deg, #0d0d0d 0%, #111 100%);
+    border-top: 2px solid #1a1a1a;
+    border-bottom: 2px solid #1a1a1a;
+}
+
+.style-strip-avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2.5px solid rgba(212,160,23,0.5);
+    flex-shrink: 0;
+    box-shadow: 0 0 16px rgba(212,160,23,0.2);
+}
+
+.style-strip-emoji {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    border: 2.5px solid rgba(212,160,23,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    flex-shrink: 0;
+}
+
+.style-strip-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.style-strip-name {
     font-family: "Bangers", cursive;
-    letter-spacing: 2px;
-    background: rgba(212,160,23,0.12);
-    border: 1px solid rgba(212,160,23,0.3);
-    padding: 8px 20px;          /* was 4px 12px */
-    border-radius: 20px;
+    font-size: 1.4rem;
+    letter-spacing: 2.5px;
+    color: #d4a017;
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(212,160,23,0.3);
+}
+
+/* ── CARTOON SPEECH BUBBLE ── */
+.style-speech-bubble {
+    position: relative;
+    background: antiquewhite;
+    border-radius: 14px;
+    padding: 10px 16px;
+    display: inline-block;
+    max-width: 100%;
+    box-shadow:
+        3px 3px 0px #a07810,
+        0 0 0 2px #a07810;
+}
+
+/* Tail pointing left toward the avatar */
+.style-speech-bubble::before {
+    content: "";
+    position: absolute;
+    left: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 8px solid transparent;
+    border-right-color: #a07810;
+}
+
+.style-speech-bubble::after {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 7px solid transparent;
+    border-right-color: #d4a017;
+}
+
+.style-speech-text {
+    font-family: "Bangers", cursive;
+    font-size: 1.05rem;
+    letter-spacing: 1.5px;
+    color: #0a0a0a;
+    line-height: 1.3;
+    text-transform: uppercase;
 }
 
 /* ── CARD BODY ── */
@@ -227,7 +283,7 @@
 .burn-line-type-badge {
     display: inline-block;
     font-family: "Bangers", cursive;
-    font-size: 0.65rem;
+    font-size: 1.4rem;
     letter-spacing: 1px;
     padding: 2px 8px;
     border-radius: 20px;
@@ -239,7 +295,7 @@
 .type-catchphrase { background: #2e1f00; color: #d4a017; }
 
 .burn-line-text {
-    font-size: 0.95rem;
+    font-size: 1.15rem;
     color: #e0e0e0;
     line-height: 1.55;
     font-style: italic;
@@ -256,14 +312,14 @@
 
 .custom-note-label {
     font-family: "Bangers", cursive;
-    font-size: 0.85rem;
+    font-size: 1.3rem;
     letter-spacing: 1.5px;
     color: #555;
     margin-bottom: 6px;
 }
 
 .custom-note-text {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     color: #888;
     font-style: italic;
     line-height: 1.6;
@@ -282,7 +338,7 @@
 }
 
 .footer-meta {
-    font-size: 0.75rem;
+    font-size: 1.1rem;
     color: #444;
     display: flex;
     align-items: center;
@@ -301,7 +357,7 @@
     align-items: center;
     gap: 5px;
     font-family: "Bangers", cursive;
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     letter-spacing: 1.5px;
     padding: 3px 10px;
     border-radius: 20px;
@@ -441,61 +497,66 @@
                 </div>
             {% endif %}
 
-            <div class="hero-overlay"></div>
+        </div><!-- /hero -->
 
-            <div class="hero-content">
+        <!-- ── ARCHETYPE NAME STRIP — below the image ── -->
+        <div class="archetype-name-strip">
 
-                {% if diss.is_riposte and diss.parent_diss %}
-                <div class="riposte-badge">
-                    <i class="fas fa-reply"></i>
-                    Riposte to
-                    <a href="{% url 'disses:diss_detail' diss.parent_diss.pk %}">
-                        {{ diss.parent_diss.target_archetype.name }}
-                        by {{ diss.parent_diss.author.username }}
-                    </a>
-                </div>
-                {% endif %}
+            {% if diss.is_riposte and diss.parent_diss %}
+            <div class="riposte-badge">
+                <i class="fas fa-reply"></i>
+                Riposte to
+                <a href="{% url 'disses:diss_detail' diss.parent_diss.pk %}">
+                    {{ diss.parent_diss.target_archetype.name }}
+                    by {{ diss.parent_diss.author.username }}
+                </a>
+            </div>
+            {% endif %}
 
-                <div class="hero-archetype-name">
-                    {{ diss.target_archetype.emoji }}
-                    {{ diss.target_archetype.name|upper }}
-                </div>
+            <div class="hero-archetype-name">
+                {{ diss.target_archetype.emoji }}
+                {{ diss.target_archetype.name|upper }}
+            </div>
 
-                <!-- Stars -->
-                <div class="hero-stars">
-                    {% with diff=diss.target_archetype.difficulty_level %}
-                        {% for i in "12345" %}
-                            <span class="h-star {% if forloop.counter <= 1 and diff == 'easy' %}on
-                                {% elif forloop.counter <= 2 and diff == 'mid' %}on
-                                {% elif forloop.counter <= 3 and diff == 'hard' %}on
-                                {% elif diff == 'legendary' %}on{% endif %}">★</span>
-                        {% endfor %}
-                    {% endwith %}
-                    <span class="hero-diff-pill">
-                        {{ diss.target_archetype.get_difficulty_level_display }}
-                    </span>
-                </div>
+            <div class="hero-stars">
+                {% with diff=diss.target_archetype.difficulty_level %}
+                    {% for i in "12345" %}
+                        <span class="h-star {% if forloop.counter <= 1 and diff == 'easy' %}on
+                            {% elif forloop.counter <= 2 and diff == 'mid' %}on
+                            {% elif forloop.counter <= 3 and diff == 'hard' %}on
+                            {% elif diff == 'legendary' %}on{% endif %}">★</span>
+                    {% endfor %}
+                {% endwith %}
+                <span class="hero-diff-pill">
+                    {{ diss.target_archetype.get_difficulty_level_display }}
+                </span>
+            </div>
 
-                {% if diss.roast_style %}
-        <div style="display:flex; align-items:center; gap:12px; margin-top:0.5rem;">
+        </div><!-- /archetype-name-strip -->
+
+        <!-- ── ROAST STYLE BADGE — below the hero ── -->
+        {% if diss.roast_style %}
+        <div class="roast-style-strip">
             {% if diss.roast_style.avatar %}
             <img src="{{ diss.roast_style.avatar.url }}"
-                alt="{{ diss.roast_style.name }}"
-                style="width: 225px; height:225px; border-radius:50%;
-                        object-fit:cover; border:2px solid rgba(212,160,23,0.4);">
+                 alt="{{ diss.roast_style.name }}"
+                 class="style-strip-avatar">
+            {% else %}
+            <div class="style-strip-emoji">{{ diss.roast_style.emoji }}</div>
             {% endif %}
-            <div class="hero-style-badge">
-                {{ diss.roast_style.emoji }}
-                {{ diss.roast_style.name|upper }}
+
+            <div class="style-strip-body">
+                <div class="style-strip-name">
+                    {{ diss.roast_style.emoji }} {{ diss.roast_style.name|upper }}
+                </div>
                 {% if diss.roast_style.tagline %}
-                    &nbsp;—&nbsp;{{ diss.roast_style.tagline }}
+                <div class="style-speech-bubble">
+                    <span class="style-speech-text">{{ diss.roast_style.tagline }}</span>
+                </div>
                 {% endif %}
             </div>
         </div>
         {% endif %}
-
-            </div><!-- /hero-content -->
-        </div><!-- /hero -->
 
         <!-- ── CARD BODY ── -->
         <div class="diss-card-body">

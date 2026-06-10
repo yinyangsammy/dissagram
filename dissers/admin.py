@@ -8,9 +8,10 @@ class DisserAdmin(admin.ModelAdmin):
 
 @admin.register(RoastCategory)
 class RoastCategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "emoji", "display_order")
-    prepopulated_fields = {"slug": ("name",)}
+    list_display = ("name", "emoji", "is_free", "required_pack_level", "display_order")
+    list_filter = ("is_free",)
     ordering = ("display_order",)
+    # prepopulated_fields = {"slug": ("name",)}  ← remove this line entirely
 
 
 @admin.register(RoastStyle)
