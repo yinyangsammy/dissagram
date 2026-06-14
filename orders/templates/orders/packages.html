@@ -5,11 +5,6 @@
 
 {% block content %}
 
-<!-- ═══════════════════════════════════════
-     PACKAGES PAGE
-     Dissagram dark aesthetic — matches diss_form/diss_detail
-═══════════════════════════════════════ -->
-
 <style>
 /* ── TOAST ── */
 .diss-toast-wrap {
@@ -40,9 +35,7 @@
 .diss-toast.toast-success { border-color: #27ae60; }
 .diss-toast.toast-info    { border-color: #2980b9; }
 .diss-toast.toast-error   { border-color: #c0392b; }
-.diss-toast.toast-out {
-    animation: toastOut 0.3s ease forwards;
-}
+.diss-toast.toast-out { animation: toastOut 0.3s ease forwards; }
 @keyframes toastIn {
     from { opacity: 0; transform: translateY(20px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -53,7 +46,7 @@
 
 /* ── PAGE ── */
 .packages-page {
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 2.5rem 1.2rem 4rem;
 }
@@ -80,6 +73,7 @@
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.8rem;
     margin-bottom: 3rem;
+    align-items: start;
 }
 
 /* ── PACK CARD ── */
@@ -99,7 +93,6 @@
     transform: translateY(-6px);
     box-shadow: 0 8px 32px rgba(212,160,23,0.12);
 }
-
 .pack-card.selected {
     border-color: #d4a017;
     box-shadow: 0 8px 32px rgba(212,160,23,0.15);
@@ -108,14 +101,12 @@
     border-color: #e8621a;
     box-shadow: 0 8px 32px rgba(232,98,26,0.2);
 }
-
 .pack-card.owned {
     border-color: #27ae60;
     opacity: 0.75;
 }
-.pack-card.featured {
-    border-color: #e8621a;
-}
+.pack-card.featured { border-color: #e8621a; }
+
 .pack-featured-badge {
     position: absolute;
     top: -13px;
@@ -143,6 +134,7 @@
     letter-spacing: 1px;
     text-transform: uppercase;
     margin-top: -0.6rem;
+    font-weight: bold;
 }
 .pack-price {
     font-family: 'Bangers', cursive;
@@ -157,8 +149,6 @@
     letter-spacing: 0;
     font-family: inherit;
 }
-
-/* ── FEATURE LIST ── */
 .pack-features {
     list-style: none;
     padding: 0;
@@ -179,11 +169,8 @@
     font-size: 0.8rem;
     flex-shrink: 0;
 }
-.pack-features li.premium .feat-icon {
-    color: #9b59b6;
-}
+.pack-features li.premium .feat-icon { color: #9b59b6; }
 
-/* ── CTA BUTTON ── */
 .pack-cta {
     margin-top: auto;
     display: block;
@@ -213,6 +200,58 @@
     pointer-events: none;
 }
 
+/* ── COMING SOON PACK ── */
+.pack-coming-soon {
+    background: #0a0a0a;
+    border: 2px dashed #2a2a2a;
+    border-radius: 16px;
+    padding: 2rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    position: relative;
+    opacity: 0.85;
+    filter: grayscale(0.5);
+    cursor: not-allowed;
+    transition: opacity 0.25s;
+}
+.pack-coming-soon:hover { opacity: 0.6; }
+.pack-coming-soon-badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2a2a2a;
+    color: #888;
+    font-family: 'Bangers', cursive;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    padding: 3px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+    border: 1px solid #444;
+}
+.pack-coming-soon .pack-name { color: #555; }
+.pack-coming-soon .pack-tagline { color: #3a3a3a !important; }
+.pack-coming-soon .pack-price { color: #444; }
+.pack-coming-soon .pack-features li { color: #3a3a3a; }
+.pack-coming-soon .pack-features li .feat-icon { color: #333; }
+.lock-icon { font-size: 2rem; text-align: center; }
+.pack-coming-soon-btn {
+    margin-top: auto;
+    display: block;
+    text-align: center;
+    background: #1a1a1a;
+    color: #555;
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 1.5px dashed #333;
+    cursor: not-allowed;
+}
+
 /* ── GIFT SECTION ── */
 .gift-section {
     background: #0d0d0d;
@@ -224,7 +263,7 @@
 .gift-section h3 {
     font-family: 'Bangers', cursive;
     font-size: 1.5rem;
-    color: #9b59b6;
+    color: #4bad1e;
     letter-spacing: 2px;
     margin-bottom: 0.3rem;
 }
@@ -256,7 +295,7 @@
     border-color: #9b59b6;
 }
 .gift-btn {
-    background: linear-gradient(135deg, #6c3483, #9b59b6);
+    background: linear-gradient(135deg, #53a237, #3e8b1a);
     color: #fff;
     font-family: 'Bangers', cursive;
     font-size: 1rem;
@@ -269,101 +308,6 @@
     white-space: nowrap;
 }
 .gift-btn:hover { opacity: 0.88; }
-
-/* ── ORDER HISTORY ── */
-.order-history {
-    margin-top: 2rem;
-}
-.order-history h2 {
-    font-family: 'Bangers', cursive;
-    font-size: 1.6rem;
-    color: #f0f0f0;
-    letter-spacing: 2px;
-    margin-bottom: 1rem;
-}
-.order-row {
-    background: #0d0d0d;
-    border: 1.5px solid #1e1e1e;
-    border-radius: 10px;
-    padding: 1rem 1.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.7rem;
-    flex-wrap: wrap;
-}
-.order-row:hover { border-color: #2a2a2a; }
-.order-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-.order-pkg-name {
-    font-family: 'Bangers', cursive;
-    font-size: 1.1rem;
-    color: #f0f0f0;
-    letter-spacing: 1px;
-}
-.order-date {
-    font-size: 0.78rem;
-    color: #555;
-}
-.order-amount {
-    font-family: 'Bangers', cursive;
-    font-size: 1.3rem;
-    color: #e8621a;
-    letter-spacing: 1px;
-}
-.order-status {
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-weight: 600;
-}
-.status-complete  { background: #0e2e0e; color: #27ae60; }
-.status-pending   { background: #2e2300; color: #d4a017; }
-.status-failed    { background: #2e0e0e; color: #c0392b; }
-.status-refunded  { background: #1a1a2e; color: #2980b9; }
-
-/* ── ORDER ACTIONS ── */
-.order-actions {
-    display: flex;
-    gap: 8px;
-}
-.order-btn {
-    font-size: 0.78rem;
-    letter-spacing: 1px;
-    padding: 5px 14px;
-    border-radius: 6px;
-    border: 1.5px solid #333;
-    background: transparent;
-    color: #888;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
-    text-decoration: none;
-}
-.order-btn:hover {
-    border-color: #d4a017;
-    color: #d4a017;
-}
-.order-btn.danger:hover {
-    border-color: #c0392b;
-    color: #c0392b;
-}
-
-/* ── GIFTED BADGE ── */
-.gifted-badge {
-    font-size: 0.72rem;
-    background: #1a0a2e;
-    color: #9b59b6;
-    border: 1px solid #3a1a5e;
-    padding: 2px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.5px;
-}
 </style>
 
 <div class="packages-page">
@@ -374,38 +318,43 @@
         <p>Unlock more archetypes, roast styles & premium content</p>
     </div>
 
-    <!-- Django messages as toasts -->
+    <!-- TOASTS -->
     {% if messages %}
     <div class="diss-toast-wrap" id="toast-wrap">
         {% for message in messages %}
         <div class="diss-toast toast-{{ message.tags }}" role="alert">
-            {% if message.tags == 'success' %}✅{% elif message.tags == 'error' %}❌{% else %}ℹ️{% endif %}
+            {% if message.tags == 'success' %}✅
+            {% elif message.tags == 'error' %}❌
+            {% else %}ℹ️{% endif %}
             {{ message }}
         </div>
         {% endfor %}
     </div>
     {% endif %}
 
-    <!-- PACK CARDS -->
+    <!-- ═══════════════════
+         PACK GRID
+         Includes Coming Soon card at end
+    ═══════════════════ -->
     <div class="pack-grid">
-       {% for package in packages %}
-<div class="pack-card 
-     {% if package.already_owned %}owned{% endif %} 
-     {% if forloop.last %}featured{% endif %}">
 
-    {% if forloop.first and not package.already_owned %}
-    <div class="pack-featured-badge" 
-         style="background:#d4a017; display:none;">
-        💰 CHEAPEST OPTION
-    </div>
-    {% endif %}
+        {% for package in packages %}
+        <div class="pack-card
+             {% if package.already_owned %}owned{% endif %}
+             {% if forloop.last %}featured{% endif %}">
 
-    {% if forloop.last %}
-    <div class="pack-featured-badge"
-         style="display:none;">
-        🤑 BEST VALUE
-    </div>
-    {% endif %}
+            {% if forloop.first and not package.already_owned %}
+            <div class="pack-featured-badge"
+                 style="background:#d4a017; display:none;">
+                💰 CHEAPEST OPTION
+            </div>
+            {% endif %}
+
+            {% if forloop.last %}
+            <div class="pack-featured-badge" style="display:none;">
+                🤑 BEST VALUE
+            </div>
+            {% endif %}
 
             <div>
                 <div class="pack-name">{{ package.name }}</div>
@@ -470,13 +419,53 @@
             No packs available right now — check back soon.
         </p>
         {% endfor %}
-    </div>
 
-    <!-- GIFT A PACK -->
-    {% if user_owned_packages %}
+        <!-- ═══════════════════════════════════════
+             COMING SOON — Roast Subscription
+             Display only — no model or Stripe needed
+        ═══════════════════════════════════════ -->
+        <div class="pack-coming-soon">
+            <div class="pack-coming-soon-badge">🔒 COMING SOON</div>
+
+           
+
+            <div>
+                <div class="pack-name">Roast Pack</div>
+                <div class="pack-tagline" style="color:#3a3a3a;">
+                    💀 The Full Arsenal
+                </div>
+            </div>
+
+            <div class="pack-price">
+                £6.99<span> /month</span>
+            </div>
+
+            <ul class="pack-features">
+                <li><span class="feat-icon">🎴</span> 5 New Archetypes Monthly</li>
+                <li><span class="feat-icon">🎭</span> All Roast Styles</li>
+                <li><span class="feat-icon">🧠</span> All Premium Diss Categories</li>
+                <li><span class="feat-icon">🔥</span> Unlimited Deploy Burns</li>
+                <li><span class="feat-icon">⚔️</span> Battle Arena Access</li>
+                <li><span class="feat-icon">🏆</span> Seasonal Rankings &amp; Prizes</li>
+                <li><span class="feat-icon">👑</span> Exclusive Expansion Drops</li>
+                <li><span class="feat-icon">🎨</span> Early Access Roast Styles</li>
+            </ul>
+
+            <div class="pack-coming-soon-btn">🔒 COMING SOON</div>
+        </div>
+        <!-- /coming soon -->
+
+    </div><!-- /pack-grid -->
+
+    <!-- ═══════════════════
+         GIFT A PACK
+         Shows only when user owns at least one pack
+    ═══════════════════ -->
+    {% if user.is_authenticated %}
+    {% with completed_count=request.user.orders.filter %}
     <div class="gift-section">
         <h3>🎁 GIFT A PACK</h3>
-        <p>Already own a pack? Send one to a mate who needs roasting.</p>
+        <p>Buy a pack for mates who need to have a word.</p>
         <form method="POST" action="{% url 'orders:gift' %}" class="gift-form">
             {% csrf_token %}
             <select name="package_id" required>
@@ -497,51 +486,57 @@
             <button type="submit" class="gift-btn">🎁 SEND PACK</button>
         </form>
     </div>
+    {% endwith %}
     {% endif %}
 
-    <!-- ORDER HISTORY -->
-   {% if past_orders %}
-<div style="text-align:center; margin-top:2rem;">
-    <a href="{% url 'orders:history' %}" 
-       style="font-family:'Bangers',cursive; font-size:1.1rem;
-              letter-spacing:2px; color:#888; border:1.5px solid #333;
-              padding:10px 24px; border-radius:10px; text-decoration:none;
-              transition:color 0.2s, border-color 0.2s;"
-       onmouseover="this.style.color='#d4a017';this.style.borderColor='#d4a017'"
-       onmouseout="this.style.color='#888';this.style.borderColor='#333'">
-        ⚡ VIEW MY ORDERS
-    </a>
-</div>
-{% endif %}
+    <!-- VIEW ORDERS LINK -->
+    {% if user.is_authenticated %}
+    <div style="text-align:center; margin-top:2rem;">
+        <a href="{% url 'orders:history' %}"
+           style="font-family:'Bangers',cursive; font-size:1.1rem;
+                  letter-spacing:2px; color:#888; border:1.5px solid #333;
+                  padding:10px 24px; border-radius:10px; text-decoration:none;"
+           onmouseover="this.style.color='#d4a017';this.style.borderColor='#d4a017'"
+           onmouseout="this.style.color='#888';this.style.borderColor='#333'">
+            ⚡ VIEW MY ORDERS
+        </a>
+    </div>
+    {% endif %}
 
-</div>
+</div><!-- /packages-page -->
 
-<!-- TOAST AUTO-DISMISS -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+
+    /* ── Pack card selection ── */
     const cards = document.querySelectorAll(".pack-card:not(.owned)");
 
     function selectCard(card) {
         cards.forEach(c => {
             c.classList.remove("selected");
-            /* hide ALL banners first */
             const banner = c.querySelector(".pack-featured-badge");
             if (banner) banner.style.display = "none";
         });
         card.classList.add("selected");
-        /* show only this card's banner */
         const activeBanner = card.querySelector(".pack-featured-badge");
         if (activeBanner) activeBanner.style.display = "inline-block";
     }
 
-    /* Default — select last card (Best Value) on load */
+    /* Default: select last real pack (Best Value) on load */
     if (cards.length) selectCard(cards[cards.length - 1]);
 
     cards.forEach(card => {
         card.addEventListener("click", () => selectCard(card));
     });
-});
 
+    /* ── Toast auto-dismiss ── */
+    document.querySelectorAll(".diss-toast").forEach(toast => {
+        setTimeout(() => {
+            toast.classList.add("toast-out");
+            setTimeout(() => toast.remove(), 350);
+        }, 4000);
+    });
+});
 </script>
 
 {% endblock %}

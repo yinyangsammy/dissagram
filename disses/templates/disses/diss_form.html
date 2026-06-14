@@ -421,7 +421,7 @@
 .dissline-content { flex: 1; }
 
 .dissline-text {
-    font-size: 0.88rem;
+    font-size: 1.2rem;
     color: #ccc;
     line-height: 1.5;
 }
@@ -429,7 +429,7 @@
 .dissline-type-badge {
     display: inline-block;
     font-family: "Bangers", cursive;
-    font-size: 0.65rem;
+    font-size: 1.1rem;
     letter-spacing: 1px;
     padding: 1px 8px;
     border-radius: 20px;
@@ -693,7 +693,7 @@
 <!-- ── PAGE HEADER ── -->
 <div class="diss-form-header">
     <h1>{% if editing %}Edit Your Diss{% else %}Build Your Diss{% endif %}</h1>
-    <p class="subtitle">Choose your target. Pick your style. Load the burn lines. Fire.</p>
+    <p class="subtitle">Choose your target. Pick your style. Load the diss lines. Fire.</p>
 </div>
 
 <!-- ── STEP TRACKER ── -->
@@ -710,7 +710,7 @@
     <div class="step-sep"></div>
     <div class="step-item" id="step-3">
         <div class="step-num">3</div>
-        <span>Burn Lines</span>
+        <span>Diss Lines</span>
     </div>
     <div class="step-sep"></div>
     <div class="step-item" id="step-4">
@@ -901,6 +901,7 @@ const ROAST_STYLES = {{ roast_styles_json|safe }};
 const INIT_ARCHETYPE_ID   = {{ selected_archetype_id|default:"null" }};
 const INIT_ROAST_STYLE_ID = {{ selected_roast_style_id|default:"null" }};
 const INIT_LINE_IDS       = {{ selected_line_ids|default:"[]"|safe }};
+const MAX_LINE_SELECTIONS = {{ max_line_selections|default:1 }};
 
 /* =====================================================
    STATE
@@ -1211,11 +1212,99 @@ function renderDissLines(lines) {
                    value="${line.id}"
                    ${INIT_LINE_IDS.includes(line.id) ? "checked" : ""}>
             <div class="dissline-content">
-                <span class="dissline-type-badge type-${line.type}">${line.type}</span>
+                <span class="dissline-type-badge type-${line.type}">
+                    ${line.type}
+                </span>
                 <div class="dissline-text">${line.content}</div>
             </div>
         </label>
     `).join("");
+
+    /* Add limit enforcement after rendering */
+    enforceDissLineLimit();
+}
+
+function enforceDissLineLimit() {
+    const checkboxes = linesList.querySelectorAll(
+        "input[name='selected_lines']"
+    );
+
+    /* Add counter badge */
+    const existing = document.getElementById("line-limit-badge");
+    if (existing) existing.remove();
+
+    const badge = document.createElement("div");
+    badge.id = "line-limit-badge";
+    badge.style.cssText = `
+        font-family: 'Bangers', cursive;
+        font-size: 0.82rem;
+        letter-spacing: 1px;
+        color: #555;
+        margin-bottom: 8px;
+    `;
+
+    const updateBadge = () => {
+        const checked = linesList.querySelectorAll(
+            "input[name='selected_lines']:checked"
+        ).length;
+        badge.textContent = `${checked} / ${MAX_LINE_SELECTIONS} lines selected`;
+        badge.style.color = checked >= MAX_LINE_SELECTIONS ? "#d4a017" : "#555";
+    };
+
+    linesList.insertAdjacentElement("beforebegin", badge);
+    updateBadge();
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener("change", () => {
+            const checked = linesList.querySelectorAll(
+                "input[name='selected_lines']:checked"
+            ).length;
+
+            if (checked > MAX_LINE_SELECTIONS) {
+                /* Uncheck this one — limit reached */
+                cb.checked = false;
+                showLimitToast();
+            }
+            updateBadge();
+        });
+    });
+}
+
+function showLimitToast() {
+    const existing = document.getElementById("limit-toast");
+    if (existing) existing.remove();
+
+    const toast = document.createElement("div");
+    toast.id = "limit-toast";
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 2rem; right: 2rem;
+        background: #111;
+        border: 1.5px solid #e8621a;
+        color: #f0f0f0;
+        font-family: 'Bangers', cursive;
+        font-size: 1rem;
+        letter-spacing: 1.5px;
+        padding: 14px 22px;
+        border-radius: 10px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: toastIn 0.35s ease forwards;
+    `;
+    toast.innerHTML = `
+    🔥 Limit reached! Uncheck one to swap -
+    or<a href="/orders/" style="color:#d4a017; margin-left:4px;">
+    upgrade for more</a>
+    `;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = "toastOut 0.3s ease forwards";
+        setTimeout(() => toast.remove(), 350);
+    }, 2500);
 }
 
 /* =====================================================

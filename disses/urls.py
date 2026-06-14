@@ -11,4 +11,5 @@ urlpatterns = [
     path("<int:pk>/", views.diss_detail, name="diss_detail"),
     path("<int:pk>/edit/", views.diss_edit, name="diss_edit"),
     path("<int:pk>/delete/", views.diss_delete, name="diss_delete"),
+    path("<int:pk>/deploy/", views.deploy_burn, name="deploy_burn"),
 ]

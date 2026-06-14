@@ -20,6 +20,10 @@ class Package(models.Model):
     stripe_price_id = models.CharField(max_length=200, blank=True)
     display_order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
+    max_line_selections = models.IntegerField(
+        default=3,
+        help_text="Max disslines user can select (free=1, Diss=2, Burn=3)"
+    )
 
     class Meta:
         ordering = ["display_order"]

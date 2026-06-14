@@ -12,7 +12,6 @@
     text-align: center;
     margin-bottom: 3rem;
 }
-
 .feed-header h1 {
     font-family: "Bangers", cursive;
     font-size: clamp(3rem, 8vw, 5.5rem);
@@ -21,7 +20,6 @@
     line-height: 1;
     margin-bottom: 0.4rem;
 }
-
 .feed-header .arena-text {
     font-family: "Bangers", cursive;
     font-size: 0.9rem;
@@ -30,7 +28,6 @@
     text-transform: uppercase;
     margin-bottom: 0.5rem;
 }
-
 .feed-header .subtitle {
     color: #666;
     font-size: 0.95rem;
@@ -44,8 +41,8 @@
     flex-wrap: wrap;
     margin-bottom: 2.5rem;
     align-items: center;
+    justify-content: center;
 }
-
 .filter-select {
     padding: 8px 14px;
     border-radius: 8px;
@@ -59,12 +56,39 @@
     background-repeat: no-repeat;
     background-position: right 10px center;
     padding-right: 30px;
-    margin: 0 auto;
 }
-
 .filter-select:focus {
     outline: none;
     border-color: #d4a017;
+}
+
+/* ── STACKED CARDS EFFECT ── */
+.roast-card-stack {
+    position: relative;
+    /* Extra bottom padding so rotated cards don't clip */
+    padding-bottom: 8px;
+    height: 100%;
+}
+.roast-card-stack.has-multiple::before,
+.roast-card-stack.has-multiple::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    border: 1.5px solid #2a2a2a;
+    z-index: 0;
+}
+.roast-card-stack.has-multiple::before {
+    transform: rotate(1.5deg) translateY(4px);
+    background: #0d0d0d;
+}
+.roast-card-stack.has-multiple::after {
+    transform: rotate(-1deg) translateY(7px);
+    background: #0a0a0a;
+}
+.roast-card-stack .roast-archetype-card {
+    position: relative;
+    z-index: 1;
 }
 
 /* ── ARCHETYPE ROAST CARD ── */
@@ -78,20 +102,20 @@
     transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
     height: 100%;
 }
-
 .roast-archetype-card:hover {
     border-color: #ff4500;
     transform: translateY(-4px);
     box-shadow: 0 10px 32px rgba(255,69,0,0.15);
+    text-decoration: none;
 }
 
+/* ── CARD HERO ── */
 .roast-card-hero {
     position: relative;
-    height: 180px;
+    height: 750px;
     overflow: hidden;
     background: #0d0d0d;
 }
-
 .roast-card-hero img {
     width: 100%;
     height: 100%;
@@ -99,7 +123,6 @@
     object-position: top center;
     display: block;
 }
-
 .roast-card-hero-placeholder {
     width: 100%;
     height: 100%;
@@ -110,48 +133,35 @@
     background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
 }
 
-.roast-card-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.85) 100%);
+/* ── NAME STRIP ── */
+.roast-card-name-strip {
+    padding: 10px 14px 8px;
+    background: #0a0a0a;
+    border-bottom: 1px solid #1a1a1a;
 }
-
-.roast-card-hero-name {
-    position: absolute;
-    bottom: 12px;
-    left: 14px;
-    right: 14px;
-    z-index: 1;
-}
-
-.roast-card-hero-name h3 {
+.roast-card-name-strip h3 {
     font-family: "Bangers", cursive;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     letter-spacing: 2px;
-    color: #fff;
-    margin: 0;
+    color: #f0f0f0;
+    margin: 0 0 2px 0;
     line-height: 1;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
 }
-
-.roast-card-hero-name .catchphrase {
+.roast-card-name-strip .catchphrase {
     font-size: 0.72rem;
-    color: #bbb;
+    color: #888;
     font-style: italic;
-    margin-top: 2px;
 }
 
-/* Card body */
+/* ── CARD BODY ── */
 .roast-card-body {
     padding: 12px 14px 14px;
 }
-
 .roast-card-stats {
     display: flex;
     gap: 12px;
     margin-bottom: 10px;
 }
-
 .roast-stat {
     display: flex;
     align-items: center;
@@ -159,32 +169,22 @@
     font-size: 0.75rem;
     color: #666;
 }
-
 .roast-stat i { font-size: 0.7rem; }
 .roast-stat.fire { color: #ff4500; }
-.roast-stat.gold { color: #d4a017; }
 
-.diff-stars {
-    display: flex;
-    gap: 2px;
-}
-
-.d-star { font-size: 11px; color: #2a2a2a; }
-.d-star.on { color: #c0392b; }
-
-/* Traits preview */
+/* ── TRAITS PREVIEW ── */
 .traits-preview {
     font-size: 0.75rem;
     color: #555;
     line-height: 1.5;
 }
-
 .trait-dot {
     display: inline;
     color: #d4a017;
     margin-right: 2px;
 }
 
+/* ── CARD FOOTER ── */
 .roast-card-footer {
     padding: 10px 14px;
     border-top: 1px solid #1a1a1a;
@@ -192,7 +192,6 @@
     align-items: center;
     justify-content: space-between;
 }
-
 .pile-on-count {
     font-family: "Bangers", cursive;
     font-size: 0.8rem;
@@ -202,7 +201,6 @@
     align-items: center;
     gap: 5px;
 }
-
 .pile-on-btn {
     font-family: "Bangers", cursive;
     font-size: 0.75rem;
@@ -215,8 +213,90 @@
     cursor: pointer;
     transition: background 0.15s;
 }
-
 .pile-on-btn:hover { background: #f5c842; }
+
+/* ── COMING SOON PACK ── */
+.pack-coming-soon {
+    background: #0d0d0d;
+    border: 2px dashed #2a2a2a;
+    border-radius: 16px;
+    padding: 2rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    position: relative;
+    opacity: 0.6;
+    filter: grayscale(0.3);
+}
+.pack-coming-soon-badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #888;
+    font-family: 'Bangers', cursive;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    padding: 3px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+    border: 1px solid #444;
+}
+.pack-coming-soon .lock-icon {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+.pack-coming-soon .pack-name {
+    font-family: 'Bangers', cursive;
+    font-size: 1.9rem;
+    letter-spacing: 2px;
+    color: #555;
+    line-height: 1;
+}
+.pack-coming-soon .pack-tagline {
+    color: #444;
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.pack-coming-soon .pack-price {
+    font-family: 'Bangers', cursive;
+    font-size: 2.6rem;
+    color: #444;
+    letter-spacing: 2px;
+    line-height: 1;
+}
+.pack-coming-soon .pack-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.pack-coming-soon .pack-features li {
+    font-size: 0.87rem;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.pack-coming-soon-btn {
+    display: block;
+    text-align: center;
+    background: #1a1a1a;
+    color: #444;
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 1.5px solid #2a2a2a;
+    cursor: not-allowed;
+    margin-top: auto;
+}
 
 /* ── EMPTY STATE ── */
 .empty-feed {
@@ -224,7 +304,6 @@
     padding: 4rem 2rem;
     color: #444;
 }
-
 .empty-feed .empty-icon {
     font-size: 4rem;
     margin-bottom: 1rem;
@@ -240,7 +319,6 @@
     text-align: center;
     margin-top: 3rem;
 }
-
 .cta-banner h3 {
     font-family: "Bangers", cursive;
     font-size: 2rem;
@@ -248,9 +326,7 @@
     color: #ff4500;
     margin-bottom: 0.5rem;
 }
-
 .cta-banner p { color: #666; font-size: 0.9rem; margin-bottom: 1.2rem; }
-
 .btn-fire-diss {
     font-family: "Bangers", cursive;
     font-size: 1.1rem;
@@ -267,11 +343,11 @@
     gap: 8px;
     transition: background 0.15s, transform 0.15s;
 }
-
 .btn-fire-diss:hover {
     background: #f5c842;
     color: #0a0a0a;
     transform: translateY(-2px);
+    text-decoration: none;
 }
 </style>
 {% endblock %}
@@ -282,13 +358,10 @@
 
     <!-- ── HEADER ── -->
     <div class="feed-header">
-        <div class="container py-5 text-center">
-      <p class="arena-text">
-            THE INTERNET'S ARCHETYPE COMBAT ARENA
-        </p>
-    <h1>💀 Roast Feed</h1>
-    <p class="subtitle">The public pile-on. All archetypes. All styles.</p>
-</div>
+        <p class="arena-text">THE INTERNET'S ARCHETYPE COMBAT ARENA</p>
+        <h1>💀 Roast Feed</h1>
+        <p class="subtitle">The public pile-on. All archetypes. All styles.</p>
+    </div>
 
     <!-- ── FILTER BAR ── -->
     <form method="GET" class="filter-bar">
@@ -314,7 +387,7 @@
 
         {% if archetype_filter or style_filter %}
         <a href="{% url 'roasts:roast_feed' %}"
-           style="font-size:0.8rem; color:#666; text-decoration:none; padding: 8px 12px;">
+           style="font-size:0.8rem; color:#666; text-decoration:none; padding:8px 12px;">
             <i class="fas fa-times"></i> Clear
         </a>
         {% endif %}
@@ -323,78 +396,77 @@
     <!-- ── ARCHETYPE ROAST GRID ── -->
     {% if roasts %}
     <div class="row g-4">
-        {% for roast in roasts %}
-        <div class="col-sm-6 col-lg-4">
-            <a href="{% url 'roasts:roast_detail' roast.slug %}"
-               class="roast-archetype-card">
 
-                <!-- Hero image / emoji -->
-                <div class="roast-card-hero">
-                    {% if roast.archetype.avatar %}
-                        <img src="{{ roast.archetype.avatar.url }}"
-                             alt="{{ roast.archetype.name }}">
-                    {% else %}
-                        <div class="roast-card-hero-placeholder">
-                            {{ roast.archetype.emoji }}
-                        </div>
-                    {% endif %}
-                    <div class="roast-card-hero-overlay"></div>
-                    <div class="roast-card-hero-name">
+        {% for roast in roasts %}
+        {% with count=roast.get_public_disses.count %}
+        <div class="col-sm-6 col-lg-4">
+            <div class="roast-card-stack {% if count > 1 %}has-multiple{% endif %}">
+                <a href="{% url 'roasts:roast_detail' roast.slug %}"
+                   class="roast-archetype-card">
+
+                    <!-- Hero image -->
+                    <div class="roast-card-hero">
+                        {% if roast.archetype.avatar %}
+                            <img src="{{ roast.archetype.avatar.url }}"
+                                 alt="{{ roast.archetype.name }}">
+                        {% else %}
+                            <div class="roast-card-hero-placeholder">
+                                {{ roast.archetype.emoji }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Name strip below image -->
+                    <div class="roast-card-name-strip">
                         <h3>{{ roast.archetype.emoji }} {{ roast.archetype.name|upper }}</h3>
                         {% if roast.archetype.catchphrase %}
                         <div class="catchphrase">"{{ roast.archetype.catchphrase }}"</div>
                         {% endif %}
                     </div>
-                </div>
 
-                <!-- Body -->
-                <div class="roast-card-body">
-                    <div class="roast-card-stats">
-                        <div class="roast-stat fire">
-                            <i class="fas fa-fire"></i>
-                            <span>{{ roast.get_public_disses.count }} diss{{ roast.get_public_disses.count|pluralize:"es" }}</span>
-                        </div>
-                        <div class="roast-stat">
-                            <div class="diff-stars">
-                                {% with diff=roast.archetype.difficulty_level %}
-                                {% for i in "12345" %}
-                                <span class="d-star
-                                    {% if forloop.counter == 1 and diff == 'easy' %}on
-                                    {% elif forloop.counter <= 2 and diff == 'mid' %}on
-                                    {% elif forloop.counter <= 3 and diff == 'hard' %}on
-                                    {% elif diff == 'legendary' %}on{% endif %}">★</span>
-                                {% endfor %}
-                                {% endwith %}
+                    <!-- Body -->
+                    <div class="roast-card-body">
+                        <div class="roast-card-stats">
+                            <div class="roast-stat fire">
+                                <i class="fas fa-fire"></i>
+                                <span>
+                                    {% if count == 1 %}
+                                        1 burn
+                                    {% else %}
+                                        {{ count }} burns 💀
+                                    {% endif %}
+                                </span>
                             </div>
-                            <span>{{ roast.archetype.get_difficulty_level_display }}</span>
+                        </div>
+
+                        {% if roast.archetype.traits %}
+                        <div class="traits-preview">
+                            {% for trait in roast.archetype.traits.splitlines|slice:":2" %}
+                                {% if trait.strip %}
+                                <span class="trait-dot">•</span>{{ trait.strip }}{% if not forloop.last %}&nbsp;&nbsp;{% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="roast-card-footer">
+                        <div class="pile-on-count">
+                            <i class="fas fa-skull"></i>
+                            Pile On
+                        </div>
+                        <div class="pile-on-btn">
+                            View Roast →
                         </div>
                     </div>
 
-                    {% if roast.archetype.traits %}
-                    <div class="traits-preview">
-                        {% for trait in roast.archetype.traits.splitlines|slice:":2" %}
-                            {% if trait.strip %}
-                            <span class="trait-dot">•</span>{{ trait.strip }}{% if not forloop.last %}&nbsp;&nbsp;{% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
-
-                <!-- Footer -->
-                <div class="roast-card-footer">
-                    <div class="pile-on-count">
-                        <i class="fas fa-skull"></i>
-                        Pile On
-                    </div>
-                    <div class="pile-on-btn">
-                        View Roast →
-                    </div>
-                </div>
-
-            </a>
+                </a>
+            </div>
         </div>
+        {% endwith %}
         {% endfor %}
+
     </div>
 
     {% else %}

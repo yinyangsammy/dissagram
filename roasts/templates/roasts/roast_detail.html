@@ -2,10 +2,13 @@
 {% load static %}
 
 {% block title %}{{ roast.archetype.name }} Roast 💀 Dissagram{% endblock %}
-{% block meta_description %}All public disses targeting the {{ roast.archetype.name }} archetype on Dissagram. The internet's archetype roast feed.{% endblock %}
+{% block meta_description %}All public disses targeting the {{ roast.archetype.name }} archetype on Dissagram.{% endblock %}
 
 {% block extra_css %}
 <style>
+/* ════════════════════════════════════════
+   ROAST DETAIL PAGE
+════════════════════════════════════════ */
 .roast-detail-page { padding: 3rem 0 5rem; }
 
 /* ── ARCHETYPE HERO ── */
@@ -14,12 +17,11 @@
     border-radius: 18px;
     overflow: hidden;
     margin-bottom: 2.5rem;
-    min-height: 280px;
+    min-height: 320px;
     display: flex;
     align-items: flex-end;
     background: #0d0d0d;
 }
-
 .archetype-hero-img {
     position: absolute;
     inset: 0;
@@ -28,7 +30,6 @@
     object-fit: cover;
     object-position: top center;
 }
-
 .archetype-hero-placeholder {
     position: absolute;
     inset: 0;
@@ -38,20 +39,21 @@
     font-size: 9rem;
     background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
 }
-
 .archetype-hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.92) 100%);
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.05) 0%,
+        rgba(0,0,0,0.95) 100%
+    );
 }
-
 .archetype-hero-content {
     position: relative;
     z-index: 2;
     padding: 2rem;
     width: 100%;
 }
-
 .archetype-hero-name {
     font-family: "Bangers", cursive;
     font-size: clamp(2.5rem, 6vw, 4rem);
@@ -61,21 +63,18 @@
     text-shadow: 0 2px 16px rgba(0,0,0,0.8);
     margin-bottom: 0.4rem;
 }
-
 .archetype-catchphrase {
     font-size: 0.95rem;
     color: #bbb;
     font-style: italic;
     margin-bottom: 0.75rem;
 }
-
 .archetype-meta-badges {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
     align-items: center;
 }
-
 .archetype-badge {
     display: inline-flex;
     align-items: center;
@@ -86,38 +85,33 @@
     font-family: "Bangers", cursive;
     letter-spacing: 1px;
 }
-
 .badge-difficulty {
     background: rgba(192,57,43,0.15);
     border: 1px solid rgba(192,57,43,0.3);
     color: #e88080;
 }
-
 .badge-count {
     background: rgba(255,69,0,0.12);
     border: 1px solid rgba(255,69,0,0.25);
     color: #ff4500;
 }
 
-/* ── TRAITS / WEAKNESSES STRIP ── */
+/* ── TRAITS / WEAKNESSES ── */
 .archetype-info-strip {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
     margin-bottom: 2.5rem;
 }
-
 @media (max-width: 576px) {
     .archetype-info-strip { grid-template-columns: 1fr; }
 }
-
 .info-block {
     background: #0f0f0f;
     border: 1px solid #1e1e1e;
     border-radius: 12px;
     padding: 1rem 1.2rem;
 }
-
 .info-block-title {
     font-family: "Bangers", cursive;
     font-size: 0.9rem;
@@ -127,10 +121,8 @@
     align-items: center;
     gap: 6px;
 }
-
-.info-block-title.traits  { color: #d4a017; }
+.info-block-title.traits     { color: #d4a017; }
 .info-block-title.weaknesses { color: #c0392b; }
-
 .info-item {
     font-size: 0.8rem;
     color: #888;
@@ -140,12 +132,11 @@
     line-height: 1.5;
     margin-bottom: 4px;
 }
-
 .info-bullet { flex-shrink: 0; margin-top: 2px; }
 .info-bullet.gold { color: #d4a017; }
 .info-bullet.red  { color: #c0392b; }
 
-/* ── FILTER + SORT BAR ── */
+/* ── FILTER BAR ── */
 .diss-filter-bar {
     display: flex;
     gap: 10px;
@@ -153,7 +144,6 @@
     align-items: center;
     margin-bottom: 1.5rem;
 }
-
 .diss-filter-bar .section-title {
     font-family: "Bangers", cursive;
     font-size: 1.4rem;
@@ -161,7 +151,6 @@
     color: #ff4500;
     flex: 1;
 }
-
 .filter-select-sm {
     padding: 6px 28px 6px 10px;
     border-radius: 7px;
@@ -174,126 +163,141 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 8px center;
-}
-
-/* ── PUBLIC DISS CARDS ── */
-.public-diss-card {
-    background: #0f0f0f;
-    border: 1.5px solid #1e1e1e;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 1rem;
     transition: border-color 0.2s;
-    text-decoration: none;
-    display: block;
 }
-
-.public-diss-card:hover {
+.filter-select-sm:focus {
+    outline: none;
     border-color: #d4a017;
 }
 
-.diss-card-header {
-    padding: 12px 16px 8px;
+/* ── BURN CARDS GRID ── */
+.burns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+/* ── INDIVIDUAL BURN CARD ── */
+.burn-card {
+    background: #0f0f0f;
+    border: 1.5px solid #1e1e1e;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+}
+.burn-card:hover {
+    border-color: #d4a017;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+    text-decoration: none;
+}
+
+/* Card header: roast style avatar + author */
+.burn-card-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 10px;
+    padding: 12px 14px;
+    background: #0a0a0a;
     border-bottom: 1px solid #1a1a1a;
 }
-
-.diss-author-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.burn-style-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid #2a2a2a;
+    flex-shrink: 0;
 }
-
-.diss-author-avatar {
-    width: 28px;
-    height: 28px;
+.burn-style-emoji {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: #1a1a1a;
     border: 1.5px solid #2a2a2a;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.7rem;
-    color: #555;
+    font-size: 1.2rem;
     flex-shrink: 0;
 }
-
-.diss-author-name {
+.burn-header-info {
+    flex: 1;
+    min-width: 0;
+}
+.burn-author {
     font-size: 0.82rem;
     color: #888;
-    font-weight: 500;
-}
-
-.diss-style-badge {
-    font-family: "Bangers", cursive;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    background: rgba(212,160,23,0.1);
-    border: 1px solid rgba(212,160,23,0.25);
-    color: #d4a017;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.burn-style-name {
+    font-family: "Bangers", cursive;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    color: #d4a017;
 }
 
-.diss-card-lines {
-    padding: 12px 16px;
+/* Card body: burn lines */
+.burn-card-body {
+    padding: 12px 14px;
+    flex: 1;
 }
+.burn-line-item {
+    margin-bottom: 8px;
+}
+.burn-line-cat {
+    font-family: "Bangers", cursive;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    padding: 1px 8px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 3px;
+}
+.cat-Diss-Line            { background: #0c3a5e; color: #6bb3e8; }
+.cat-Internal-Monologue   { background: #2e1f00; color: #d4a017; }
+.cat-LinkedIn-Endorsement { background: #0e3b1a; color: #6be8a0; }
+.cat-default              { background: #1a1a1a; color: #888; }
 
-.pub-burn-line {
-    font-size: 0.88rem;
+.burn-line-text {
+    font-size: 0.86rem;
     color: #ccc;
     font-style: italic;
-    line-height: 1.6;
-    display: flex;
-    gap: 8px;
-    margin-bottom: 6px;
-    align-items: flex-start;
+    line-height: 1.5;
 }
-
-.pub-burn-line .line-type-dot {
-    font-size: 0.6rem;
-    font-family: "Bangers", cursive;
-    letter-spacing: 0.5px;
-    padding: 2px 7px;
-    border-radius: 20px;
-    flex-shrink: 0;
-    margin-top: 3px;
-}
-
-.type-trait       { background: #0c3a5e; color: #6bb3e8; }
-.type-weakness    { background: #3b0e0e; color: #e88080; }
-.type-catchphrase { background: #2e1f00; color: #d4a017; }
-
-.more-lines-note {
-    font-size: 0.75rem;
+.burn-more-lines {
+    font-size: 0.72rem;
     color: #444;
     font-style: italic;
     margin-top: 4px;
 }
 
-.diss-card-note {
-    padding: 0 16px 10px;
-    font-size: 0.8rem;
+/* Custom note */
+.burn-card-note {
+    padding: 8px 14px;
+    font-size: 0.78rem;
     color: #555;
     font-style: italic;
     border-top: 1px solid #161616;
-    padding-top: 8px;
+    line-height: 1.4;
 }
 
-.diss-card-meta-footer {
-    padding: 8px 16px;
+/* Card footer */
+.burn-card-footer {
+    padding: 8px 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: #080808;
     border-top: 1px solid #1a1a1a;
 }
-
-.diss-meta-chip {
+.burn-meta-chip {
     font-size: 0.7rem;
     color: #444;
     display: flex;
@@ -308,11 +312,29 @@
     color: #444;
     border: 1.5px dashed #1e1e1e;
     border-radius: 12px;
+    grid-column: 1 / -1;
+}
+.empty-disses p { font-size: 0.9rem; margin-bottom: 1.2rem; color: #555; }
+.btn-fire-first {
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    padding: 10px 28px;
+    border-radius: 9px;
+    background: #d4a017;
+    color: #0a0a0a;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.15s, transform 0.15s;
+}
+.btn-fire-first:hover {
+    background: #f5c842;
+    color: #0a0a0a;
+    transform: translateY(-2px);
+    text-decoration: none;
 }
 
-.empty-disses p { font-size: 0.9rem; margin-bottom: 1.2rem; }
-
-/* ── BACK + CTA ── */
+/* ── NAV BUTTONS ── */
 .page-actions {
     display: flex;
     gap: 10px;
@@ -320,7 +342,6 @@
     align-items: center;
     margin-bottom: 2rem;
 }
-
 .btn-back {
     font-size: 0.82rem;
     color: #666;
@@ -330,8 +351,7 @@
     gap: 6px;
     transition: color 0.15s;
 }
-
-.btn-back:hover { color: #d4a017; }
+.btn-back:hover { color: #d4a017; text-decoration: none; }
 
 .btn-pile-on {
     font-family: "Bangers", cursive;
@@ -350,25 +370,20 @@
     margin-left: auto;
     transition: background 0.15s, transform 0.15s;
 }
-
 .btn-pile-on:hover {
     background: #f5c842;
     color: #0a0a0a;
     transform: translateY(-2px);
+    text-decoration: none;
 }
 </style>
 {% endblock %}
 
 
 {% block content %}
-
-<div class="container py-5 text-center">
-    <h1>💀 The Roast</h1>
-    <p>All public disses for this archetype will pile on here.</p>
-</div>
 <div class="container roast-detail-page">
 
-    <!-- Back nav -->
+    <!-- ── NAV ── -->
     <div class="page-actions">
         <a href="{% url 'roasts:roast_feed' %}" class="btn-back">
             <i class="fas fa-arrow-left"></i> Roast Feed
@@ -387,7 +402,9 @@
                  src="{{ roast.archetype.avatar.url }}"
                  alt="{{ roast.archetype.name }}">
         {% else %}
-            <div class="archetype-hero-placeholder">{{ roast.archetype.emoji }}</div>
+            <div class="archetype-hero-placeholder">
+                {{ roast.archetype.emoji }}
+            </div>
         {% endif %}
         <div class="archetype-hero-overlay"></div>
 
@@ -407,7 +424,8 @@
                 </span>
                 <span class="archetype-badge badge-count">
                     <i class="fas fa-fire"></i>
-                    {{ public_disses.count }} public diss{{ public_disses.count|pluralize:"es" }}
+                    {{ public_disses.count }}
+                    public diss{{ public_disses.count|pluralize:"es" }}
                 </span>
             </div>
         </div>
@@ -450,14 +468,16 @@
     </div>
     {% endif %}
 
-    <!-- ── PUBLIC DISSES ── -->
+    <!-- ── FILTER BAR ── -->
     <div class="diss-filter-bar">
         <div class="section-title">
             <i class="fas fa-bolt"></i> The Burns
         </div>
         {% if public_disses.count > 0 %}
         <form method="GET" style="display:flex; gap:8px; align-items:center;">
-            <select name="style" class="filter-select-sm" onchange="this.form.submit()">
+            <select name="style"
+                    class="filter-select-sm"
+                    onchange="this.form.submit()">
                 <option value="">All Styles</option>
                 {% for style in roast_styles %}
                 <option value="{{ style.slug }}"
@@ -470,91 +490,114 @@
         {% endif %}
     </div>
 
-    {% if public_disses %}
-        {% for diss in public_disses %}
-        <a href="{% url 'disses:diss_detail' diss.pk %}" class="public-diss-card">
+    <!-- ── BURNS GRID ── -->
+    <div class="burns-grid">
 
-            <!-- Header: author + style -->
-            <div class="diss-card-header">
-                <div class="diss-author-info">
-                    <div class="diss-author-avatar">
-                        <i class="fas fa-fire"></i>
+        {% if public_disses %}
+            {% for diss in public_disses %}
+            <a href="{% url 'disses:diss_detail' diss.pk %}"
+               class="burn-card">
+
+                <!-- Header: roast style avatar + author -->
+                <div class="burn-card-header">
+                    {% if diss.roast_style.avatar %}
+                    <img src="{{ diss.roast_style.avatar.url }}"
+                         alt="{{ diss.roast_style.name }}"
+                         class="burn-style-avatar">
+                    {% else %}
+                    <div class="burn-style-emoji">
+                        {{ diss.roast_style.emoji }}
                     </div>
-                    <span class="diss-author-name">{{ diss.author.username }}</span>
+                    {% endif %}
+
+                    <div class="burn-header-info">
+                        <div class="burn-author">
+                            <i class="fas fa-fire"
+                               style="color:#ff4500; font-size:0.65rem;"></i>
+                            {{ diss.author.username }}
+                        </div>
+                        {% if diss.roast_style %}
+                        <div class="burn-style-name">
+                            {{ diss.roast_style.name }}
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
-                {% if diss.roast_style %}
-                <span class="diss-style-badge">
-                    {{ diss.roast_style.emoji }} {{ diss.roast_style.name }}
-                </span>
+
+                <!-- Burn lines (max 2) -->
+                {% with lines=diss.selected_lines.all %}
+                {% if lines %}
+                <div class="burn-card-body">
+                    {% for line in lines|slice:":2" %}
+                    <div class="burn-line-item">
+                        {% if line.category %}
+                        <span class="burn-line-cat cat-{{ line.category.name|cut:' ' }}">
+                            {{ line.category.emoji }} {{ line.category.name }}
+                        </span>
+                        {% endif %}
+                        <div class="burn-line-text">
+                            "{{ line.content }}"
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% if lines.count > 2 %}
+                    <div class="burn-more-lines">
+                        + {{ lines.count|add:"-2" }} more
+                        line{{ lines.count|add:"-2"|pluralize }}
+                    </div>
+                    {% endif %}
+                </div>
                 {% endif %}
-            </div>
+                {% endwith %}
 
-            <!-- Burn lines preview (max 2) -->
-            {% with lines=diss.selected_lines.all %}
-            {% if lines %}
-            <div class="diss-card-lines">
-                {% for line in lines|slice:":2" %}
-                <div class="pub-burn-line">
-                    <span class="line-type-dot type-{{ line.line_type }}">
-                        {{ line.get_line_type_display }}
-                    </span>
-                    "{{ line.content }}"
-                </div>
-                {% endfor %}
-                {% if lines|length > 2 %}
-                <div class="more-lines-note">
-                    + {{ lines|length|add:"-2" }} more line{{ lines|length|add:"-2"|pluralize }}
+                <!-- Custom note -->
+                {% if diss.custom_note %}
+                <div class="burn-card-note">
+                    <i class="fas fa-pen-nib"
+                       style="color:#333; margin-right:4px;"></i>
+                    {{ diss.custom_note|truncatechars:100 }}
                 </div>
                 {% endif %}
-            </div>
-            {% endif %}
-            {% endwith %}
 
-            {% if diss.custom_note %}
-            <div class="diss-card-note">
-                <i class="fas fa-pen-nib" style="color:#333;"></i>
-                {{ diss.custom_note|truncatechars:120 }}
-            </div>
-            {% endif %}
-
-            <!-- Footer: date + line count -->
-            <div class="diss-card-meta-footer">
-                <div class="diss-meta-chip">
-                    <i class="fas fa-clock"></i>
-                    {{ diss.created_on|date:"d M Y" }}
+                <!-- Footer -->
+                <div class="burn-card-footer">
+                    <div class="burn-meta-chip">
+                        <i class="fas fa-clock"></i>
+                        {{ diss.created_on|date:"d M Y" }}
+                    </div>
+                    <div class="burn-meta-chip">
+                        <i class="fas fa-bolt"
+                           style="color:#d4a017;"></i>
+                        {{ diss.selected_lines.count }}
+                        burn{{ diss.selected_lines.count|pluralize }}
+                    </div>
                 </div>
-                <div class="diss-meta-chip">
-                    <i class="fas fa-bolt" style="color:#d4a017;"></i>
-                    {{ diss.selected_lines.count }} burn{{ diss.selected_lines.count|pluralize }}
-                </div>
-            </div>
 
-        </a>
-        {% endfor %}
+            </a>
+            {% endfor %}
 
-    {% else %}
-    <div class="empty-disses">
-        <p>
-            No public disses yet for the {{ roast.archetype.name }}.<br>
-            Someone has to start the pile-on.
-        </p>
-        {% if user.is_authenticated %}
-        <a href="{% url 'disses:diss_create' %}"
-           style="font-family:'Bangers',cursive; font-size:1rem; letter-spacing:2px;
-                  padding:10px 28px; border-radius:9px; background:#d4a017;
-                  color:#0a0a0a; text-decoration:none; display:inline-block;">
-            <i class="fas fa-fire"></i> Fire the First Diss
-        </a>
         {% else %}
-        <a href="{% url 'account_signup' %}"
-           style="font-family:'Bangers',cursive; font-size:1rem; letter-spacing:2px;
-                  padding:10px 28px; border-radius:9px; background:#d4a017;
-                  color:#0a0a0a; text-decoration:none; display:inline-block;">
-            <i class="fas fa-user-plus"></i> Join to Fire First
-        </a>
+        <div class="empty-disses">
+            <p>
+                No public disses yet for the
+                {{ roast.archetype.name }}.<br>
+                Someone has to start the pile-on.
+            </p>
+            {% if user.is_authenticated %}
+            <a href="{% url 'disses:diss_create' %}"
+               class="btn-fire-first">
+                <i class="fas fa-fire"></i> Fire the First Diss
+            </a>
+            {% else %}
+            <a href="{% url 'account_signup' %}"
+               class="btn-fire-first">
+                <i class="fas fa-user-plus"></i> Join to Fire First
+            </a>
+            {% endif %}
+        </div>
         {% endif %}
-    </div>
-    {% endif %}
+
+    </div><!-- /burns-grid -->
 
 </div>
 {% endblock %}

@@ -261,6 +261,7 @@ def diss_create(request):
         "roast_styles_json": _roast_style_json(roast_styles, request.user),
         "archetypes": archetypes,
         "roast_styles": roast_styles,
+        "max_line_selections": _get_max_line_selections(request.user),
     }
     return render(request, "disses/diss_form.html", context)
 
@@ -308,6 +309,7 @@ def diss_edit(request, pk):
         "selected_line_ids": list(
             diss.selected_lines.values_list("id", flat=True)
         ),
+        "max_line_selections": _get_max_line_selections(request.user),
     }
     return render(request, "disses/diss_form.html", context)
 
@@ -336,3 +338,107 @@ def diss_delete(request, pk):
         messages.success(request, "💀 Diss deleted.")
         return redirect("disses:my_disses")
     return render(request, "disses/diss_confirm_delete.html", {"diss": diss})
+
+
+def _get_max_line_selections(user):
+    """Returns max disslines user can select based on pack owned."""
+    from orders.models import Order
+
+    if not user.is_authenticated:
+        return 1
+
+    completed = Order.objects.filter(
+        user=user,
+        status="complete"
+    ).select_related("package")
+
+    max_lines = 1  # free tier default
+    for order in completed:
+        if order.package and order.package.max_line_selections:
+            max_lines = max(max_lines, order.package.max_line_selections)
+
+    return max_lines
+
+
+@login_required
+def deploy_burn(request, pk):
+    """
+    Deploy a diss as a public Burn.
+    Creates or retrieves the Roast for the archetype,
+    publishes the diss, redirects to the public roast page.
+    Mirrors publish/unpublish pattern from HipTripHooray.
+    """
+    from roasts.models import Roast
+    from django.utils.text import slugify
+
+    # DEBUG — remove after fix
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.warning(f"deploy_burn called — method: {request.method}, pk: {pk}, POST: {request.POST}")
+    
+    diss = get_object_or_404(Diss, pk=pk, author=request.user)
+
+    if request.method == "POST":
+        action = request.POST.get("action", "deploy")
+
+        if action == "undeploy":
+            diss.is_public = False
+            diss.status = "draft"
+            diss.save()
+            messages.success(
+                request, "🔒 Burn recalled — diss set back to draft."
+            )
+            return redirect("disses:diss_detail", pk=diss.pk)
+
+        # Validate before doing anything
+        if not diss.selected_lines.exists():
+            messages.error(
+                request,
+                "⚠️ Add at least one burn line before deploying."
+            )
+            return redirect("disses:diss_detail", pk=diss.pk)
+
+        if not diss.target_archetype:
+            messages.error(request, "⚠️ No target archetype selected.")
+            return redirect("disses:diss_detail", pk=diss.pk)
+
+        # ── Step 1: Publish the diss FIRST ──────────────────
+        diss.is_public = True
+        diss.status = "published"
+        diss.save()
+
+        # ── Step 2: Ensure Roast exists — separately ────────
+        # Explicit slug prevents save() failure on get_or_create
+        archetype_slug = slugify(diss.target_archetype.name)
+
+        try:
+            roast = Roast.objects.get(archetype=diss.target_archetype)
+        except Roast.DoesNotExist:
+            roast = Roast.objects.create(
+                archetype=diss.target_archetype,
+                slug=archetype_slug,
+                intro=(
+                    f"The community weighs in on "
+                    f"{diss.target_archetype.name}."
+                ),
+                is_published=True,
+            )
+
+        # Safety — ensure slug is set even on existing roasts
+        if not roast.slug:
+            roast.slug = archetype_slug
+            roast.save()
+
+        messages.success(
+            request,
+            f"🔥 Burn deployed! "
+            f"{diss.target_archetype.name} has been roasted publicly."
+        )
+        return redirect("roasts:roast_detail", slug=roast.slug)
+
+    # GET — confirmation page
+    return render(
+        request,
+        "disses/deploy_burn_confirm.html",
+        {"diss": diss}
+    )
