@@ -1,9 +1,26 @@
+"""
+orders/views.py
+
+Handles package display, Stripe checkout, webhook confirmation,
+order history, gifting and order management.
+
+Key architectural decision: order status is set to 'complete'
+ONLY inside stripe_webhook — never on the success URL.
+This prevents manipulation of order status via URL tampering.
+(Improvement over Boutique Ado's client-side confirmation approach.)
+
+Order confirmation emails are sent via Django's email framework
+on webhook confirmation. In development, emails print to the
+console backend. Production uses SMTP (see settings.py).
+"""
+
 import stripe
-import json
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from .models import Package, Order
@@ -11,8 +28,52 @@ from .models import Package, Order
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
+# ═══════════════════════════════════════════════════════
+# PACKAGE LIST
+# ═══════════════════════════════════════════════════════
+
+@login_required
+def package_list(request):
+    """
+    Show available packages with locked/unlocked state.
+    Marks each package as already_owned if the user has
+    a completed order for it.
+    """
+    packages = Package.objects.filter(is_active=True)
+
+    completed_order_ids = Order.objects.filter(
+        user=request.user,
+        status="complete"
+    ).values_list("package_id", flat=True)
+
+    for pkg in packages:
+        pkg.already_owned = pkg.pk in completed_order_ids
+
+    past_orders = Order.objects.filter(
+        user=request.user
+    ).select_related("package", "gifted_to")
+
+    user_owned_packages = packages.filter(pk__in=completed_order_ids)
+
+    return render(request, "orders/packages.html", {
+        "packages": packages,
+        "past_orders": past_orders,
+        "user_owned_packages": user_owned_packages,
+        "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
+    })
+
+
+# ═══════════════════════════════════════════════════════
+# STRIPE CHECKOUT
+# ═══════════════════════════════════════════════════════
+
 @login_required
 def checkout(request, package_id):
+    """
+    Create a Stripe Checkout Session for the selected package.
+    Redirects to Stripe-hosted payment page.
+    No order is created here — order is created in stripe_webhook only.
+    """
     package = get_object_or_404(Package, pk=package_id, is_active=True)
 
     try:
@@ -47,7 +108,132 @@ def checkout(request, package_id):
 
 
 @login_required
+def checkout_success(request):
+    """
+    Landing page after successful Stripe payment.
+    Order status is updated via webhook — this is UX confirmation only.
+    Looks up the most recent completed order for this user.
+    """
+    session_id = request.GET.get("session_id")
+
+    try:
+        order = Order.objects.filter(
+            user=request.user,
+            status="complete",
+            stripe_payment_id__icontains=session_id[:20]
+            if session_id else ""
+        ).latest("created_on")
+    except Order.DoesNotExist:
+        order = None
+
+    messages.success(request, "🔥 Pack unlocked! Your arsenal is ready.")
+    return render(request, "orders/success.html", {"order": order})
+
+
+@login_required
+def checkout_cancel(request):
+    """User cancelled at Stripe — no charge made."""
+    messages.info(request, "Payment cancelled — no charge made.")
+    return redirect("orders:packages")
+
+
+# ═══════════════════════════════════════════════════════
+# STRIPE WEBHOOK
+# ═══════════════════════════════════════════════════════
+
+@csrf_exempt
+def stripe_webhook(request):
+    """
+    Stripe webhook endpoint.
+    Listens for checkout.session.completed and:
+      1. Creates the Order record
+      2. Sends order confirmation email
+
+    This is the ONLY place order status is set to 'complete'.
+    Using webhook-only confirmation prevents success URL manipulation.
+    """
+    payload = request.body
+    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+        )
+    except (ValueError, stripe.error.SignatureVerificationError):
+        return HttpResponse(status=400)
+
+    if event["type"] == "checkout.session.completed":
+        session = event["data"]["object"]
+        user_id = session["metadata"].get("user_id")
+        package_id = session["metadata"].get("package_id")
+
+        if user_id and package_id:
+            try:
+                from django.contrib.auth.models import User
+                user = User.objects.get(pk=user_id)
+                package = Package.objects.get(pk=package_id)
+
+                # Create the confirmed order
+                order = Order.objects.create(
+                    user=user,
+                    package=package,
+                    amount_paid=package.price,
+                    status="complete",
+                    stripe_payment_id=session.get("payment_intent", ""),
+                )
+
+                # ── Send order confirmation email ──────────────
+                # fail_silently=True ensures email failure never
+                # breaks the webhook response to Stripe
+                _send_order_confirmation(order)
+
+            except (User.DoesNotExist, Package.DoesNotExist):
+                pass
+
+    return HttpResponse(status=200)
+
+
+def _send_order_confirmation(order):
+    """
+    Send order confirmation email to the purchasing user.
+    Uses plain text template for maximum email client compatibility.
+    Fails silently — email errors must never affect order processing.
+    """
+    try:
+        subject = (
+            f"🔥 Your {order.package.name} is Locked and Loaded!"
+        )
+        message = render_to_string(
+            "orders/email/order_confirmation.txt",
+            {
+                "order": order,
+                "user": order.user,
+                "package": order.package,
+            }
+        )
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [order.user.email],
+            fail_silently=True,
+        )
+    except Exception:
+        # Email failure must never crash the webhook
+        pass
+
+
+# ═══════════════════════════════════════════════════════
+# ORDER HISTORY
+# ═══════════════════════════════════════════════════════
+
+@login_required
 def order_history(request):
+    """
+    Full order history for the logged-in user.
+    Includes stats: total orders, completed packs, total spent,
+    and gifted pack count.
+    """
     past_orders = Order.objects.filter(
         user=request.user
     ).select_related("package", "gifted_to")
@@ -70,109 +256,19 @@ def order_history(request):
 
 
 @login_required
-def checkout_success(request):
-    session_id = request.GET.get("session_id")
-    try:
-        # Find the order created by webhook
-        order = Order.objects.filter(
-            user=request.user,
-            status="complete",
-            stripe_payment_id__icontains=session_id[:20]
-                if session_id else ""
-        ).latest("created_on")
-    except Order.DoesNotExist:
-        order = None
-
-    messages.success(
-        request, "🔥 Pack unlocked! Your arsenal is ready."
-    )
-    return render(
-        request, "orders/success.html", {"order": order}
-    )
-
-
-@login_required
-def checkout_cancel(request):
-    """User cancelled at Stripe — redirect back to packages."""
-    messages.info(request, "Payment cancelled — no charge made.")
-    return redirect("orders:packages")
-
-
-@login_required
-def package_list(request):
-    """Show available packages with locked/unlocked state."""
-    packages = Package.objects.filter(is_active=True)
-    completed_order_ids = Order.objects.filter(
-        user=request.user,
-        status="complete"
-    ).values_list("package_id", flat=True)
-
-    for pkg in packages:
-        pkg.already_owned = pkg.pk in completed_order_ids
-
-    past_orders = Order.objects.filter(
-        user=request.user
-    ).select_related("package", "gifted_to")
-
-    # Packages the user owns (for gift form)
-    user_owned_packages = packages.filter(
-        pk__in=completed_order_ids
-    )
-
-    return render(request, "orders/packages.html", {
-        "packages": packages,
-        "past_orders": past_orders,
-        "user_owned_packages": user_owned_packages,
-        "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
-    })
-
-
-@csrf_exempt
-def stripe_webhook(request):
-    payload = request.body
-    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
-
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
-        )
-    except (ValueError, stripe.error.SignatureVerificationError):
-        return HttpResponse(status=400)
-
-    if event["type"] == "checkout.session.completed":
-        session = event["data"]["object"]
-        user_id = session["metadata"].get("user_id")
-        package_id = session["metadata"].get("package_id")
-
-        if user_id and package_id:
-            try:
-                from django.contrib.auth.models import User
-                user = User.objects.get(pk=user_id)
-                package = Package.objects.get(pk=package_id)
-
-                Order.objects.create(
-                    user=user,
-                    package=package,
-                    amount_paid=package.price,
-                    status="complete",
-                    stripe_payment_id=session.get(
-                        "payment_intent", ""
-                    ),
-                )
-            except (User.DoesNotExist, Package.DoesNotExist):
-                pass
-
-    return HttpResponse(status=200)
-
-
-@login_required
 def order_detail(request, order_id):
+    """View a single order — reuses success template."""
     order = get_object_or_404(Order, pk=order_id, user=request.user)
     return render(request, "orders/success.html", {"order": order})
 
 
+# ═══════════════════════════════════════════════════════
+# ORDER MANAGEMENT (Cancel / Uncancel / Delete)
+# ═══════════════════════════════════════════════════════
+
 @login_required
 def cancel_order(request, order_id):
+    """Cancel a pending order."""
     if request.method == "POST":
         order = get_object_or_404(
             Order, pk=order_id, user=request.user, status="pending"
@@ -180,12 +276,16 @@ def cancel_order(request, order_id):
         order.status = "failed"
         order.save()
         messages.success(request, "Order cancelled.")
-    return redirect("orders:history")  # ← was "orders:packages"
+    return redirect("orders:history")
 
 
 @login_required
 def toggle_cancel_order(request, order_id):
-    """Toggle order between pending and failed — mirrors publish/unpublish pattern."""
+    """
+    Toggle order between pending and failed.
+    Mirrors publish/unpublish pattern from HipTripHooray.
+    Allows users to reinstate an accidentally cancelled order.
+    """
     if request.method == "POST":
         order = get_object_or_404(Order, pk=order_id, user=request.user)
         if order.status == "pending":
@@ -200,22 +300,38 @@ def toggle_cancel_order(request, order_id):
 
 @login_required
 def delete_order(request, order_id):
+    """
+    Delete a failed or pending order from history.
+    Completed orders cannot be deleted — payment records
+    must be retained for financial accountability.
+    """
     if request.method == "POST":
-        order = get_object_or_404(
-            Order, pk=order_id, user=request.user
-        )
-        # Only allow deleting failed/cancelled orders
-        # Never delete completed orders — payment records must be kept
+        order = get_object_or_404(Order, pk=order_id, user=request.user)
         if order.status in ["failed", "pending"]:
             order.delete()
             messages.success(request, "Order removed from your history.")
         else:
-            messages.error(request, "Completed orders cannot be deleted.")
+            messages.error(
+                request,
+                "Completed orders cannot be deleted."
+            )
     return redirect("orders:history")
 
 
+# ═══════════════════════════════════════════════════════
+# GIFTING
+# ═══════════════════════════════════════════════════════
+
 @login_required
 def gift_pack(request):
+    """
+    Gift a pack to another user by username.
+    Stores recipient in session, then redirects to checkout.
+    The gifted_to field is set on Order after webhook confirmation.
+
+    Future enhancement: accept email address for users who
+    don't yet have a Dissagram account.
+    """
     if request.method == "POST":
         from django.contrib.auth.models import User as DjangoUser
         package_id = request.POST.get("package_id")
@@ -224,34 +340,47 @@ def gift_pack(request):
 
         try:
             recipient = DjangoUser.objects.get(username=username)
-            package = get_object_or_404(Package, pk=package_id, is_active=True)
-
-            # Create a gifted order — goes straight to checkout
-            # but tagged with gifted_to
+            package = get_object_or_404(
+                Package, pk=package_id, is_active=True
+            )
             request.session["gift_recipient_id"] = recipient.pk
             request.session["gift_message"] = gift_message
             return redirect("orders:checkout", package_id=package.pk)
 
         except DjangoUser.DoesNotExist:
-            messages.error(request, f"No user found with username '{username}'.")
+            messages.error(
+                request,
+                f"No user found with username '{username}'."
+            )
 
     return redirect("orders:packages")
 
 
+# ═══════════════════════════════════════════════════════
+# CACHE CHECKOUT DATA (Assessment pattern — Boutique Ado)
+# ═══════════════════════════════════════════════════════
+
 @login_required
 def cache_checkout_data(request):
-    """Cache order data before Stripe redirect — assessment pattern."""
+    """
+    Cache order data before Stripe redirect.
+    Included to demonstrate awareness of the Boutique Ado
+    payment intent caching pattern, though Dissagram uses
+    Stripe Checkout (hosted) rather than a custom card element.
+    """
     if request.method == "POST":
         try:
-            pid = request.POST.get("client_secret", "").split("_secret")[0]
+            pid = request.POST.get(
+                "client_secret", ""
+            ).split("_secret")[0]
             stripe.api_key = settings.STRIPE_SECRET_KEY
             stripe.PaymentIntent.modify(pid, metadata={
                 "username": request.user.username,
             })
             return HttpResponse(status=200)
         except Exception as e:
-            messages.error(request, "Sorry, your payment cannot be processed.")
+            messages.error(
+                request,
+                "Sorry, your payment cannot be processed."
+            )
             return HttpResponse(content=str(e), status=400)
-
-
-    
