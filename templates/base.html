@@ -155,15 +155,64 @@
 <!-- ========================= -->
 <!-- MESSAGES -->
 <!-- ========================= -->
-<main>
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
-                {{ message }}
-                <button title="Close" type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
+
+
+    <!-- ── GLOBAL DJANGO MESSAGES AS TOASTS ── -->
+{% if messages %}
+<div style="position:fixed; bottom:2rem; right:2rem; z-index:9999;
+            display:flex; flex-direction:column; gap:10px;"
+     id="global-toast-wrap">
+    {% for message in messages %}
+    <div class="global-toast toast-{{ message.tags }}"
+         role="alert"
+         style="background:#111;
+                border:1.5px solid
+                {% if message.tags == 'success' %}#27ae60
+                {% elif message.tags == 'error' %}#c0392b
+                {% elif message.tags == 'warning' %}#d4a017
+                {% else %}#2980b9{% endif %};
+                color:#f0f0f0;
+                font-family:'Bangers',cursive;
+                font-size:1rem;
+                letter-spacing:1.5px;
+                padding:14px 22px;
+                border-radius:10px;
+                box-shadow:0 4px 24px rgba(0,0,0,0.5);
+                display:flex;
+                align-items:center;
+                gap:10px;
+                max-width:340px;
+                animation:toastIn 0.35s ease forwards;">
+        {% if message.tags == 'success' %}✅
+        {% elif message.tags == 'error' %}❌
+        {% elif message.tags == 'warning' %}⚠️
+        {% else %}ℹ️{% endif %}
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+@keyframes toastIn {
+    from { opacity:0; transform:translateY(20px); }
+    to   { opacity:1; transform:translateY(0); }
+}
+@keyframes toastOut {
+    to   { opacity:0; transform:translateY(20px); }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".global-toast").forEach(toast => {
+        setTimeout(() => {
+            toast.style.animation = "toastOut 0.3s ease forwards";
+            setTimeout(() => toast.remove(), 350);
+        }, 4000);
+    });
+});
+</script>
+{% endif %}
 
     {% block content %}
     {% endblock %}

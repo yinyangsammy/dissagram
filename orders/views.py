@@ -14,6 +14,7 @@ on webhook confirmation. In development, emails print to the
 console backend. Production uses SMTP (see settings.py).
 """
 
+import json
 import stripe
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -151,6 +152,9 @@ def stripe_webhook(request):
 
     This is the ONLY place order status is set to 'complete'.
     Using webhook-only confirmation prevents success URL manipulation.
+
+    We parse metadata from the raw JSON payload (not the StripeObject)
+    because StripeObject does not support .get() on nested objects.
     """
     payload = request.body
     sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
@@ -163,9 +167,14 @@ def stripe_webhook(request):
         return HttpResponse(status=400)
 
     if event["type"] == "checkout.session.completed":
-        session = event["data"]["object"]
-        user_id = session["metadata"].get("user_id")
-        package_id = session["metadata"].get("package_id")
+        # Parse the raw payload as plain JSON — avoids StripeObject .get() issues
+        payload_data = json.loads(payload)
+        session_data = payload_data["data"]["object"]
+        metadata = session_data.get("metadata", {})
+
+        user_id = metadata.get("user_id")
+        package_id = metadata.get("package_id")
+        payment_intent = session_data.get("payment_intent", "")
 
         if user_id and package_id:
             try:
@@ -173,22 +182,27 @@ def stripe_webhook(request):
                 user = User.objects.get(pk=user_id)
                 package = Package.objects.get(pk=package_id)
 
-                # Create the confirmed order
                 order = Order.objects.create(
                     user=user,
                     package=package,
                     amount_paid=package.price,
                     status="complete",
-                    stripe_payment_id=session.get("payment_intent", ""),
+                    stripe_payment_id=payment_intent or "",
                 )
 
-                # ── Send order confirmation email ──────────────
-                # fail_silently=True ensures email failure never
-                # breaks the webhook response to Stripe
-                _send_order_confirmation(order)
+                # Email in completely separate try block
+                try:
+                    _send_order_confirmation(order)
+                except Exception:
+                    pass  # never let email crash the order
 
-            except (User.DoesNotExist, Package.DoesNotExist):
-                pass
+            except Exception as e:
+                import logging
+                import traceback
+                logging.getLogger(__name__).error(
+                    f"Webhook order creation failed: {e}\n{traceback.format_exc()}"
+                )
+                return HttpResponse(status=500)
 
     return HttpResponse(status=200)
 

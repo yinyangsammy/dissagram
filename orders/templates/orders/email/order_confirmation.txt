@@ -1,0 +1,25 @@
+Hi {{ user.username }}!
+
+🔥 Your {{ package.name }} is confirmed and locked and loaded.
+
+────────────────────────
+ORDER CONFIRMATION
+────────────────────────
+Order #{{ order.pk }}
+Pack: {{ package.name }}
+Amount: £{{ order.amount_paid }}
+
+WHAT YOU'VE UNLOCKED:
+✅ {{ package.archetype_count }} Archetypes
+✅ {{ package.roast_style_count }} Roast Styles
+{% if package.premium_category_count %}✅ {{ package.premium_category_count }} Premium Diss Categor{{ package.premium_category_count|pluralize:"y,ies" }}{% endif %}
+{% if package.includes_leaderboard %}✅ Leaderboard & Rankings{% endif %}
+{% if package.deploy_burn_count %}✅ Deploy {{ package.deploy_burn_count }} Burn{{ package.deploy_burn_count|pluralize }}{% endif %}
+
+Head back and start firing:
+http://dissagram.com/disses/create/
+
+Have a word. 💀
+
+— The Dissagram Team
+Dissagram — Because some things need to be said.
