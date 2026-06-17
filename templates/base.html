@@ -22,24 +22,109 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
+    <style>
+        /* ── Centered logo trick ── */
+        .navbar .container {
+            position: relative;
+            padding: 2rem;
+        }
+        .navbar-brand.logo {
+            position: absolute;
+            left: 15%;
+            transform: translateX(-15%);
+        }
+        /* On mobile the burger is top-right, so just let logo flow normally */
+        @media (max-width: 991px) {
+            .navbar-brand.logo {
+                position: static;
+                transform: none;
+            }
+        }
+
+        /* ── Dropdown menus ── */
+        .navbar-nav .dropdown-menu {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            min-width: 190px;
+        }
+        .navbar-nav .dropdown-item {
+            color: #ccc;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.9rem;
+            padding: 8px 18px;
+        }
+        .navbar-nav .dropdown-item:hover {
+            background: #2a2a2a;
+            color: #ff6b00;
+        }
+        /* Silver gradient dropdown toggle labels */
+        .navbar-nav .dropdown-toggle {
+            font-family: 'Bangers', cursive;
+            letter-spacing: 1.5px;
+            font-size: 1.05rem;
+            background: linear-gradient(135deg, #f29595, #fc8c57);
+            background: linear-gradient(135deg, #ff6c6c, #f19165);
+            background: linear-gradient(135deg, #e8e8e8, #a0a0a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: filter 0.2s;
+        }
+        .navbar-nav .dropdown-toggle:hover {
+            filter: brightness(1.3);
+        }
+
+        .text-username {
+            color: #ffd5a9;
+            font-family: Arial !important;
+        }
+
+        .text-username:hover {
+            color: #d4a017 !important;
+        }
+
+
+        /* Mobile group headers */
+        .mobile-group-header {
+            font-family: 'Bangers', cursive;
+            letter-spacing: 1.5px;
+            font-size: 1.05rem;
+            background: linear-gradient(135deg, #e8e8e8, #a0a0a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            padding: 10px 12px 4px;
+            border-top: 1px solid #333;
+            margin-top: 6px;
+            display: block;
+        }
+        @media (min-width: 992px) {
+            .mobile-only { display: none !important; }
+        }
+        @media (max-width: 991px) {
+            .desktop-only { display: none !important; }
+        }
+    </style>
+
     {% block extra_css %}{% endblock %}
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
 
 <!-- ========================= -->
-<!-- HEADER -->
+<!-- HEADER                    -->
 <!-- ========================= -->
 <header>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
         <div class="container">
 
-            <!-- LOGO -->
+            <!-- LOGO — absolutely centered on desktop, flows normally on mobile -->
             <a class="navbar-brand logo" href="{% url 'home:home' %}">
-    <h1>🔥 Dissagram <span class="tagline" style="color: white">🎯 Have A Word 💀</span></h1>
-</a>
+                <h1>🔥 Dissagram <span class="tagline" style="color: white">🎯 Have A Word 💀</span></h1>
+            </a>
 
-            <!-- BURGER -->
+            <!-- BURGER (mobile) -->
             <button class="navbar-toggler border-0"
                 type="button"
                 data-bs-toggle="collapse"
@@ -50,102 +135,134 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- NAV LINKS -->
+            <!-- NAV -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto text-end">
+                <ul class="navbar-nav ms-auto text-end align-items-lg-center">
 
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'home:home' %}">
-            <i class="fas fa-house me-1"></i> Home
-        </a>
-    </li>
+                    <!-- ══════════════════════════ -->
+                    <!-- DESKTOP DROPDOWNS (≥ lg)  -->
+                    <!-- ══════════════════════════ -->
 
-    <li class="nav-item">
-    <a class="nav-link" href="{% url 'disses:diss_example' %}">
-        <i class="fa-solid fa-crosshairs"></i> Burn Charting Disses
-    </a>
-</li>
+                    <!-- Store -->
+                    <li class="nav-item dropdown desktop-only">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-cart-arrow-down me-1"></i> Store
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'orders:packages' %}">
+                                <i class="fa-solid fa-cart-arrow-down me-2"></i>Get Packs</a></li>
+                            {% if user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{% url 'orders:history' %}">
+                                <i class="fa-solid fa-dumpster-fire me-2"></i>My Orders</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
 
-<li class="nav-item">
-        <a class="nav-link" href="{% url 'dissers:disser_list' %}">
-            <i class="fas fa-fire me-1"></i> Browse Dissers
-        </a>
-    </li>
+                    <!-- About -->
+                    <li class="nav-item dropdown desktop-only">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-circle-question me-1"></i> About
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'roasts:roast_feed' %}">
+                                <i class="fas fa-skull me-2"></i>Roast Feed</a></li>
+                            <li><a class="dropdown-item" href="{% url 'home:how_it_works' %}">
+                                <i class="fas fa-circle-question me-2"></i>How It Works</a></li>
+                            <li><a class="dropdown-item" href="{% url 'contact' %}">
+                                <i class="fas fa-envelope me-2"></i>Contact</a></li>
+                        </ul>
+                    </li>
 
- <li class="nav-item">
-        <a class="nav-link" href="{% url 'roasts:roast_feed' %}">
-            <i class="fas fa-skull me-1"></i> Roast Feed
-        </a>
-    </li>
+                    <!-- Account / username -->
+                    <li class="nav-item dropdown desktop-only">
+                        {% if user.is_authenticated %}
+                        <a class="nav-link dropdown-toggle fw-bold text-username"
+                           href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false"
+                           style="-webkit-text-fill-color: unset;">
+                            🔥 {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'disses:my_disses' %}">
+                                <i class="fas fa-paper-plane me-2"></i>My Disses</a></li>
+                            <li><a class="dropdown-item" href="{% url 'roasts:my_roasts' %}">
+                                <i class="fas fa-scroll me-2"></i>My Roasts</a></li>
+                            <li><hr class="dropdown-divider border-secondary"></li>
+                            <li><a class="dropdown-item" href="{% url 'account_logout' %}">
+                                <i class="fas fa-sign-out-alt me-2"></i>Sign Out</a></li>
+                        </ul>
+                        {% else %}
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user me-1"></i> Account
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'account_signup' %}">
+                                <i class="fas fa-user-plus me-2"></i>Join The Arena</a></li>
+                            <li><a class="dropdown-item" href="{% url 'account_login' %}">
+                                <i class="fas fa-sign-in-alt me-2"></i>Sign In</a></li>
+                        </ul>
+                        {% endif %}
+                    </li>
 
+                    <!-- ══════════════════════════════════ -->
+                    <!-- MOBILE LINKS (< lg, sectioned)    -->
+                    <!-- ══════════════════════════════════ -->
 
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'home:how_it_works' %}">
-            <i class="fas fa-circle-question me-1"></i> How It Works
-        </a>
-    </li>
+                    {% if user.is_authenticated %}
+                    <li class="mobile-only">
+                        <span class="nav-link fw-bold text-username">🔥 {{ user.username }}</span>
+                    </li>
+                    {% endif %}
 
-    {% if user.is_authenticated %}
+                    <!-- Store -->
+                    <li class="mobile-only"><span class="mobile-group-header">🛒 Store</span></li>
+                    <li class="nav-item mobile-only">
+                        <a class="nav-link" href="{% url 'orders:packages' %}">
+                            <i class="fa-solid fa-cart-arrow-down me-1"></i> Get Packs</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item mobile-only">
+                        <a class="nav-link" href="{% url 'orders:history' %}">
+                            <i class="fa-solid fa-dumpster-fire me-1"></i> My Orders</a></li>
+                    {% endif %}
 
-    <li class="nav-item">
-        <span class="nav-link fw-bold text-warning">
-            🔥 {{ user.username }}
-        </span>
-    </li>
+                    <!-- About -->
+                    <li class="mobile-only"><span class="mobile-group-header">💀 About</span></li>
+                    <li class="nav-item mobile-only">
+                        <a class="nav-link" href="{% url 'roasts:roast_feed' %}">
+                            <i class="fas fa-skull me-1"></i> Roast Feed</a></li>
+                    <li class="nav-item mobile-only">
+                        <a class="nav-link" href="{% url 'home:how_it_works' %}">
+                            <i class="fas fa-circle-question me-1"></i> How It Works</a></li>
+                    <li class="nav-item mobile-only">
+                        <a class="nav-link" href="{% url 'contact' %}">
+                            <i class="fas fa-envelope me-1"></i> Contact</a></li>
 
-    <li class="nav-item">
-    <a class="nav-link" href="{% url 'orders:packages' %}">
-        <i class="fa-solid fa-cart-arrow-down"></i> Get Packs
-    </a>
-    </li>
+                    <!-- My Stuff (authenticated) / Account (guest) -->
+                    {% if user.is_authenticated %}
+                    <li class="mobile-only"><span class="mobile-group-header">👤 My Stuff</span></li>
+                    <li class="nav-item mobile-only">
+                        <a class="nav-link" href="{% url 'disses:my_disses' %}">
+                            <i class="fas fa-paper-plane me-1"></i> My Disses</a></li>
+                    <li class="nav-item mobile-only">
+                        <a class="nav-link" href="{% url 'roasts:my_roasts' %}">
+                            <i class="fas fa-scroll me-1"></i> My Roasts</a></li>
+                    <li class="nav-item mobile-only">
+                        <a class="nav-link" href="{% url 'account_logout' %}">
+                            <i class="fas fa-sign-out-alt me-1"></i> Sign Out</a></li>
+                    {% else %}
+                    <li class="mobile-only"><span class="mobile-group-header">👤 Account</span></li>
+                    <li class="nav-item mobile-only">
+                        <a class="nav-link" href="{% url 'account_signup' %}">
+                            <i class="fas fa-user-plus me-1"></i> Join The Arena</a></li>
+                    <li class="nav-item mobile-only">
+                        <a class="nav-link" href="{% url 'account_login' %}">
+                            <i class="fas fa-sign-in-alt me-1"></i> Sign In</a></li>
+                    {% endif %}
 
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'orders:history' %}">
-            <i class="fa-solid fa-dumpster-fire"></i> My Orders
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'disses:my_disses' %}">
-            <i class="fas fa-paper-plane me-1"></i> My Disses
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'roasts:my_roasts' %}">
-            <i class="fas fa-scroll me-1"></i> My Roasts
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'account_logout' %}">
-            <i class="fas fa-sign-out-alt me-1"></i> Sign Out
-        </a>
-    </li>
-
-    {% else %}
-
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'account_signup' %}">
-            <i class="fas fa-user-plus me-1"></i> Join The Arena
-        </a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'account_login' %}">
-            <i class="fas fa-sign-in-alt me-1"></i> Sign In
-        </a>
-    </li>
-
-    {% endif %}
-
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'contact' %}">
-            <i class="fas fa-envelope me-1"></i> Contact
-        </a>
-    </li>
-
-</ul>
+                </ul>
             </div>
 
         </div>
@@ -153,11 +270,8 @@
 </header>
 
 <!-- ========================= -->
-<!-- MESSAGES -->
+<!-- MESSAGES                  -->
 <!-- ========================= -->
-
-
-    <!-- ── GLOBAL DJANGO MESSAGES AS TOASTS ── -->
 {% if messages %}
 <div style="position:fixed; bottom:2rem; right:2rem; z-index:9999;
             display:flex; flex-direction:column; gap:10px;"
@@ -219,28 +333,26 @@ document.addEventListener("DOMContentLoaded", () => {
 </main>
 
 <!-- ========================= -->
-<!-- FOOTER -->
+<!-- FOOTER                    -->
 <!-- ========================= -->
 <footer class="site-footer text-center py-4 mt-5">
     <p>🔥 Dissagram — Because some things need to be said 💀</p>
     <div class="footer-icons mt-2">
-         
         <a href="https://www.tiktok.com" target="_blank" rel="noopener" aria-label="TikTok">
             <i class="fa-brands fa-tiktok"></i>
         </a>
-         <a href="https://www.youtube.com" target="_blank" rel="noopener" aria-label="YouTube">
+        <a href="https://www.youtube.com" target="_blank" rel="noopener" aria-label="YouTube">
             <i class="fa-brands fa-youtube"></i>
         </a>
-         <a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+        <a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
             <i class="fa-brands fa-facebook"></i>
         </a>
         <a href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
             <i class="fa-brands fa-instagram"></i>
         </a>
-         <a href="https://www.twitter.com" target="_blank" rel="noopener" aria-label="Twitter">
+        <a href="https://www.twitter.com" target="_blank" rel="noopener" aria-label="Twitter">
             <i class="fa-brands fa-x-twitter"></i>
         </a>
-
     </div>
 </footer>
 

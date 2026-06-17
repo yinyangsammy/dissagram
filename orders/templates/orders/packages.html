@@ -101,12 +101,17 @@
     border-color: #e8621a;
     box-shadow: 0 8px 32px rgba(232,98,26,0.2);
 }
+/* Owned: green border, full opacity since it's still interactive */
 .pack-card.owned {
     border-color: #27ae60;
-    opacity: 0.75;
+}
+.pack-card.owned:hover {
+    border-color: #2ecc71;
+    box-shadow: 0 8px 32px rgba(39,174,96,0.15);
 }
 .pack-card.featured { border-color: #e8621a; }
 
+/* ── BADGES ── */
 .pack-featured-badge {
     position: absolute;
     top: -13px;
@@ -121,6 +126,23 @@
     border-radius: 20px;
     white-space: nowrap;
 }
+/* Green purchased badge — always visible, no JS toggle needed */
+.pack-purchased-badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a4a1a;
+    color: #27ae60;
+    border: 1px solid #27ae60;
+    font-family: 'Bangers', cursive;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    padding: 3px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
 .pack-name {
     font-family: 'Bangers', cursive;
     font-size: 1.9rem;
@@ -171,6 +193,7 @@
 }
 .pack-features li.premium .feat-icon { color: #9b59b6; }
 
+/* ── BUTTONS ── */
 .pack-cta {
     margin-top: auto;
     display: block;
@@ -193,11 +216,17 @@
     color: #fff;
     text-decoration: none;
 }
-.pack-cta.owned-btn {
-    background: #1a3a1a;
+/* Buy Again — green outline style, fully clickable */
+.pack-cta.buy-again-btn {
+    background: transparent;
     color: #27ae60;
-    cursor: default;
-    pointer-events: none;
+    border: 1.5px solid #27ae60;
+}
+.pack-cta.buy-again-btn:hover {
+    background: #27ae60;
+    color: #fff;
+    opacity: 1;
+    transform: scale(1.03);
 }
 
 /* ── COMING SOON PACK ── */
@@ -236,7 +265,6 @@
 .pack-coming-soon .pack-price { color: #444; }
 .pack-coming-soon .pack-features li { color: #3a3a3a; }
 .pack-coming-soon .pack-features li .feat-icon { color: #333; }
-.lock-icon { font-size: 2rem; text-align: center; }
 .pack-coming-soon-btn {
     margin-top: auto;
     display: block;
@@ -334,7 +362,6 @@
 
     <!-- ═══════════════════
          PACK GRID
-         Includes Coming Soon card at end
     ═══════════════════ -->
     <div class="pack-grid">
 
@@ -343,14 +370,24 @@
              {% if package.already_owned %}owned{% endif %}
              {% if forloop.last %}featured{% endif %}">
 
-            {% if forloop.first and not package.already_owned %}
+            {% if package.already_owned %}
+            <!-- Green purchased badge — replaces cheapest/best value when owned -->
+            <div class="pack-purchased-badge">
+                ✅ PURCHASED
+                {% if package.purchase_count == 1 %}ONCE
+                {% elif package.purchase_count == 2 %}TWICE
+                {% else %}{{ package.purchase_count }}×{% endif %}
+            </div>
+
+            {% elif forloop.first %}
+            <!-- Cheapest option badge — JS-toggled on click -->
             <div class="pack-featured-badge"
                  style="background:#d4a017; display:none;">
                 💰 CHEAPEST OPTION
             </div>
-            {% endif %}
 
-            {% if forloop.last %}
+            {% elif forloop.last %}
+            <!-- Best value badge — JS-toggled on click -->
             <div class="pack-featured-badge" style="display:none;">
                 🤑 BEST VALUE
             </div>
@@ -404,7 +441,12 @@
             </ul>
 
             {% if package.already_owned %}
-            <span class="pack-cta owned-btn">✅ OWNED</span>
+            <!-- Owned: buy again link styled as ghost green button -->
+            <a href="{% url 'orders:checkout' package.pk %}"
+               class="pack-cta buy-again-btn"
+               aria-label="Buy {{ package.name }} again">
+               🔄 BUY AGAIN?
+            </a>
             {% else %}
             <a href="{% url 'orders:checkout' package.pk %}"
                class="pack-cta"
@@ -422,12 +464,9 @@
 
         <!-- ═══════════════════════════════════════
              COMING SOON — Roast Subscription
-             Display only — no model or Stripe needed
         ═══════════════════════════════════════ -->
         <div class="pack-coming-soon">
             <div class="pack-coming-soon-badge">🔒 COMING SOON</div>
-
-           
 
             <div>
                 <div class="pack-name">Roast Pack</div>
@@ -453,13 +492,11 @@
 
             <div class="pack-coming-soon-btn">🔒 COMING SOON</div>
         </div>
-        <!-- /coming soon -->
 
     </div><!-- /pack-grid -->
 
     <!-- ═══════════════════
          GIFT A PACK
-         Shows only when user owns at least one pack
     ═══════════════════ -->
     {% if user.is_authenticated %}
     {% with completed_count=request.user.orders.filter %}
@@ -508,7 +545,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* ── Pack card selection ── */
+    /* ── Pack card selection (non-owned cards only) ── */
     const cards = document.querySelectorAll(".pack-card:not(.owned)");
 
     function selectCard(card) {

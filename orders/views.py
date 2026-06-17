@@ -19,6 +19,7 @@ import stripe
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
@@ -37,18 +38,27 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 def package_list(request):
     """
     Show available packages with locked/unlocked state.
-    Marks each package as already_owned if the user has
-    a completed order for it.
+    Annotates each package with purchase_count (how many times
+    the user has bought it) and already_owned (bool convenience).
+    Users can repurchase owned packs via the Buy Again button.
     """
     packages = Package.objects.filter(is_active=True)
 
-    completed_order_ids = Order.objects.filter(
+    # Count purchases per package rather than just a yes/no check
+    purchase_counts = Order.objects.filter(
         user=request.user,
         status="complete"
-    ).values_list("package_id", flat=True)
+    ).values("package_id").annotate(count=Count("id"))
+
+    purchase_count_map = {
+        item["package_id"]: item["count"] for item in purchase_counts
+    }
+
+    completed_order_ids = list(purchase_count_map.keys())
 
     for pkg in packages:
-        pkg.already_owned = pkg.pk in completed_order_ids
+        pkg.purchase_count = purchase_count_map.get(pkg.pk, 0)
+        pkg.already_owned = pkg.purchase_count > 0
 
     past_orders = Order.objects.filter(
         user=request.user
@@ -167,7 +177,7 @@ def stripe_webhook(request):
         return HttpResponse(status=400)
 
     if event["type"] == "checkout.session.completed":
-        # Parse the raw payload as plain JSON — avoids StripeObject .get() issues
+        # Parse raw payload as plain JSON — avoids StripeObject .get() issues
         payload_data = json.loads(payload)
         session_data = payload_data["data"]["object"]
         metadata = session_data.get("metadata", {})
