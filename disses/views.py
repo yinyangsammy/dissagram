@@ -97,7 +97,8 @@ def _get_accessible_category_names(user):
 def _archetype_json(archetypes, user):
     """
     Builds the JSON payload for the archetype carousel.
-    Includes locked state and filtered diss lines per archetype.
+    Includes locked state, filtered diss lines, and gender
+    so the template JS can split into two carousel rows.
     """
     max_archetypes, _ = _get_user_unlocked_counts(user)
     accessible_categories = _get_accessible_category_names(user)
@@ -158,6 +159,7 @@ def _archetype_json(archetypes, user):
             "difficulty_label": a.get_difficulty_level_display(),
             "is_free": a.is_free,
             "locked": locked,
+            "gender": a.gender,   # ← NEW: 'M' or 'F', used by JS to split carousels
             "diss_lines": all_lines,
         })
 
@@ -375,7 +377,7 @@ def deploy_burn(request, pk):
     import logging
     logger = logging.getLogger(__name__)
     logger.warning(f"deploy_burn called — method: {request.method}, pk: {pk}, POST: {request.POST}")
-    
+
     diss = get_object_or_404(Diss, pk=pk, author=request.user)
 
     if request.method == "POST":
@@ -408,7 +410,6 @@ def deploy_burn(request, pk):
         diss.save()
 
         # ── Step 2: Ensure Roast exists — separately ────────
-        # Explicit slug prevents save() failure on get_or_create
         archetype_slug = slugify(diss.target_archetype.name)
 
         try:

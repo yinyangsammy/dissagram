@@ -94,14 +94,20 @@ class TargetArchetype(models.Model):
         blank=True,
         null=True
     )
-
     display_order = models.PositiveIntegerField(default=0)
-
     is_free = models.BooleanField(
         default=False,
         help_text="Available to free-tier users."
     )
-   
+
+    # ── Gender — groups archetypes into two carousel rows ──
+    gender = models.CharField(
+        max_length=1,
+        choices=[('M', 'Male'), ('F', 'Female')],
+        default='M',
+        help_text="Groups archetypes in the Build Your Diss carousel"
+    )
+
     class Meta:
         ordering = ["display_order"]
         verbose_name = "Target Archetype"

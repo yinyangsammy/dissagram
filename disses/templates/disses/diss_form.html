@@ -106,6 +106,24 @@
     background: #222;
 }
 
+/* ── GENDER CAROUSEL LABEL ── */
+.gender-carousel-label {
+    font-family: "Bangers", cursive;
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 0.75rem;
+    padding-left: 2px;
+}
+
+.gender-carousel-row {
+    margin-bottom: 0.5rem;
+}
+
+.gender-carousel-row + .gender-carousel-row {
+    margin-top: 2rem;
+}
+
 /* ── CAROUSEL ── */
 .carousel-outer {
     position: relative;
@@ -193,7 +211,7 @@
     margin-bottom: 2px;
 }
 
-/* Bottom half: card body — this is the "spliced half" */
+/* Bottom half: card body */
 .arch-card-body {
     padding: 8px 10px 10px;
     background: #111;
@@ -381,7 +399,6 @@
 }
 
 .diss-select option { background: #111; color: #f0f0f0; }
-
 .diss-select.error { border-color: #c0392b; }
 
 /* ── DISS LINES (checkboxes) ── */
@@ -436,9 +453,8 @@
     margin-bottom: 4px;
 }
 
-/* replace the three type classes with these */
-.type-Diss\.Line        { background: #0c3a5e; color: #6bb3e8; }
-.type-Internal\.Monologue { background: #2e1f00; color: #d4a017; }
+.type-Diss\.Line           { background: #0c3a5e; color: #6bb3e8; }
+.type-Internal\.Monologue  { background: #2e1f00; color: #d4a017; }
 .type-LinkedIn\.Endorsement { background: #0e3b1a; color: #6be8a0; }
 
 .disslines-placeholder {
@@ -499,7 +515,6 @@
 
 .vis-option:hover { border-color: #333; color: #ccc; }
 .vis-option.chosen { border-color: #d4a017; color: #d4a017; background: #111; }
-
 .vis-option i { font-size: 1rem; }
 
 /* ── FORM ERRORS ── */
@@ -617,14 +632,8 @@
     line-height: 1.2;
 }
 
-.style-avatar-card.selected .style-avatar-name {
-    color: #d4a017;
-}
-
-.style-lock-icon {
-    font-size: 0.7rem;
-    color: #555;
-}
+.style-avatar-card.selected .style-avatar-name { color: #d4a017; }
+.style-lock-icon { font-size: 0.7rem; color: #555; }
 
 /* ── LOCKED STATES ── */
 .arch-card.locked {
@@ -652,9 +661,7 @@
     pointer-events: none;
 }
 
-.lock-overlay .lock-icon {
-    font-size: 1.6rem;
-}
+.lock-overlay .lock-icon  { font-size: 1.6rem; }
 
 .lock-overlay .lock-label {
     font-family: 'Bangers', cursive;
@@ -665,13 +672,12 @@
     padding: 0 8px;
 }
 
-/* Same for roast style cards */
 .style-avatar-card.locked:hover {
     transform: none;
     border-color: #222;
 }
 
-/* ── LOCK TOAST KEYFRAMES ── */
+/* ── TOAST KEYFRAMES ── */
 @keyframes toastIn {
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -751,26 +757,47 @@
 <input type="hidden" name="is_public"        id="id_is_public"   value="false">
 
 <!-- ═══════════════════════════════════
-     STEP 1 — ARCHETYPE CAROUSEL
+     STEP 1 — ARCHETYPE CAROUSELS
 ═══════════════════════════════════ -->
 <div class="diss-section-label">
     <i class="fas fa-crosshairs"></i> Step 1 — Pick Your Target
 </div>
 
-<div class="carousel-outer">
-    <div class="carousel-track" id="carousel-track"></div>
+<!-- ♂️ Male Archetypes -->
+<div class="gender-carousel-row">
+    <div class="gender-carousel-label">♂️ Male Archetypes</div>
+    <div class="carousel-outer">
+        <div class="carousel-track" id="carousel-track-m"></div>
+    </div>
+    <div class="carousel-controls">
+        <button type="button" class="carousel-btn" id="carousel-prev-m" disabled aria-label="Previous male archetype">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="carousel-dots" id="carousel-dots-m"></div>
+        <button type="button" class="carousel-btn" id="carousel-next-m" aria-label="Next male archetype">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
 </div>
 
-<div class="carousel-controls">
-    <button type="button" class="carousel-btn" id="carousel-prev" disabled aria-label="Previous">
-        <i class="fas fa-chevron-left"></i>
-    </button>
-    <div class="carousel-dots" id="carousel-dots"></div>
-    <button type="button" class="carousel-btn" id="carousel-next" aria-label="Next">
-        <i class="fas fa-chevron-right"></i>
-    </button>
+<!-- ♀️ Female Archetypes -->
+<div class="gender-carousel-row">
+    <div class="gender-carousel-label">♀️ Female Archetypes</div>
+    <div class="carousel-outer">
+        <div class="carousel-track" id="carousel-track-f"></div>
+    </div>
+    <div class="carousel-controls">
+        <button type="button" class="carousel-btn" id="carousel-prev-f" disabled aria-label="Previous female archetype">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="carousel-dots" id="carousel-dots-f"></div>
+        <button type="button" class="carousel-btn" id="carousel-next-f" aria-label="Next female archetype">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
 </div>
 
+<!-- Selected badge — shared across both carousels -->
 <div class="selected-badge-wrap">
     <div class="selected-badge" id="selected-badge">
         <i class="fas fa-crosshairs"></i>
@@ -792,10 +819,8 @@
         <label class="diss-field-label">Choose Your Voice</label>
         <div class="diss-field-hint">The persona and register of your diss</div>
 
-        <!-- Avatar grid — replaces dropdown -->
         <div class="style-avatar-grid" id="style-avatar-grid"></div>
 
-        <!-- Selected style badge -->
         <div class="selected-style-wrap" id="selected-style-wrap" style="display:none; margin-top:1rem;">
             <div class="selected-badge visible" id="selected-style-badge">
                 <i class="fas fa-fire"></i>
@@ -803,7 +828,6 @@
             </div>
         </div>
 
-        <!-- Hidden input still needed for form submit -->
         <input type="hidden" id="roast-style-select" name="roast_style_hidden">
     </div>
 
@@ -828,7 +852,7 @@
         </div>
     </div>
 
-</div><!-- /section-lines -->
+</div>
 
 
 <!-- ═══════════════════════════════════
@@ -840,7 +864,6 @@
         <i class="fas fa-pen-nib"></i> Step 4 — Final Touches
     </div>
 
-    <!-- Custom Note -->
     <div class="diss-field-group">
         <label class="diss-field-label" for="id_custom_note">
             Custom Note <span style="font-size:0.75rem; color:#555; font-family: Lato, sans-serif; font-weight: 400;">(optional)</span>
@@ -849,7 +872,6 @@
         {{ form.custom_note }}
     </div>
 
-    <!-- Visibility -->
     <div class="diss-field-group">
         <label class="diss-field-label">Visibility</label>
         <div class="diss-field-hint">Draft stays private. Published appears on the Roast Feed.</div>
@@ -872,7 +894,6 @@
         </div>
     </div>
 
-    <!-- Submit -->
     <div class="submit-section">
         <button type="submit" class="diss-submit-btn" id="submit-btn">
             <i class="fas fa-flame"></i> Fire the Diss
@@ -897,7 +918,6 @@
 const ARCHETYPES   = {{ archetypes_json|safe }};
 const ROAST_STYLES = {{ roast_styles_json|safe }};
 
-/* Pre-selected values (edit mode) */
 const INIT_ARCHETYPE_ID   = {{ selected_archetype_id|default:"null" }};
 const INIT_ROAST_STYLE_ID = {{ selected_roast_style_id|default:"null" }};
 const INIT_LINE_IDS       = {{ selected_line_ids|default:"[]"|safe }};
@@ -907,16 +927,15 @@ const MAX_LINE_SELECTIONS = {{ max_line_selections|default:1 }};
    STATE
 ===================================================== */
 let selectedArchetype = null;
-let currentCarouselIdx = 0;
 const CARDS_VISIBLE = 3;
 
+/* Split archetypes by gender for the two carousel rows */
+const MALE_ARCHETYPES   = ARCHETYPES.filter(a => a.gender === 'M');
+const FEMALE_ARCHETYPES = ARCHETYPES.filter(a => a.gender === 'F');
+
 /* =====================================================
-   ELEMENTS
+   SHARED ELEMENTS
 ===================================================== */
-const track       = document.getElementById("carousel-track");
-const dotsEl      = document.getElementById("carousel-dots");
-const prevBtn     = document.getElementById("carousel-prev");
-const nextBtn     = document.getElementById("carousel-next");
 const badge       = document.getElementById("selected-badge");
 const badgeName   = document.getElementById("selected-badge-name");
 const styleSelect = document.getElementById("roast-style-select");
@@ -940,29 +959,20 @@ const hiddenPublic    = document.getElementById("id_is_public");
    LOCK TOAST
 ===================================================== */
 function showLockToast() {
-    /* Remove existing lock toast if present */
     const existing = document.getElementById("lock-toast");
     if (existing) existing.remove();
 
     const toast = document.createElement("div");
     toast.id = "lock-toast";
     toast.style.cssText = `
-        position: fixed;
-        bottom: 2rem; right: 2rem;
-        background: #111;
-        border: 1.5px solid #d4a017;
-        color: #f0f0f0;
-        font-family: 'Bangers', cursive;
-        font-size: 1rem;
-        letter-spacing: 1.5px;
-        padding: 14px 22px;
-        border-radius: 10px;
+        position: fixed; bottom: 2rem; right: 2rem;
+        background: #111; border: 1.5px solid #d4a017;
+        color: #f0f0f0; font-family: 'Bangers', cursive;
+        font-size: 1rem; letter-spacing: 1.5px;
+        padding: 14px 22px; border-radius: 10px;
         box-shadow: 0 4px 24px rgba(0,0,0,0.5);
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        animation: toastIn 0.35s ease forwards;
+        z-index: 9999; display: flex; align-items: center;
+        gap: 10px; animation: toastIn 0.35s ease forwards;
     `;
     toast.innerHTML = `🔒 Get a pack to unlock this!`;
     document.body.appendChild(toast);
@@ -974,120 +984,142 @@ function showLockToast() {
 }
 
 /* =====================================================
-   CAROUSEL BUILD
+   CAROUSEL FACTORY
+   Creates an independent carousel instance for any
+   dataset + set of DOM elements.
 ===================================================== */
-function buildCarousel() {
-    track.innerHTML = "";
+function createCarousel(data, trackId, dotsId, prevId, nextId) {
+    const trackEl  = document.getElementById(trackId);
+    const dotsWrap = document.getElementById(dotsId);
+    const prevEl   = document.getElementById(prevId);
+    const nextEl   = document.getElementById(nextId);
+    let idx = 0;
 
-    ARCHETYPES.forEach((arch) => {
-        const isLocked = arch.locked;
+    function getCardWidth() {
+        const c = trackEl.querySelector(".arch-card");
+        return c ? c.offsetWidth + 16 : 216;
+    }
 
-        const avatarHtml = arch.avatar_url
-            ? `<img src="${arch.avatar_url}"
-                    alt="${arch.name}"
-                    style="width:100%;height:300px;object-fit:cover;display:block;">`
-            : `<div style="width:100%;height:300px;
-                           display:flex;align-items:center;
-                           justify-content:center;
-                           font-size:3.5rem;background:#0d0d0d;">
-                   ${arch.emoji}
-               </div>`;
-
-        const lockHtml = isLocked ? `
-            <div class="lock-overlay">
-                <span class="lock-icon">🔒</span>
-                <span class="lock-label">Unlock with a Pack</span>
-            </div>` : "";
-
-        const card = document.createElement("div");
-        card.className = `arch-card${isLocked ? " locked" : ""}`;
-        card.dataset.archId = arch.id;
-        if (isLocked) card.dataset.locked = "true";
-        card.setAttribute("role", "button");
-        card.setAttribute("tabindex", isLocked ? "-1" : "0");
-        card.setAttribute("aria-label",
-            isLocked ? `${arch.name} — locked` : `Select ${arch.name}`
-        );
-
-        card.innerHTML = `
-            ${avatarHtml}
-            ${lockHtml}
-            <div class="arch-card-name">${arch.name}</div>
-            ${arch.catchphrase
-                ? `<div class="arch-catchphrase">"${arch.catchphrase}"</div>`
-                : ""}
-        `;
-
-        card.addEventListener("click", () => {
-            if (isLocked) {
-                showLockToast();
-                setTimeout(() => { window.location.href = "/orders/"; }, 1800);
-                return;
-            }
-            selectArchetype(arch, card);
+    function updateDots() {
+        dotsWrap.innerHTML = "";
+        data.forEach((_, i) => {
+            const dot = document.createElement("div");
+            dot.className = `c-dot${i === 0 ? " active" : ""}`;
+            dot.addEventListener("click", () => moveTo(i));
+            dotsWrap.appendChild(dot);
         });
+    }
 
-        card.addEventListener("keydown", e => {
-            if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
+    function updateTrack() {
+        const max = Math.max(0, data.length - CARDS_VISIBLE);
+        idx = Math.max(0, Math.min(idx, max));
+        trackEl.style.transform = `translateX(-${idx * getCardWidth()}px)`;
+        prevEl.disabled = idx === 0;
+        nextEl.disabled = idx >= max;
+        dotsWrap.querySelectorAll(".c-dot").forEach((d, i) =>
+            d.classList.toggle("active", i === idx)
+        );
+    }
+
+    function moveTo(i) { idx = i; updateTrack(); }
+
+    prevEl.addEventListener("click", () => { idx--; updateTrack(); });
+    nextEl.addEventListener("click", () => { idx++; updateTrack(); });
+    window.addEventListener("resize", updateTrack);
+
+    function build() {
+        trackEl.innerHTML = "";
+
+        data.forEach(arch => {
+            const isLocked = arch.locked;
+
+            const avatarHtml = arch.avatar_url
+                ? `<img src="${arch.avatar_url}"
+                        alt="${arch.name}"
+                        style="width:100%;height:300px;object-fit:cover;display:block;">`
+                : `<div style="width:100%;height:300px;display:flex;
+                               align-items:center;justify-content:center;
+                               font-size:3.5rem;background:#0d0d0d;">
+                       ${arch.emoji}
+                   </div>`;
+
+            const lockHtml = isLocked ? `
+                <div class="lock-overlay">
+                    <span class="lock-icon">🔒</span>
+                    <span class="lock-label">Unlock with a Pack</span>
+                </div>` : "";
+
+            const card = document.createElement("div");
+            card.className = `arch-card${isLocked ? " locked" : ""}`;
+            card.dataset.archId = arch.id;
+            if (isLocked) card.dataset.locked = "true";
+            card.setAttribute("role", "button");
+            card.setAttribute("tabindex", isLocked ? "-1" : "0");
+            card.setAttribute("aria-label",
+                isLocked ? `${arch.name} — locked` : `Select ${arch.name}`
+            );
+
+            card.innerHTML = `
+                ${avatarHtml}
+                ${lockHtml}
+                <div class="arch-card-name">${arch.name}</div>
+                ${arch.catchphrase
+                    ? `<div class="arch-catchphrase">"${arch.catchphrase}"</div>`
+                    : ""}
+            `;
+
+            card.addEventListener("click", () => {
                 if (isLocked) {
                     showLockToast();
                     setTimeout(() => { window.location.href = "/orders/"; }, 1800);
                     return;
                 }
                 selectArchetype(arch, card);
-            }
+            });
+
+            card.addEventListener("keydown", e => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    if (isLocked) {
+                        showLockToast();
+                        setTimeout(() => { window.location.href = "/orders/"; }, 1800);
+                        return;
+                    }
+                    selectArchetype(arch, card);
+                }
+            });
+
+            trackEl.appendChild(card);
         });
 
-        track.appendChild(card);
-    });
-
-    updateCarouselDots();
-    updateTrack();
-}
-
-/* =====================================================
-   CAROUSEL DOTS + TRACK
-===================================================== */
-function updateCarouselDots() {
-    dotsEl.innerHTML = "";
-    for (let i = 0; i < ARCHETYPES.length; i++) {
-        const dot = document.createElement("div");
-        dot.className = `c-dot${i === 0 ? " active" : ""}`;
-        dot.addEventListener("click", () => moveTo(i));
-        dotsEl.appendChild(dot);
+        updateDots();
+        updateTrack();
     }
+
+    return { build, moveTo, trackEl };
 }
 
-function cardWidth() {
-    const c = track.querySelector(".arch-card");
-    return c ? c.offsetWidth + 16 : 216;
-}
-
-function updateTrack() {
-    const max = Math.max(0, ARCHETYPES.length - CARDS_VISIBLE);
-    currentCarouselIdx = Math.max(0, Math.min(currentCarouselIdx, max));
-    track.style.transform = `translateX(-${currentCarouselIdx * cardWidth()}px)`;
-    prevBtn.disabled = currentCarouselIdx === 0;
-    nextBtn.disabled = currentCarouselIdx >= max;
-    document.querySelectorAll(".c-dot").forEach((d, i) =>
-        d.classList.toggle("active", i === currentCarouselIdx)
-    );
-}
-
-function moveTo(i) { currentCarouselIdx = i; updateTrack(); }
-
-prevBtn.addEventListener("click", () => { currentCarouselIdx--; updateTrack(); });
-nextBtn.addEventListener("click", () => { currentCarouselIdx++; updateTrack(); });
-window.addEventListener("resize", updateTrack);
+/* Create one carousel per gender */
+const maleCarousel   = createCarousel(
+    MALE_ARCHETYPES,
+    "carousel-track-m", "carousel-dots-m",
+    "carousel-prev-m",  "carousel-next-m"
+);
+const femaleCarousel = createCarousel(
+    FEMALE_ARCHETYPES,
+    "carousel-track-f", "carousel-dots-f",
+    "carousel-prev-f",  "carousel-next-f"
+);
 
 /* =====================================================
-   SELECT ARCHETYPE  (extracted from pickArchetype)
+   SELECT ARCHETYPE
+   document.querySelectorAll(".arch-card") already
+   covers both carousels — no change needed here.
 ===================================================== */
 function selectArchetype(arch, card) {
     selectedArchetype = arch;
 
-    /* Card highlight */
+    /* Highlight selected card, clear all others */
     document.querySelectorAll(".arch-card").forEach(c =>
         c.classList.toggle("selected", c === card)
     );
@@ -1118,11 +1150,11 @@ function selectArchetype(arch, card) {
     setTimeout(() => sectionStyle.scrollIntoView({ behavior: "smooth", block: "nearest" }), 100);
 }
 
-/* Keep pickArchetype as a convenience wrapper for init/edit restore */
+/* Convenience wrapper for init/edit restore — searches across both carousels */
 function pickArchetype(id) {
     const arch = ARCHETYPES.find(a => a.id === id);
     if (!arch || arch.locked) return;
-    const card = track.querySelector(`[data-arch-id="${id}"]`);
+    const card = document.querySelector(`[data-arch-id="${id}"]`);
     selectArchetype(arch, card);
 }
 
@@ -1154,7 +1186,6 @@ function buildStyleSelect() {
                 setTimeout(() => { window.location.href = "/orders/"; }, 1800);
                 return;
             }
-            /* Selection logic */
             grid.querySelectorAll(".style-avatar-card")
                 .forEach(c => c.classList.remove("selected"));
             card.classList.add("selected");
@@ -1220,38 +1251,32 @@ function renderDissLines(lines) {
         </label>
     `).join("");
 
-    /* Add limit enforcement after rendering */
     enforceDissLineLimit();
 }
 
 function enforceDissLineLimit() {
-    const checkboxes = linesList.querySelectorAll(
-        "input[name='selected_lines']"
-    );
+    const checkboxes = linesList.querySelectorAll("input[name='selected_lines']");
 
-    /* Add counter badge */
     const existing = document.getElementById("line-limit-badge");
     if (existing) existing.remove();
 
-    const badge = document.createElement("div");
-    badge.id = "line-limit-badge";
-    badge.style.cssText = `
+    const limitBadge = document.createElement("div");
+    limitBadge.id = "line-limit-badge";
+    limitBadge.style.cssText = `
         font-family: 'Bangers', cursive;
-        font-size: 0.82rem;
-        letter-spacing: 1px;
-        color: #555;
-        margin-bottom: 8px;
+        font-size: 0.82rem; letter-spacing: 1px;
+        color: #555; margin-bottom: 8px;
     `;
 
     const updateBadge = () => {
         const checked = linesList.querySelectorAll(
             "input[name='selected_lines']:checked"
         ).length;
-        badge.textContent = `${checked} / ${MAX_LINE_SELECTIONS} lines selected`;
-        badge.style.color = checked >= MAX_LINE_SELECTIONS ? "#d4a017" : "#555";
+        limitBadge.textContent = `${checked} / ${MAX_LINE_SELECTIONS} lines selected`;
+        limitBadge.style.color = checked >= MAX_LINE_SELECTIONS ? "#d4a017" : "#555";
     };
 
-    linesList.insertAdjacentElement("beforebegin", badge);
+    linesList.insertAdjacentElement("beforebegin", limitBadge);
     updateBadge();
 
     checkboxes.forEach(cb => {
@@ -1259,9 +1284,7 @@ function enforceDissLineLimit() {
             const checked = linesList.querySelectorAll(
                 "input[name='selected_lines']:checked"
             ).length;
-
             if (checked > MAX_LINE_SELECTIONS) {
-                /* Uncheck this one — limit reached */
                 cb.checked = false;
                 showLimitToast();
             }
@@ -1277,27 +1300,18 @@ function showLimitToast() {
     const toast = document.createElement("div");
     toast.id = "limit-toast";
     toast.style.cssText = `
-        position: fixed;
-        bottom: 2rem; right: 2rem;
-        background: #111;
-        border: 1.5px solid #e8621a;
-        color: #f0f0f0;
-        font-family: 'Bangers', cursive;
-        font-size: 1rem;
-        letter-spacing: 1.5px;
-        padding: 14px 22px;
-        border-radius: 10px;
+        position: fixed; bottom: 2rem; right: 2rem;
+        background: #111; border: 1.5px solid #e8621a;
+        color: #f0f0f0; font-family: 'Bangers', cursive;
+        font-size: 1rem; letter-spacing: 1.5px;
+        padding: 14px 22px; border-radius: 10px;
         box-shadow: 0 4px 24px rgba(0,0,0,0.5);
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        animation: toastIn 0.35s ease forwards;
+        z-index: 9999; display: flex; align-items: center;
+        gap: 10px; animation: toastIn 0.35s ease forwards;
     `;
     toast.innerHTML = `
-    🔥 Limit reached! Uncheck one to swap -
-    or<a href="/orders/" style="color:#d4a017; margin-left:4px;">
-    upgrade for more</a>
+        🔥 Limit reached! Uncheck one to swap —
+        or <a href="/orders/" style="color:#d4a017; margin-left:4px;">upgrade for more</a>
     `;
     document.body.appendChild(toast);
 
@@ -1343,14 +1357,22 @@ document.getElementById("diss-form").addEventListener("submit", function(e) {
 });
 
 /* =====================================================
-   INIT — restore state on edit / POST error
+   INIT — build both carousels, restore on edit
 ===================================================== */
-buildCarousel();
+maleCarousel.build();
+femaleCarousel.build();
 
 if (INIT_ARCHETYPE_ID) {
     pickArchetype(INIT_ARCHETYPE_ID);
-    const idx = ARCHETYPES.findIndex(a => a.id === INIT_ARCHETYPE_ID);
-    if (idx >= 0) { moveTo(Math.max(0, idx - 1)); }
+    /* Scroll the correct carousel to show the pre-selected card */
+    const initArch = ARCHETYPES.find(a => a.id === INIT_ARCHETYPE_ID);
+    if (initArch) {
+        const isFemale = initArch.gender === 'F';
+        const data     = isFemale ? FEMALE_ARCHETYPES : MALE_ARCHETYPES;
+        const carousel = isFemale ? femaleCarousel    : maleCarousel;
+        const i        = data.findIndex(a => a.id === INIT_ARCHETYPE_ID);
+        if (i >= 0) carousel.moveTo(Math.max(0, i - 1));
+    }
 }
 
 if (INIT_ROAST_STYLE_ID) {
