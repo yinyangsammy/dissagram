@@ -89,8 +89,15 @@ class DissLine(models.Model):
     )
     roast_style = models.ForeignKey(        # Single FK — dropdown
         "dissers.RoastStyle",
-        on_delete=models.CASCADE,
-        related_name="diss_lines"
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="diss_lines",
+        help_text=(
+            "Required for standard Diss Lines. Leave blank for "
+            "Premium lines (LinkedIn Endorsement, Internal Monologue, "
+            "etc.) — these apply to any roast style."
+        )
     )
     content = models.TextField(
         help_text="The actual burn line"
@@ -123,3 +130,21 @@ class DissLine(models.Model):
             f"{self.archetype} × {self.roast_style} "
             f"[{self.category}] — {self.content[:50]}"
         )
+
+
+class PremiumDissLine(DissLine):
+    """
+    Proxy model — same database table as DissLine, zero extra
+    migrations for data. Gives Premium content (LinkedIn
+    Endorsement, Internal Monologue, etc.) its own dedicated
+    "Add" entry point in the admin, separate from standard
+    roast-style-specific Diss Lines.
+
+    Filtered to premium (non-free) categories only, via the
+    admin's get_queryset — see disses/admin.py.
+    """
+
+    class Meta:
+        proxy = True
+        verbose_name = "Premium Diss Line"
+        verbose_name_plural = "Premium Diss Lines"

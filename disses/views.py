@@ -135,6 +135,7 @@ def _archetype_json(archetypes, user):
                 "type": cat_name,
                 "content": line.content,
                 "roast_style_id": sid,
+                "is_premium": not (line.category.is_free if line.category else True),
             })
 
         # Flatten disslines into a single list
@@ -317,15 +318,20 @@ def diss_edit(request, pk):
 
 
 def diss_detail(request, pk):
-    """
-    Public diss detail page.
-    Non-public disses only visible to their author.
-    """
     diss = get_object_or_404(Diss, pk=pk)
     if not diss.is_public and diss.author != request.user:
         from django.http import Http404
         raise Http404
-    return render(request, "disses/diss_detail.html", {"diss": diss})
+
+    # Order: standard lines (is_free=True) first, premium last
+    ordered_lines = diss.selected_lines.select_related(
+        "category"
+    ).order_by("-category__is_free", "display_order")
+
+    return render(request, "disses/diss_detail.html", {
+        "diss": diss,
+        "ordered_lines": ordered_lines,
+    })
 
 
 @login_required

@@ -1,7 +1,123 @@
 {% extends "base.html" %}
+
+{% block title %}Contact — Dissagram 🔥{% endblock %}
+
+{% block meta_description %}
+Contact Dissagram for account help, pack questions, bug reports, payment problems or general verbal mischief.
+{% endblock %}
+
+{% block body_class %}contact-page{% endblock %}
+
 {% block content %}
-<div class="container py-5 text-center">
-    <h1>📬 Contact</h1>
-    <p>Contact form coming soon.</p>
-</div>
+
+<section class="contact-shell">
+
+    <div class="contact-hero">
+        <div class="contact-flame">📬</div>
+        <h1>Have A Word</h1>
+        <p>
+            Account chaos? Pack confusion? Bug doing press-ups in production?
+            Send it here. We’ll inspect the damage.
+        </p>
+    </div>
+
+    <div class="contact-grid">
+
+        <aside class="contact-info-card">
+            <h2>💀 Before You Fire</h2>
+
+            <div class="contact-info-block">
+                <h3>Orders & Packs</h3>
+                <p>
+                    Include your username and the pack name if the issue is about a purchase,
+                    unlock or gifted pack.
+                </p>
+            </div>
+
+            <div class="contact-info-block">
+                <h3>Bug Reports</h3>
+                <p>
+                    Tell us what page you were on, what you clicked, and what exploded emotionally.
+                </p>
+            </div>
+
+            <div class="contact-info-block">
+                <h3>Moderation</h3>
+                <p>
+                    If something crosses the line from roast to rancid, report it here.
+                    We are pro-chaos, not pro-creep.
+                </p>
+            </div>
+        </aside>
+
+        <div class="contact-form-card">
+            <div class="contact-form-header">
+                <span class="contact-badge">📬 Contact HQ</span>
+                <h2>Send The Message</h2>
+                <p>No carrier pigeon required. They unionised.</p>
+            </div>
+
+            <form method="POST" class="contact-form">
+                {% csrf_token %}
+
+                {{ form.honeypot }}
+
+                <div class="contact-row">
+                    <div class="contact-field">
+                        <label for="{{ form.name.id_for_label }}">Name</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="contact-error">{{ form.name.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="contact-field">
+                        <label for="{{ form.email.id_for_label }}">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="contact-error">{{ form.email.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="contact-field">
+                    <label for="{{ form.reason.id_for_label }}">Reason</label>
+                    {{ form.reason }}
+                    {% if form.reason.errors %}
+                        <div class="contact-error">{{ form.reason.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="contact-field">
+                    <label for="{{ form.subject.id_for_label }}">Subject</label>
+                    {{ form.subject }}
+                    {% if form.subject.errors %}
+                        <div class="contact-error">{{ form.subject.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="contact-field">
+                    <label for="{{ form.message.id_for_label }}">Message</label>
+                    {{ form.message }}
+                    {% if form.message.errors %}
+                        <div class="contact-error">{{ form.message.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                {% if form.non_field_errors %}
+                    <div class="contact-error contact-error-wide">
+                        {{ form.non_field_errors|striptags }}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="contact-submit">
+                    🔥 Fire The Message
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+</section>
+
 {% endblock %}

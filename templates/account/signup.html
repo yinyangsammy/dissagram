@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Join The Arena — Dissagram 🔥{% endblock %}
+
+{% block meta_description %}
+Create your Dissagram account and join the roast arena.
+{% endblock %}
+
+{% block body_class %}auth-page auth-signup-page{% endblock %}
+
+{% block content %}
+
+<section class="auth-shell">
+
+    <div class="auth-card auth-card-wide">
+
+        <div class="auth-flame">💀</div>
+
+        <div class="auth-header">
+            <span class="auth-badge">New Challenger</span>
+            <h1>Join The Arena</h1>
+            <p>
+                Create your account. Choose your username carefully.
+                History will judge the spelling.
+            </p>
+        </div>
+
+        <form method="POST" action="{% url 'account_signup' %}" class="auth-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="auth-error auth-error-wide">
+                    {{ form.non_field_errors|striptags }}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                {% if field.is_hidden %}
+                    {{ field }}
+                {% else %}
+                    <div class="auth-field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+
+                        {% if field.help_text %}
+                            <small>{{ field.help_text }}</small>
+                        {% endif %}
+
+                        {% if field.errors %}
+                            <div class="auth-error">
+                                {{ field.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            {% if redirect_field_value %}
+                <input type="hidden"
+                       name="{{ redirect_field_name }}"
+                       value="{{ redirect_field_value }}">
+            {% endif %}
+
+            <button type="submit" class="auth-submit">
+                🔥 Create Account
+            </button>
+        </form>
+
+        <div class="auth-switch">
+            <p>
+                Already carrying grudges?
+                <a href="{% url 'account_login' %}">Sign In</a>
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

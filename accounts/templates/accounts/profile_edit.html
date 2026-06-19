@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile — Dissagram 🔥{% endblock %}
+
+{% block meta_description %}
+Update your Dissagram profile image and email address.
+{% endblock %}
+
+{% block body_class %}profile-page profile-edit-page{% endblock %}
+
+{% block content %}
+
+<section class="profile-shell">
+
+    <div class="profile-card">
+
+        <div class="profile-flame">✏️</div>
+
+        <div class="profile-header">
+            <span class="profile-badge">Identity Maintenance</span>
+            <h1>Edit Profile</h1>
+            <p>
+                Add your email. Upload your battle face.
+                Try not to choose anything that screams “LinkedIn keynote hostage.”
+            </p>
+        </div>
+
+        <div class="profile-avatar">
+            {% if disser.avatar %}
+                <img src="{{ disser.avatar.url }}" alt="{{ request.user.username }} profile image">
+            {% else %}
+                <span>🔥</span>
+            {% endif %}
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="profile-error profile-error-wide">
+                    {{ form.non_field_errors|striptags }}
+                </div>
+            {% endif %}
+
+            <div class="profile-field">
+                <label for="{{ form.email.id_for_label }}">Email</label>
+                {{ form.email }}
+
+                {% if form.email.errors %}
+                    <div class="profile-error">
+                        {{ form.email.errors|striptags }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="profile-field">
+                <label for="{{ form.avatar.id_for_label }}">Profile Image</label>
+                {{ form.avatar }}
+
+                {% if form.avatar.errors %}
+                    <div class="profile-error">
+                        {{ form.avatar.errors|striptags }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="profile-actions">
+                <button type="submit" class="profile-btn profile-btn-primary profile-submit">
+                    🔥 Save Profile
+                </button>
+
+                <a href="{% url 'accounts:profile' %}" class="profile-btn profile-btn-secondary">
+                    ↩ Back to Profile
+                </a>
+            </div>
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

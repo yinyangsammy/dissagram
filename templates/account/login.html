@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In — Dissagram 🔥{% endblock %}
+
+{% block meta_description %}
+Sign in to Dissagram and return to the arena.
+{% endblock %}
+
+{% block body_class %}auth-page auth-login-page{% endblock %}
+
+{% block content %}
+
+<section class="auth-shell">
+
+    <div class="auth-card">
+
+        <div class="auth-flame">👊</div>
+
+        <div class="auth-header">
+            <span class="auth-badge">Arena Access</span>
+            <h1>Sign In</h1>
+            <p>
+                Return to the verbal colosseum. Your unfinished business is probably judging you.
+            </p>
+        </div>
+
+        <form method="POST" action="{% url 'account_login' %}" class="auth-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="auth-error auth-error-wide">
+                    {{ form.non_field_errors|striptags }}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                {% if field.is_hidden %}
+                    {{ field }}
+                {% else %}
+                    <div class="auth-field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+
+                        {% if field.help_text %}
+                            <small>{{ field.help_text }}</small>
+                        {% endif %}
+
+                        {% if field.errors %}
+                            <div class="auth-error">
+                                {{ field.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            {% if redirect_field_value %}
+                <input type="hidden"
+                       name="{{ redirect_field_name }}"
+                       value="{{ redirect_field_value }}">
+            {% endif %}
+
+            <button type="submit" class="auth-submit">
+                🔥 Enter The Arena
+            </button>
+        </form>
+
+        <div class="auth-switch">
+            <p>
+                New to the chaos?
+                <a href="{% url 'account_signup' %}">Join The Arena</a>
+            </p>
+
+            <p>
+                Forgotten your password?
+                <a href="{% url 'account_reset_password' %}">Summon a reset spell</a>
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

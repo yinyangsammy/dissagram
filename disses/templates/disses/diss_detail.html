@@ -32,7 +32,7 @@
     gap: 6px;
 }
 
-.back-nav a:hover { color: #d4a017; }
+.back-nav a:hover { color: #ffac2b; }
 
 /* ── THE CARD ── */
 .diss-card {
@@ -154,7 +154,7 @@
     font-family: "Bangers", cursive;
     font-size: 1.4rem;
     letter-spacing: 2.5px;
-    color: #d4a017;
+    color: #ffac2b;
     line-height: 1;
     text-shadow: 0 0 20px rgba(212,160,23,0.3);
 }
@@ -190,7 +190,7 @@
     top: 50%;
     transform: translateY(-50%);
     border: 7px solid transparent;
-    border-right-color: #d4a017;
+    border-right-color: #ffac2b;
 }
 
 .style-speech-text {
@@ -223,7 +223,7 @@
     font-family: "Bangers", cursive;
     font-size: 1rem;
     letter-spacing: 2px;
-    color: #d4a017;
+    color: #ffac2b;
     margin-bottom: 0.6rem;
     display: flex;
     align-items: center;
@@ -241,7 +241,7 @@
 }
 
 .trait-bullet {
-    color: #d4a017;
+    color: #ffac2b;
     flex-shrink: 0;
     font-size: 0.7rem;
     margin-top: 3px;
@@ -271,7 +271,7 @@
 .burn-line-card {
     background: #0a0a0a;
     border: 1px solid #1e1e1e;
-    border-left: 3px solid #d4a017;
+    border-left: 3px solid #ffac2b;
     border-radius: 0 8px 8px 0;
     padding: 12px 16px;
     margin-bottom: 10px;
@@ -292,7 +292,7 @@
 
 .type-trait       { background: #0c3a5e; color: #6bb3e8; }
 .type-weakness    { background: #3b0e0e; color: #e88080; }
-.type-catchphrase { background: #2e1f00; color: #d4a017; }
+.type-catchphrase { background: #2e1f00; color: #ffac2b; }
 
 .burn-line-text {
     font-size: 1.15rem;
@@ -364,7 +364,7 @@
 }
 
 .status-draft     { background: #1a1a1a; color: #555; border: 1px solid #222; }
-.status-published { background: rgba(212,160,23,0.12); color: #d4a017; border: 1px solid rgba(212,160,23,0.3); }
+.status-published { background: rgba(212,160,23,0.12); color: #ffac2b; border: 1px solid rgba(212,160,23,0.3); }
 
 /* ── ACTION BUTTONS ── */
 .diss-actions {
@@ -384,7 +384,7 @@
     letter-spacing: 2px;
     padding: 10px 28px;
     border-radius: 8px;
-    background: #d4a017;
+    background: #ffac2b;
     color: #0a0a0a;
     border: none;
     text-decoration: none;
@@ -475,8 +475,8 @@
     padding: 10px 28px;
     border-radius: 8px;
     background: transparent;
-    color: #d4a017;
-    border: 1.5px solid #d4a017;
+    color: #ffac2b;
+    border: 1.5px solid #ffac2b;
     cursor: pointer;
     transition: all 0.15s;
     display: inline-flex;
@@ -520,7 +520,7 @@
     margin-bottom: 1rem;
 }
 
-.riposte-badge a { color: #d4a017; text-decoration: none; }
+.riposte-badge a { color: #ffac2b; text-decoration: none; }
 .riposte-badge a:hover { text-decoration: underline; }
 </style>
 {% endblock %}
@@ -666,7 +666,7 @@
             <div class="diss-divider"></div>
 
             <!-- BURN LINES -->
-            {% with lines=diss.selected_lines.all %}
+            {% with lines=ordered_lines %}
             {% if lines %}
             <div class="burn-lines-title">
                 <i class="fas fa-bolt"></i> The Burns
@@ -685,7 +685,7 @@
             <p style="color:#444; font-style:italic; font-size:0.85rem; text-align:center; padding: 1rem 0;">
                 No burn lines selected yet.
                 {% if user == diss.author %}
-                    <a href="{% url 'disses:diss_edit' diss.pk %}" style="color:#d4a017;">Edit this diss</a> to add some.
+                    <a href="{% url 'disses:diss_edit' diss.pk %}" style="color:#ffac2b;">Edit this diss</a> to add some.
                 {% endif %}
             </p>
             {% endif %}
@@ -716,7 +716,7 @@
                 </div>
                 {% if diss.selected_lines.count %}
                 <div class="footer-meta-item">
-                    <i class="fas fa-bolt" style="color:#d4a017;"></i>
+                    <i class="fas fa-bolt" style="color:#ffac2b;"></i>
                     <span>{{ diss.selected_lines.count }} burn{{ diss.selected_lines.count|pluralize }}</span>
                 </div>
                 {% endif %}

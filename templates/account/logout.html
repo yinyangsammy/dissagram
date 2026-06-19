@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Out — Dissagram 🔥{% endblock %}
+
+{% block meta_description %}
+Sign out of Dissagram.
+{% endblock %}
+
+{% block body_class %}auth-page auth-logout-page{% endblock %}
+
+{% block content %}
+
+<section class="auth-shell">
+
+    <div class="auth-card auth-logout-card">
+
+        <div class="auth-flame">👋</div>
+
+        <div class="auth-header">
+            <span class="auth-badge">Leaving So Soon?</span>
+            <h1>Sign Out</h1>
+            <p>
+                Are you sure you want to leave the arena?
+                The insults will continue training in your absence.
+            </p>
+        </div>
+
+        <form method="POST" action="{% url 'account_logout' %}" class="auth-form">
+            {% csrf_token %}
+
+            {% if redirect_field_value %}
+                <input type="hidden"
+                       name="{{ redirect_field_name }}"
+                       value="{{ redirect_field_value }}">
+            {% endif %}
+
+            <button type="submit" class="auth-submit">
+                💀 Yes, Sign Me Out
+            </button>
+        </form>
+
+        <div class="auth-switch">
+            <p>
+                Changed your mind?
+                <a href="{% url 'home:home' %}">Return to safety</a>
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

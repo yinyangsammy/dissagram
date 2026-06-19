@@ -76,12 +76,12 @@
         }
 
         .text-username {
-            color: #ffd5a9;
+            color: #ffac2b !important;
             font-family: Arial !important;
         }
 
         .text-username:hover {
-            color: #d4a017 !important;
+            color: rgb(255, 69, 0) !important;
         }
 
 
@@ -185,6 +185,8 @@
                             🔥 {{ user.username }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
+                                <i class="fas fa-circle-user me-2"></i>Profile</a></li>
                             <li><a class="dropdown-item" href="{% url 'disses:my_disses' %}">
                                 <i class="fas fa-paper-plane me-2"></i>My Disses</a></li>
                             <li><a class="dropdown-item" href="{% url 'roasts:my_roasts' %}">
@@ -283,7 +285,7 @@
                 border:1.5px solid
                 {% if message.tags == 'success' %}#27ae60
                 {% elif message.tags == 'error' %}#c0392b
-                {% elif message.tags == 'warning' %}#d4a017
+                {% elif message.tags == 'warning' %}#ffac2b
                 {% else %}#2980b9{% endif %};
                 color:#f0f0f0;
                 font-family:'Bangers',cursive;
@@ -336,7 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- FOOTER                    -->
 <!-- ========================= -->
 <footer class="site-footer text-center py-4 mt-5">
-    <p>🔥 Dissagram — Because some things need to be said 💀</p>
+    <p>©️ Dissagram — Because some things need to be said 💀</p>
     <div class="footer-icons mt-2">
         <a href="https://www.tiktok.com" target="_blank" rel="noopener" aria-label="TikTok">
             <i class="fa-brands fa-tiktok"></i>

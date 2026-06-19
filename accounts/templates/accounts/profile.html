@@ -1,1 +1,90 @@
-<h1>Accounts Page</h1>
+{% extends "base.html" %}
+
+{% block title %}Your Profile — Dissagram 🔥{% endblock %}
+
+{% block meta_description %}
+View your Dissagram profile and account settings.
+{% endblock %}
+
+{% block body_class %}profile-page{% endblock %}
+
+{% block content %}
+
+<section class="profile-shell">
+
+    <div class="profile-card">
+
+        <div class="profile-flame">🎯</div>
+
+        <div class="profile-header">
+            <span class="profile-badge">Arena Identity</span>
+            <h1>Your Profile</h1>
+            <p>
+                Your official Dissagram control room.
+                Ready yourself for war ⚔️
+            </p>
+        </div>
+
+        <div class="profile-avatar">
+            {% if disser.avatar %}
+                <img src="{{ disser.avatar.url }}" alt="{{ request.user.username }} profile image">
+            {% else %}
+                <span>🔥</span>
+            {% endif %}
+        </div>
+
+        <div class="profile-details">
+
+            <div class="profile-detail">
+                <span class="profile-label">Username</span>
+                <span class="profile-value">{{ request.user.username }}</span>
+            </div>
+
+            <div class="profile-detail">
+                <span class="profile-label">Email</span>
+                <span class="profile-value">
+                    {% if request.user.email %}
+                        {{ request.user.email }}
+                    {% else %}
+                        Not added yet
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="profile-detail">
+                <span class="profile-label">Target Emoji</span>
+                <span class="profile-value profile-emoji">🎯</span>
+            </div>
+
+            <div class="profile-detail">
+                <span class="profile-label">Arena Status</span>
+                <span class="profile-value">Active menace</span>
+            </div>
+
+        </div>
+
+        <div class="profile-actions">
+
+            <a href="{% url 'accounts:profile_edit' %}" class="profile-btn profile-btn-primary">
+                ✏️ Edit Profile
+            </a>
+
+            <a href="{% url 'account_change_password' %}" class="profile-btn profile-btn-secondary">
+                🔐 Change Password
+            </a>
+
+            <a href="{% url 'contact' %}" class="profile-btn profile-btn-secondary">
+                📬 Contact HQ
+            </a>
+
+            <a href="{% url 'account_logout' %}" class="profile-btn profile-btn-danger">
+                👋 Sign Out
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

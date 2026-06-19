@@ -68,19 +68,27 @@ SITE_ID = 1
 
 # ── EMAIL ──────────────────────────────
 # Development: print emails to console
-# Production: swap for real SMTP (e.g. SendGrid)
+# Production: use real SMTP via Heroku Config Vars
+
+DEFAULT_FROM_EMAIL = os.environ.get(
+    "DEFAULT_FROM_EMAIL",
+    "noreply@dissagram.com",
+)
+
+CONTACT_EMAIL = os.environ.get(
+    "CONTACT_EMAIL",
+    DEFAULT_FROM_EMAIL,
+)
+
 if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
-    EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+    EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
     EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-    DEFAULT_FROM_EMAIL = os.environ.get(
-        'DEFAULT_FROM_EMAIL', 'noreply@dissagram.com'
-    )
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 
 
 ACCOUNT_LOGIN_METHODS = {'username', 'email'}
