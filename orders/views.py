@@ -41,7 +41,15 @@ def package_list(request):
     Annotates each package with purchase_count (how many times
     the user has bought it) and already_owned (bool convenience).
     Users can repurchase owned packs via the Buy Again button.
+
+    Also attaches the actual archetype / roast style / premium
+    category NAMES each package unlocks, computed using the exact
+    same display_order-based logic that drives real unlocking in
+    disses/views.py — so the pre-purchase confirmation modal can
+    never drift out of sync with what the user actually gets.
     """
+    from dissers.models import TargetArchetype, RoastStyle, RoastCategory
+
     packages = Package.objects.filter(is_active=True)
 
     # Count purchases per package rather than just a yes/no check
@@ -56,9 +64,37 @@ def package_list(request):
 
     completed_order_ids = list(purchase_count_map.keys())
 
+    # Same ordered lists the unlock logic itself uses — single
+    # source of truth, computed once rather than per package.
+    ordered_paid_archetypes = list(
+        TargetArchetype.objects.filter(is_free=False)
+        .order_by("display_order")
+        .values_list("name", flat=True)
+    )
+    ordered_paid_styles = list(
+        RoastStyle.objects.filter(is_free=False)
+        .order_by("display_order")
+        .values_list("name", flat=True)
+    )
+
     for pkg in packages:
         pkg.purchase_count = purchase_count_map.get(pkg.pk, 0)
         pkg.already_owned = pkg.purchase_count > 0
+
+        # Exactly which named archetypes / styles this pack's count
+        # actually unlocks — purely positional, mirrors disses/views.py
+        pkg.included_archetype_names = ordered_paid_archetypes[
+            :pkg.archetype_count
+        ]
+        pkg.included_roast_style_names = ordered_paid_styles[
+            :pkg.roast_style_count
+        ]
+        pkg.included_category_names = list(
+            RoastCategory.objects.filter(
+                is_free=False,
+                required_pack_level__lte=pkg.display_order
+            ).order_by("required_pack_level").values_list("name", flat=True)
+        )
 
     past_orders = Order.objects.filter(
         user=request.user

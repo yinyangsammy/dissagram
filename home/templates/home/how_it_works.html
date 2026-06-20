@@ -1,10 +1,680 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}How It Works 🔥 Dissagram{% endblock %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ================================================
+   HOW IT WORKS — Chalkboard Timeline
+   Dark "blackboard" aesthetic, hand-drawn doodle
+   icons, marker-style connecting arrows, and
+   polaroid-style screenshot notes pinned to each card.
+================================================ */
+
+.hiw-page {
+    padding: 3rem 0 5rem;
+    position: relative;
+}
+
+/* ── HERO ── */
+.hiw-hero {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.hiw-hero .eyebrow {
+    font-family: "Kalam", cursive;
+    font-size: 1rem;
+    color: #d4a017;
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+}
+
+.hiw-hero h1 {
+    font-family: "Bangers", cursive;
+    font-size: clamp(3rem, 7vw, 5rem);
+    color: #ff4500;
+    letter-spacing: 3px;
+    line-height: 1;
+    margin-bottom: 0.6rem;
+}
+
+.hiw-hero .subtitle {
+    font-size: 1.05rem;
+    color: #999;
+    font-style: italic;
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+/* ── CHALKBOARD WRAPPER ── */
+.chalkboard {
+    background: radial-gradient(ellipse at top, #14201a 0%, #0c130f 70%);
+    border: 10px solid #2a1f15;
+    border-radius: 18px;
+    box-shadow:
+        0 0 0 3px #1a1410,
+        inset 0 0 60px rgba(0,0,0,0.5),
+        0 20px 50px rgba(0,0,0,0.6);
+    padding: 3.5rem 1.5rem 3rem;
+    margin: 2.5rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* faint chalk dust texture */
+.chalkboard::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.025) 0, transparent 3%),
+        radial-gradient(circle at 80% 10%, rgba(255,255,255,0.02) 0, transparent 2%),
+        radial-gradient(circle at 60% 85%, rgba(255,255,255,0.03) 0, transparent 4%),
+        radial-gradient(circle at 30% 70%, rgba(255,255,255,0.02) 0, transparent 3%);
+    pointer-events: none;
+}
+
+.chalkboard-label {
+    position: absolute;
+    top: 14px;
+    left: 28px;
+    font-family: "Kalam", cursive;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.5px;
+}
+
+/* ── TIMELINE ── */
+.hiw-timeline {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+/* central dashed chalk line — desktop only */
+.hiw-timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    border-left: 3px dashed rgba(255,255,255,0.18);
+    transform: translateX(-50%);
+}
+
+@media (max-width: 767px) {
+    .hiw-timeline::before { left: 28px; }
+}
+
+/* ── STEP ROW ── */
+.hiw-step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: hiwFadeUp 0.6s ease forwards;
+}
+
+.hiw-step:nth-child(1) { animation-delay: 0.05s; }
+.hiw-step:nth-child(2) { animation-delay: 0.15s; }
+.hiw-step:nth-child(3) { animation-delay: 0.25s; }
+.hiw-step:nth-child(4) { animation-delay: 0.35s; }
+.hiw-step:nth-child(5) { animation-delay: 0.45s; }
+.hiw-step:nth-child(6) { animation-delay: 0.55s; }
+
+@keyframes hiwFadeUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hiw-step:last-child { margin-bottom: 0; }
+
+/* alternate sides on desktop */
+.hiw-step.side-left  { justify-content: flex-start; }
+.hiw-step.side-right { justify-content: flex-end; }
+
+@media (max-width: 767px) {
+    .hiw-step.side-left,
+    .hiw-step.side-right { justify-content: flex-start; padding-left: 60px; }
+}
+
+/* step number dot on the timeline */
+.hiw-step-dot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #0c130f;
+    border: 3px solid #d4a017;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Bangers", cursive;
+    font-size: 1.2rem;
+    color: #d4a017;
+    z-index: 2;
+    box-shadow: 0 0 0 6px #14201a;
+}
+
+@media (max-width: 767px) {
+    .hiw-step-dot { left: 28px; }
+}
+
+/* ── DOODLE CARD ── */
+.hiw-card {
+    width: 100%;
+    max-width: 320px;
+    background: rgba(255,255,255,0.02);
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 1.5rem 1.4rem 1.3rem;
+    position: relative;
+    transition: transform 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.hiw-card:hover {
+    transform: translateY(-4px) rotate(-0.4deg);
+    border-color: #d4a017;
+    background: rgba(212,160,23,0.04);
+}
+
+.hiw-step.side-right .hiw-card { margin-right: 56px; }
+.hiw-step.side-left  .hiw-card { margin-left: 56px; }
+
+@media (max-width: 767px) {
+    .hiw-step.side-right .hiw-card,
+    .hiw-step.side-left  .hiw-card { margin: 0; max-width: 100%; }
+}
+
+.hiw-icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 0.6rem;
+    color: #d4a017;
+}
+
+.hiw-card-title {
+    font-family: "Bangers", cursive;
+    font-size: 1.4rem;
+    letter-spacing: 1.5px;
+    color: #f5f5f0;
+    margin-bottom: 0.4rem;
+}
+
+.hiw-card-desc {
+    font-family: "Kalam", cursive;
+    font-size: 1rem;
+    color: #b8b8b0;
+    line-height: 1.45;
+    margin-bottom: 1rem;
+}
+
+/* ── CARD BOTTOM ROW — sticky note + button live here ── */
+.hiw-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.hiw-card-bottom.solo {
+    justify-content: flex-start;
+}
+
+.hiw-card-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: "Bangers", cursive;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    color: #0a0a0a;
+    background: #d4a017;
+    padding: 7px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: transform 0.15s, background 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.hiw-card-btn:hover {
+    background: #f5c842;
+    transform: scale(1.04);
+    color: #0a0a0a;
+    text-decoration: none;
+}
+
+/* ── POLAROID / STICKY NOTE ── */
+.hiw-sticky-wrap {
+    flex-shrink: 0;
+}
+
+.hiw-sticky {
+    width: 92px;
+    background: #f4f0e4;
+    border-radius: 3px;
+    padding: 6px 6px 12px;
+    box-shadow: 2px 5px 12px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.2);
+    position: relative;
+    transform: rotate(-4deg);
+}
+
+/* alternate the tilt per step so the board feels hand-placed */
+.hiw-step:nth-child(2)  .hiw-sticky { transform: rotate(3deg); }
+.hiw-step:nth-child(3)  .hiw-sticky { transform: rotate(-2.5deg); }
+.hiw-step:nth-child(4)  .hiw-sticky { transform: rotate(4deg); }
+.hiw-step:nth-child(5)  .hiw-sticky { transform: rotate(-3.5deg); }
+.hiw-step:nth-child(6)  .hiw-sticky { transform: rotate(2deg); }
+
+.hiw-sticky:hover { transform: rotate(0deg) scale(1.04); }
+
+/* washi tape strip across the top corner */
+.hiw-sticky::before {
+    content: "";
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    width: 38px;
+    height: 16px;
+    transform: translateX(-50%) rotate(-3deg);
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.55),
+        rgba(255,255,255,0.55) 4px,
+        rgba(255,255,255,0.35) 4px,
+        rgba(255,255,255,0.35) 8px
+    );
+    border: 1px solid rgba(255,255,255,0.2);
+    opacity: 0.85;
+}
+
+.hiw-sticky-photo {
+    width: 100%;
+    height: 70px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: #0c0c0c;
+    position: relative;
+}
+
+.hiw-sticky-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* fallback shown automatically if the screenshot file isn't found yet */
+.hiw-sticky-fallback {
+    display: none;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3px;
+    border: 1.5px dashed rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.3);
+}
+
+.hiw-sticky.no-img .hiw-sticky-fallback { display: flex; }
+
+.hiw-sticky-fallback svg {
+    width: 22px;
+    height: 22px;
+}
+
+.hiw-sticky-fallback span {
+    font-family: "Kalam", cursive;
+    font-size: 0.62rem;
+    letter-spacing: 0.3px;
+}
+
+/* connecting squiggly arrow between cards (desktop) */
+.hiw-connector {
+    position: absolute;
+    width: 70px;
+    height: 50px;
+    color: rgba(255,255,255,0.25);
+    z-index: 1;
+}
+
+.hiw-step.side-left .hiw-connector  { right: -35px; bottom: -45px; }
+.hiw-step.side-right .hiw-connector { left: -35px;  bottom: -45px; }
+
+@media (max-width: 767px) {
+    .hiw-connector { display: none; }
+}
+
+.hiw-step:last-child .hiw-connector { display: none; }
+
+/* ── FINAL CTA ── */
+.hiw-final {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px dashed rgba(255,255,255,0.15);
+}
+
+.hiw-final p {
+    font-family: "Kalam", cursive;
+    font-size: 1.15rem;
+    color: #ccc;
+    margin-bottom: 1.2rem;
+}
+
+.hiw-final-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Bangers", cursive;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: #0a0a0a;
+    background: linear-gradient(135deg, #ff6b1a, #d4a017);
+    padding: 14px 42px;
+    border-radius: 14px;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(212,160,23,0.25);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.hiw-final-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(212,160,23,0.35);
+    color: #0a0a0a;
+    text-decoration: none;
+}
+</style>
+{% endblock %}
+
+
 {% block content %}
-<div class="container py-5 text-center">
-      <p class="arena-text">
-            THE INTERNET'S ARCHETYPE COMBAT ARENA
-        </p>
-    <h1>🔥 How It Works</h1>
-    <p>Coming soon.</p>
-</div>
+<div class="container hiw-page">
+<div class="row">
+<div class="col-lg-9 mx-auto">
+
+    <div class="hiw-hero">
+        <div class="eyebrow">✏️ scribbled on the Dissagram whiteboard</div>
+        <h1>🔥 How It Works</h1>
+        <p class="subtitle">From spotting your target to lighting the fuse — six steps, zero mercy.</p>
+    </div>
+
+    <div class="chalkboard">
+        <div class="chalkboard-label">— the burn pipeline —</div>
+
+        <div class="hiw-timeline">
+
+            <!-- STEP 1 — ENEMY SPOTTED -->
+            <div class="hiw-step side-left">
+                <div class="hiw-card">
+                    <svg class="hiw-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 32c6-12 16-18 26-18s20 6 26 18c-6 12-16 18-26 18S12 44 6 32Z"/>
+                        <circle cx="32" cy="32" r="8"/>
+                        <circle cx="32" cy="32" r="2.5" fill="currentColor"/>
+                        <path d="M32 8v4M32 56v4M58 32h4M2 32h4" stroke-dasharray="2 4"/>
+                    </svg>
+                    <div class="hiw-card-title">1. Enemy Spotted</div>
+                    <div class="hiw-card-desc">Someone out there needs a word. You know exactly who.</div>
+
+                    <div class="hiw-card-bottom solo">
+                        <!-- To add your screenshot: drop a file at
+                             static/images/how-it-works/step-1-enemy-spotted.jpg
+                             and it'll replace this placeholder automatically -->
+                        <div class="hiw-sticky-wrap">
+                            <div class="hiw-sticky">
+                                <div class="hiw-sticky-photo">
+                                    <img class="hiw-sticky-img"
+                                         src="{% static 'images/how-it-works/step-1-enemy-spotted.jpg' %}"
+                                         alt="Enemy Spotted screenshot"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'; this.closest('.hiw-sticky').classList.add('no-img');">
+                                    <div class="hiw-sticky-fallback">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3 7h3l2-3h8l2 3h3v13H3V7Z"/>
+                                            <circle cx="12" cy="13" r="3.5"/>
+                                        </svg>
+                                        <span>add a shot</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <svg class="hiw-connector" viewBox="0 0 70 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M10 5C40 5 55 20 60 45" stroke-dasharray="4 5"/>
+                    <path d="M52 40l8 5 2-9" />
+                </svg>
+            </div>
+
+            <!-- STEP 2 — ENEMY TARGETED -->
+            <div class="hiw-step side-right">
+                <div class="hiw-card">
+                    <svg class="hiw-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="32" cy="32" r="22"/>
+                        <circle cx="32" cy="32" r="13"/>
+                        <circle cx="32" cy="32" r="4" fill="currentColor"/>
+                        <path d="M32 2v10M32 52v10M2 32h10M52 32h10" stroke-dasharray="3 3"/>
+                        <path d="M14 14l38 38" stroke-width="2"/>
+                    </svg>
+                    <div class="hiw-card-title">2. Enemy Targeted</div>
+                    <div class="hiw-card-desc">Lock in the archetype. Gym Narcissist? Fake Guru? Pick your menace.</div>
+
+                    <div class="hiw-card-bottom solo">
+                        <!-- static/images/how-it-works/step-2-enemy-targeted.jpg -->
+                        <div class="hiw-sticky-wrap">
+                            <div class="hiw-sticky">
+                                <div class="hiw-sticky-photo">
+                                    <img class="hiw-sticky-img"
+                                         src="{% static 'images/how-it-works/step-2-enemy-targeted.jpg' %}"
+                                         alt="Enemy Targeted screenshot"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'; this.closest('.hiw-sticky').classList.add('no-img');">
+                                    <div class="hiw-sticky-fallback">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3 7h3l2-3h8l2 3h3v13H3V7Z"/>
+                                            <circle cx="12" cy="13" r="3.5"/>
+                                        </svg>
+                                        <span>add a shot</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <svg class="hiw-connector" viewBox="0 0 70 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M60 5C30 5 15 20 10 45" stroke-dasharray="4 5"/>
+                    <path d="M18 40l-8 5-2-9" />
+                </svg>
+            </div>
+
+            <!-- STEP 3 — CARD CHOSEN -->
+            <div class="hiw-step side-left">
+                <div class="hiw-card">
+                    <svg class="hiw-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="14" y="6" width="28" height="40" rx="3" transform="rotate(-8 28 26)"/>
+                        <rect x="22" y="14" width="28" height="40" rx="3"/>
+                        <circle cx="36" cy="26" r="5"/>
+                        <path d="M28 44h16" stroke-dasharray="2 4"/>
+                    </svg>
+                    <div class="hiw-card-title">3. Card Chosen</div>
+                    <div class="hiw-card-desc">Their archetype card flips into your hand. Traits, weaknesses, all exposed.</div>
+
+                    <div class="hiw-card-bottom">
+                        <!-- static/images/how-it-works/step-3-card-chosen.jpg -->
+                        <div class="hiw-sticky-wrap">
+                            <div class="hiw-sticky">
+                                <div class="hiw-sticky-photo">
+                                    <img class="hiw-sticky-img"
+                                         src="{% static 'images/how-it-works/step-3-card-chosen.jpg' %}"
+                                         alt="Card Chosen screenshot"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'; this.closest('.hiw-sticky').classList.add('no-img');">
+                                    <div class="hiw-sticky-fallback">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3 7h3l2-3h8l2 3h3v13H3V7Z"/>
+                                            <circle cx="12" cy="13" r="3.5"/>
+                                        </svg>
+                                        <span>add a shot</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url 'disses:diss_create' %}" class="hiw-card-btn">
+                            <i class="fas fa-crosshairs"></i> Build Your Diss
+                        </a>
+                    </div>
+                </div>
+                <svg class="hiw-connector" viewBox="0 0 70 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M10 5C40 5 55 20 60 45" stroke-dasharray="4 5"/>
+                    <path d="M52 40l8 5 2-9" />
+                </svg>
+            </div>
+
+            <!-- STEP 4 — ROAST STYLE ACTIVATED -->
+            <div class="hiw-step side-right">
+                <div class="hiw-card">
+                    <svg class="hiw-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 28c0-10 5-18 12-18s12 8 12 18c0 4-2 7-2 7H22s-2-3-2-7Z"/>
+                        <path d="M16 44c4 6 12 10 16 10s12-4 16-10" />
+                        <path d="M26 36c1 2 3 3 6 3s5-1 6-3" stroke-dasharray="2 3"/>
+                        <circle cx="26" cy="26" r="1.5" fill="currentColor"/>
+                        <circle cx="38" cy="26" r="1.5" fill="currentColor"/>
+                    </svg>
+                    <div class="hiw-card-title">4. Roast Style Activated</div>
+                    <div class="hiw-card-desc">Shakespearean Savage? Battle Rapper? Choose the voice doing the damage.</div>
+
+                    <div class="hiw-card-bottom solo">
+                        <!-- static/images/how-it-works/step-4-roast-style.jpg -->
+                        <div class="hiw-sticky-wrap">
+                            <div class="hiw-sticky">
+                                <div class="hiw-sticky-photo">
+                                    <img class="hiw-sticky-img"
+                                         src="{% static 'images/how-it-works/step-4-roast-style.jpg' %}"
+                                         alt="Roast Style Activated screenshot"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'; this.closest('.hiw-sticky').classList.add('no-img');">
+                                    <div class="hiw-sticky-fallback">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3 7h3l2-3h8l2 3h3v13H3V7Z"/>
+                                            <circle cx="12" cy="13" r="3.5"/>
+                                        </svg>
+                                        <span>add a shot</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <svg class="hiw-connector" viewBox="0 0 70 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M60 5C30 5 15 20 10 45" stroke-dasharray="4 5"/>
+                    <path d="M18 40l-8 5-2-9" />
+                </svg>
+            </div>
+
+            <!-- STEP 5 — DISS LINES DEPLOYED -->
+            <div class="hiw-step side-left">
+                <div class="hiw-card">
+                    <svg class="hiw-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 14h36l8 8v28H8V14Z"/>
+                        <path d="M44 14v8h8" />
+                        <path d="M16 28h22M16 36h22M16 44h14" stroke-dasharray="3 4"/>
+                    </svg>
+                    <div class="hiw-card-title">5. Diss Lines Deployed</div>
+                    <div class="hiw-card-desc">Pick your burns. Free lines included — premium categories unlock with a pack.</div>
+
+                    <div class="hiw-card-bottom">
+                        <!-- static/images/how-it-works/step-5-lines-deployed.jpg -->
+                        <div class="hiw-sticky-wrap">
+                            <div class="hiw-sticky">
+                                <div class="hiw-sticky-photo">
+                                    <img class="hiw-sticky-img"
+                                         src="{% static 'images/how-it-works/step-5-lines-deployed.jpg' %}"
+                                         alt="Diss Lines Deployed screenshot"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'; this.closest('.hiw-sticky').classList.add('no-img');">
+                                    <div class="hiw-sticky-fallback">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3 7h3l2-3h8l2 3h3v13H3V7Z"/>
+                                            <circle cx="12" cy="13" r="3.5"/>
+                                        </svg>
+                                        <span>add a shot</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url 'orders:packages' %}" class="hiw-card-btn">
+                            <i class="fas fa-fire"></i> Get More Packs
+                        </a>
+                    </div>
+                </div>
+                <svg class="hiw-connector" viewBox="0 0 70 50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M10 5C40 5 55 20 60 45" stroke-dasharray="4 5"/>
+                    <path d="M52 40l8 5 2-9" />
+                </svg>
+            </div>
+
+            <!-- STEP 6 — BURN BABY BURN -->
+            <div class="hiw-step side-right">
+                <div class="hiw-card">
+                    <svg class="hiw-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M32 6c8 8 4 12 8 18 3-2 4-6 4-6 4 6 6 12 6 18 0 12-9 20-18 20s-18-8-18-20c0-8 4-12 8-18 2 4 2 7 4 7-2-8 0-14 6-19Z"/>
+                        <path d="M32 38c3 0 5 3 5 6s-2 6-5 6-5-3-5-6 2-6 5-6Z" stroke-dasharray="2 3"/>
+                    </svg>
+                    <div class="hiw-card-title">6. Burn Baby Burn</div>
+                    <div class="hiw-card-desc">Deploy it public, watch the Roast Feed light up, climb the leaderboard.</div>
+
+                    <div class="hiw-card-bottom">
+                        <!-- static/images/how-it-works/step-6-burn-baby-burn.jpg -->
+                        <div class="hiw-sticky-wrap">
+                            <div class="hiw-sticky">
+                                <div class="hiw-sticky-photo">
+                                    <img class="hiw-sticky-img"
+                                         src="{% static 'images/how-it-works/step-6-burn-baby-burn.jpg' %}"
+                                         alt="Burn Baby Burn screenshot"
+                                         loading="lazy"
+                                         onerror="this.style.display='none'; this.closest('.hiw-sticky').classList.add('no-img');">
+                                    <div class="hiw-sticky-fallback">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M3 7h3l2-3h8l2 3h3v13H3V7Z"/>
+                                            <circle cx="12" cy="13" r="3.5"/>
+                                        </svg>
+                                        <span>add a shot</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url 'roasts:roast_feed' %}" class="hiw-card-btn">
+                            <i class="fas fa-skull"></i> See the Carnage
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /hiw-timeline -->
+    </div><!-- /chalkboard -->
+
+    <div class="hiw-final">
+        <p>Enough reading. Time to have a word.</p>
+        <a href="{% url 'disses:diss_create' %}" class="hiw-final-btn">
+            🔥 Build Your First Diss
+        </a>
+    </div>
+
+</div><!-- /col -->
+</div><!-- /row -->
+</div><!-- /container -->
 {% endblock %}

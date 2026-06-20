@@ -3,8 +3,7 @@
 
 {% block title %}Get Your Pack — Dissagram{% endblock %}
 
-{% block content %}
-
+{% block extra_css %}
 <style>
 /* ── TOAST ── */
 .diss-toast-wrap {
@@ -18,7 +17,7 @@
 }
 .diss-toast {
     background: #111;
-    border: 1.5px solid #ffac2b;
+    border: 1.5px solid #d4a017;
     color: #f0f0f0;
     font-family: 'Bangers', cursive;
     font-size: 1.05rem;
@@ -89,12 +88,12 @@
     transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
 }
 .pack-card:hover {
-    border-color: #ffac2b;
+    border-color: #d4a017;
     transform: translateY(-6px);
     box-shadow: 0 8px 32px rgba(212,160,23,0.12);
 }
 .pack-card.selected {
-    border-color: #ffac2b;
+    border-color: #d4a017;
     box-shadow: 0 8px 32px rgba(212,160,23,0.15);
 }
 .pack-card.featured.selected {
@@ -151,7 +150,7 @@
     line-height: 1;
 }
 .pack-tagline {
-    color: #ffac2b;
+    color: #d4a017;
     font-size: 0.82rem;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -187,7 +186,7 @@
     gap: 8px;
 }
 .pack-features li .feat-icon {
-    color: #ffac2b;
+    color: #d4a017;
     font-size: 0.8rem;
     flex-shrink: 0;
 }
@@ -197,6 +196,7 @@
 .pack-cta {
     margin-top: auto;
     display: block;
+    width: 100%;
     text-align: center;
     background: linear-gradient(135deg, #e8621a, #c0392b);
     color: #fff;
@@ -336,7 +336,118 @@
     white-space: nowrap;
 }
 .gift-btn:hover { opacity: 0.88; }
+
+/* ════════════════════════════════════════
+   CONFIRM MODAL — "what's actually inside"
+   before sending the user to Stripe
+════════════════════════════════════════ */
+.pack-modal .modal-content {
+    background: #111;
+    border: 1.5px solid #2a2a2a;
+    border-radius: 16px;
+    color: #f0f0f0;
+}
+.pack-modal .modal-header {
+    border-bottom: 1px solid #222;
+    padding: 1.4rem 1.6rem 1rem;
+}
+.pack-modal .modal-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.6rem;
+    letter-spacing: 1.5px;
+    color: #e8621a;
+}
+.pack-modal .modal-body {
+    padding: 1.2rem 1.6rem;
+}
+.pack-modal .modal-footer {
+    border-top: 1px solid #222;
+    padding: 1rem 1.6rem 1.4rem;
+    gap: 10px;
+}
+
+.pm-group {
+    margin-bottom: 1.1rem;
+}
+.pm-group:last-child { margin-bottom: 0; }
+
+.pm-group-label {
+    font-family: 'Bangers', cursive;
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
+    color: #d4a017;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.pm-group-label.premium { color: #9b59b6; }
+
+.pm-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.pm-chip {
+    background: #1a1a1a;
+    border: 1px solid #2e2e2e;
+    color: #ddd;
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    border-radius: 16px;
+}
+.pm-chip.premium {
+    border-color: rgba(155,89,182,0.4);
+    color: #c9a3da;
+}
+
+.pm-tier-note {
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #222;
+    font-size: 0.78rem;
+    color: #666;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.pm-confirm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #e8621a, #c0392b);
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    letter-spacing: 1.5px;
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: none;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.15s;
+}
+.pm-confirm-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.03);
+    color: #fff;
+    text-decoration: none;
+}
+.pm-cancel-btn {
+    background: transparent;
+    border: 1.5px solid #333;
+    color: #999;
+    font-family: 'Bangers', cursive;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    padding: 9px 18px;
+    border-radius: 10px;
+    transition: border-color 0.2s, color 0.2s;
+}
+.pm-cancel-btn:hover { border-color: #555; color: #ccc; }
 </style>
+{% endblock %}
+
+{% block content %}
 
 <div class="packages-page">
 
@@ -441,21 +552,97 @@
             </ul>
 
             {% if package.already_owned %}
-            <!-- Owned: buy again link styled as ghost green button -->
-            <a href="{% url 'orders:checkout' package.pk %}"
-               class="pack-cta buy-again-btn"
-               aria-label="Buy {{ package.name }} again">
+            <!-- Owned: opens confirm modal, same as a fresh purchase -->
+            <button type="button"
+                    class="pack-cta buy-again-btn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#packModal{{ package.pk }}"
+                    aria-label="Buy {{ package.name }} again">
                🔄 BUY AGAIN?
-            </a>
+            </button>
             {% else %}
-            <a href="{% url 'orders:checkout' package.pk %}"
-               class="pack-cta"
-               aria-label="Buy {{ package.name }} for £{{ package.price }}">
+            <button type="button"
+                    class="pack-cta"
+                    data-bs-toggle="modal"
+                    data-bs-target="#packModal{{ package.pk }}"
+                    aria-label="Buy {{ package.name }} for £{{ package.price }}">
                🔥 GET THIS PACK
-            </a>
+            </button>
             {% endif %}
 
         </div>
+
+        <!-- ═══════════════════════════════════════════
+             CONFIRM MODAL for this package — shows the
+             actual archetype / roast style / category
+             names before sending the user to Stripe.
+        ═══════════════════════════════════════════ -->
+        <div class="modal fade pack-modal" id="packModal{{ package.pk }}" tabindex="-1"
+             aria-labelledby="packModalLabel{{ package.pk }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="packModalLabel{{ package.pk }}">
+                            🔥 {{ package.name }}
+                        </h2>
+                        <button type="button" class="btn-close btn-close-white"
+                                data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        {% if package.included_archetype_names %}
+                        <div class="pm-group">
+                            <div class="pm-group-label">🎴 Archetypes Included</div>
+                            <div class="pm-chip-list">
+                                {% for name in package.included_archetype_names %}
+                                <span class="pm-chip">{{ name }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if package.included_roast_style_names %}
+                        <div class="pm-group">
+                            <div class="pm-group-label">🎭 Roast Styles Included</div>
+                            <div class="pm-chip-list">
+                                {% for name in package.included_roast_style_names %}
+                                <span class="pm-chip">{{ name }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if package.included_category_names %}
+                        <div class="pm-group">
+                            <div class="pm-group-label premium">🧠 Premium Diss Categories</div>
+                            <div class="pm-chip-list">
+                                {% for name in package.included_category_names %}
+                                <span class="pm-chip premium">{{ name }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="pm-tier-note">
+                            ℹ️ Packs are cumulative tiers — a higher pack always
+                            includes everything in the packs below it, plus more.
+                            If you already own a smaller pack, you'll see some
+                            overlap above — that's expected.
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="pm-cancel-btn" data-bs-dismiss="modal">
+                            Maybe Later
+                        </button>
+                        <a href="{% url 'orders:checkout' package.pk %}" class="pm-confirm-btn">
+                            Confirm & Continue to Payment →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {% empty %}
         <p style="color:#555; text-align:center; grid-column:1/-1;">
             No packs available right now — check back soon.
@@ -481,8 +668,8 @@
 
             <ul class="pack-features">
                 <li><span class="feat-icon">🎴</span> 5 New Archetypes Monthly</li>
-                <li><span class="feat-icon">🎭</span> 5 Roast Styles</li>
-                <li><span class="feat-icon">🧠</span> 3 Premium Diss Categories</li>
+                <li><span class="feat-icon">🎭</span> All Roast Styles</li>
+                <li><span class="feat-icon">🧠</span> All Premium Diss Categories</li>
                 <li><span class="feat-icon">🔥</span> Unlimited Deploy Burns</li>
                 <li><span class="feat-icon">⚔️</span> Battle Arena Access</li>
                 <li><span class="feat-icon">🏆</span> Seasonal Rankings &amp; Prizes</li>
@@ -499,7 +686,6 @@
          GIFT A PACK
     ═══════════════════ -->
     {% if user.is_authenticated %}
-    {% with completed_count=request.user.orders.filter %}
     <div class="gift-section">
         <h3>🎁 GIFT A PACK</h3>
         <p>Buy a pack for mates who need to have a word.</p>
@@ -523,7 +709,6 @@
             <button type="submit" class="gift-btn">🎁 SEND PACK</button>
         </form>
     </div>
-    {% endwith %}
     {% endif %}
 
     <!-- VIEW ORDERS LINK -->
@@ -533,7 +718,7 @@
            style="font-family:'Bangers',cursive; font-size:1.1rem;
                   letter-spacing:2px; color:#888; border:1.5px solid #333;
                   padding:10px 24px; border-radius:10px; text-decoration:none;"
-           onmouseover="this.style.color='#ffac2b';this.style.borderColor='#ffac2b'"
+           onmouseover="this.style.color='#d4a017';this.style.borderColor='#d4a017'"
            onmouseout="this.style.color='#888';this.style.borderColor='#333'">
             ⚡ VIEW MY ORDERS
         </a>
