@@ -16,7 +16,9 @@ console backend. Production uses SMTP (see settings.py).
 
 import json
 import stripe
+
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Count
@@ -24,8 +26,9 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib import messages
+
 from .models import Package, Order
+
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -38,21 +41,22 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 def package_list(request):
     """
     Show available packages with locked/unlocked state.
-    Annotates each package with purchase_count (how many times
-    the user has bought it) and already_owned (bool convenience).
-    Users can repurchase owned packs via the Buy Again button.
+    Annotates each package with purchase_count and already_owned.
 
     Also attaches the actual archetype / roast style / premium
-    category NAMES each package unlocks, computed using the exact
-    same display_order-based logic that drives real unlocking in
-    disses/views.py — so the pre-purchase confirmation modal can
-    never drift out of sync with what the user actually gets.
+    category names each package unlocks, so the pre-purchase
+    confirmation modal shows exactly what the user is getting.
+
+    Important:
+    - package.archetype_count and package.roast_style_count are treated
+      as PAID unlock counts.
+    - display_archetype_count and display_roast_style_count include the
+      free starter archetype / style too, for customer-facing display.
     """
     from dissers.models import TargetArchetype, RoastStyle, RoastCategory
 
-    packages = Package.objects.filter(is_active=True)
+    packages = Package.objects.filter(is_active=True).order_by("display_order")
 
-    # Count purchases per package rather than just a yes/no check
     purchase_counts = Order.objects.filter(
         user=request.user,
         status="complete"
@@ -64,20 +68,26 @@ def package_list(request):
 
     completed_order_ids = list(purchase_count_map.keys())
 
-    # Same ordered lists the unlock logic itself uses — single
-    # source of truth, computed once rather than per package.
-    # unlock_priority here, NOT display_order — display_order only
-    # controls visual carousel layout, while unlock_priority controls
-    # which archetypes a pack tier actually unlocks.
+    # Free starter content — included in customer-facing totals/modal.
+    free_archetype_names = list(
+        TargetArchetype.objects.filter(is_free=True)
+        .order_by("unlock_priority")
+        .values_list("name", flat=True)
+    )
+
+    free_roast_style_names = list(
+        RoastStyle.objects.filter(is_free=True)
+        .order_by("unlock_priority")
+        .values_list("name", flat=True)
+    )
+
+    # Paid unlock content — sliced by each package's admin-controlled count.
     ordered_paid_archetypes = list(
         TargetArchetype.objects.filter(is_free=False)
         .order_by("unlock_priority")
         .values_list("name", flat=True)
     )
-    # Roast styles use unlock_priority here, NOT display_order —
-    # display_order only controls visual grid layout (e.g. keeping
-    # certain coloured avatars grouped together), while unlock_priority
-    # independently controls which styles a pack tier actually unlocks.
+
     ordered_paid_styles = list(
         RoastStyle.objects.filter(is_free=False)
         .order_by("unlock_priority")
@@ -88,14 +98,23 @@ def package_list(request):
         pkg.purchase_count = purchase_count_map.get(pkg.pk, 0)
         pkg.already_owned = pkg.purchase_count > 0
 
-        # Exactly which named archetypes / styles this pack's count
-        # actually unlocks — purely positional, mirrors disses/views.py
-        pkg.included_archetype_names = ordered_paid_archetypes[
-            :pkg.archetype_count
-        ]
-        pkg.included_roast_style_names = ordered_paid_styles[
-            :pkg.roast_style_count
-        ]
+        # Include the free starter content in the modal so users understand
+        # that buying a pack fully unlocks the starter archetype/style too.
+        pkg.included_archetype_names = (
+            free_archetype_names +
+            ordered_paid_archetypes[:pkg.archetype_count]
+        )
+
+        pkg.included_roast_style_names = (
+            free_roast_style_names +
+            ordered_paid_styles[:pkg.roast_style_count]
+        )
+
+        # Customer-facing count totals.
+        pkg.display_archetype_count = len(pkg.included_archetype_names)
+        pkg.display_roast_style_count = len(pkg.included_roast_style_names)
+
+        # Premium categories are tiered by required_pack_level.
         pkg.included_category_names = list(
             RoastCategory.objects.filter(
                 is_free=False,
@@ -220,7 +239,6 @@ def stripe_webhook(request):
         return HttpResponse(status=400)
 
     if event["type"] == "checkout.session.completed":
-        # Parse raw payload as plain JSON — avoids StripeObject .get() issues
         payload_data = json.loads(payload)
         session_data = payload_data["data"]["object"]
         metadata = session_data.get("metadata", {})
@@ -232,6 +250,7 @@ def stripe_webhook(request):
         if user_id and package_id:
             try:
                 from django.contrib.auth.models import User
+
                 user = User.objects.get(pk=user_id)
                 package = Package.objects.get(pk=package_id)
 
@@ -243,17 +262,18 @@ def stripe_webhook(request):
                     stripe_payment_id=payment_intent or "",
                 )
 
-                # Email in completely separate try block
                 try:
                     _send_order_confirmation(order)
                 except Exception:
-                    pass  # never let email crash the order
+                    pass
 
             except Exception as e:
                 import logging
                 import traceback
+
                 logging.getLogger(__name__).error(
-                    f"Webhook order creation failed: {e}\n{traceback.format_exc()}"
+                    f"Webhook order creation failed: {e}\n"
+                    f"{traceback.format_exc()}"
                 )
                 return HttpResponse(status=500)
 
@@ -267,9 +287,8 @@ def _send_order_confirmation(order):
     Fails silently — email errors must never affect order processing.
     """
     try:
-        subject = (
-            f"🔥 Your {order.package.name} is Locked and Loaded!"
-        )
+        subject = f"🔥 Your {order.package.name} is Locked and Loaded!"
+
         message = render_to_string(
             "orders/email/order_confirmation.txt",
             {
@@ -278,6 +297,7 @@ def _send_order_confirmation(order):
                 "package": order.package,
             }
         )
+
         send_mail(
             subject,
             message,
@@ -285,8 +305,8 @@ def _send_order_confirmation(order):
             [order.user.email],
             fail_silently=True,
         )
+
     except Exception:
-        # Email failure must never crash the webhook
         pass
 
 
@@ -306,9 +326,11 @@ def order_history(request):
     ).select_related("package", "gifted_to")
 
     complete_orders = past_orders.filter(status="complete")
+
     total_spent = sum(
         o.amount_paid for o in complete_orders if o.amount_paid
     )
+
     gifted_count = past_orders.filter(
         gifted_to__isnull=False
     ).count()
@@ -338,11 +360,15 @@ def cancel_order(request, order_id):
     """Cancel a pending order."""
     if request.method == "POST":
         order = get_object_or_404(
-            Order, pk=order_id, user=request.user, status="pending"
+            Order,
+            pk=order_id,
+            user=request.user,
+            status="pending"
         )
         order.status = "failed"
         order.save()
         messages.success(request, "Order cancelled.")
+
     return redirect("orders:history")
 
 
@@ -355,13 +381,17 @@ def toggle_cancel_order(request, order_id):
     """
     if request.method == "POST":
         order = get_object_or_404(Order, pk=order_id, user=request.user)
+
         if order.status == "pending":
             order.status = "failed"
             messages.success(request, "Order cancelled.")
+
         elif order.status == "failed":
             order.status = "pending"
             messages.success(request, "Order reinstated!")
+
         order.save()
+
     return redirect("orders:history")
 
 
@@ -374,14 +404,17 @@ def delete_order(request, order_id):
     """
     if request.method == "POST":
         order = get_object_or_404(Order, pk=order_id, user=request.user)
+
         if order.status in ["failed", "pending"]:
             order.delete()
             messages.success(request, "Order removed from your history.")
+
         else:
             messages.error(
                 request,
                 "Completed orders cannot be deleted."
             )
+
     return redirect("orders:history")
 
 
@@ -401,17 +434,23 @@ def gift_pack(request):
     """
     if request.method == "POST":
         from django.contrib.auth.models import User as DjangoUser
+
         package_id = request.POST.get("package_id")
         username = request.POST.get("recipient_username", "").strip()
         gift_message = request.POST.get("gift_message", "").strip()
 
         try:
             recipient = DjangoUser.objects.get(username=username)
+
             package = get_object_or_404(
-                Package, pk=package_id, is_active=True
+                Package,
+                pk=package_id,
+                is_active=True
             )
+
             request.session["gift_recipient_id"] = recipient.pk
             request.session["gift_message"] = gift_message
+
             return redirect("orders:checkout", package_id=package.pk)
 
         except DjangoUser.DoesNotExist:
@@ -440,11 +479,15 @@ def cache_checkout_data(request):
             pid = request.POST.get(
                 "client_secret", ""
             ).split("_secret")[0]
+
             stripe.api_key = settings.STRIPE_SECRET_KEY
+
             stripe.PaymentIntent.modify(pid, metadata={
                 "username": request.user.username,
             })
+
             return HttpResponse(status=200)
+
         except Exception as e:
             messages.error(
                 request,

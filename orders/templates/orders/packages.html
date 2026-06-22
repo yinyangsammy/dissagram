@@ -100,7 +100,6 @@
     border-color: #e8621a;
     box-shadow: 0 8px 32px rgba(232,98,26,0.2);
 }
-/* Owned: green border, full opacity since it's still interactive */
 .pack-card.owned {
     border-color: #27ae60;
 }
@@ -125,7 +124,6 @@
     border-radius: 20px;
     white-space: nowrap;
 }
-/* Green purchased badge — always visible, no JS toggle needed */
 .pack-purchased-badge {
     position: absolute;
     top: -13px;
@@ -190,7 +188,9 @@
     font-size: 0.8rem;
     flex-shrink: 0;
 }
-.pack-features li.premium .feat-icon { color: #9b59b6; }
+.pack-features li.premium .feat-icon {
+    color: #9b59b6;
+}
 
 /* ── BUTTONS ── */
 .pack-cta {
@@ -216,7 +216,6 @@
     color: #fff;
     text-decoration: none;
 }
-/* Buy Again — green outline style, fully clickable */
 .pack-cta.buy-again-btn {
     background: transparent;
     color: #27ae60;
@@ -338,8 +337,7 @@
 .gift-btn:hover { opacity: 0.88; }
 
 /* ════════════════════════════════════════
-   CONFIRM MODAL — "what's actually inside"
-   before sending the user to Stripe
+   CONFIRM MODAL
 ════════════════════════════════════════ */
 .pack-modal .modal-content {
     background: #111;
@@ -369,8 +367,9 @@
 .pm-group {
     margin-bottom: 1.1rem;
 }
-.pm-group:last-child { margin-bottom: 0; }
-
+.pm-group:last-child {
+    margin-bottom: 0;
+}
 .pm-group-label {
     font-family: 'Bangers', cursive;
     font-size: 0.95rem;
@@ -381,8 +380,9 @@
     align-items: center;
     gap: 8px;
 }
-.pm-group-label.premium { color: #9b59b6; }
-
+.pm-group-label.premium {
+    color: #9b59b6;
+}
 .pm-chip-list {
     display: flex;
     flex-wrap: wrap;
@@ -400,7 +400,6 @@
     border-color: rgba(155,89,182,0.4);
     color: #c9a3da;
 }
-
 .pm-tier-note {
     margin-top: 1.2rem;
     padding-top: 1rem;
@@ -410,7 +409,6 @@
     font-style: italic;
     line-height: 1.4;
 }
-
 .pm-confirm-btn {
     display: inline-flex;
     align-items: center;
@@ -443,7 +441,10 @@
     border-radius: 10px;
     transition: border-color 0.2s, color 0.2s;
 }
-.pm-cancel-btn:hover { border-color: #555; color: #ccc; }
+.pm-cancel-btn:hover {
+    border-color: #555;
+    color: #ccc;
+}
 </style>
 {% endblock %}
 
@@ -454,7 +455,7 @@
     <!-- HERO -->
     <div class="packages-hero">
         <h1>🔥 GET YOUR PACK</h1>
-        <p>Unlock more archetypes, roast styles & premium content</p>
+        <p>Unlock more archetypes, roast styles &amp; premium content</p>
     </div>
 
     <!-- TOASTS -->
@@ -471,9 +472,7 @@
     </div>
     {% endif %}
 
-    <!-- ═══════════════════
-         PACK GRID
-    ═══════════════════ -->
+    <!-- PACK GRID -->
     <div class="pack-grid">
 
         {% for package in packages %}
@@ -482,7 +481,6 @@
              {% if forloop.last %}featured{% endif %}">
 
             {% if package.already_owned %}
-            <!-- Green purchased badge — replaces cheapest/best value when owned -->
             <div class="pack-purchased-badge">
                 ✅ PURCHASED
                 {% if package.purchase_count == 1 %}ONCE
@@ -491,14 +489,12 @@
             </div>
 
             {% elif forloop.first %}
-            <!-- Cheapest option badge — JS-toggled on click -->
             <div class="pack-featured-badge"
                  style="background:#ffac2b; display:none;">
                 💰 CHEAPEST OPTION
             </div>
 
             {% elif forloop.last %}
-            <!-- Best value badge — JS-toggled on click -->
             <div class="pack-featured-badge" style="display:none;">
                 🤑 BEST VALUE
             </div>
@@ -518,16 +514,30 @@
             <ul class="pack-features">
                 <li>
                     <span class="feat-icon">🎴</span>
-                    {{ package.archetype_count }} Archetypes unlocked
+                    {{ package.display_archetype_count }}
+                    Archetype{{ package.display_archetype_count|pluralize }} unlocked
                 </li>
+
                 <li>
                     <span class="feat-icon">🎭</span>
-                    {{ package.roast_style_count }} Roast Styles unlocked
+                    {{ package.display_roast_style_count }}
+                    Roast Style{{ package.display_roast_style_count|pluralize }} unlocked
                 </li>
+
                 <li>
                     <span class="feat-icon">💬</span>
-                    Select {{ package.max_line_selections }} Diss Line{{ package.max_line_selections|pluralize }} per burn
+                    {{ package.standard_diss_line_count }}
+                    Diss Line{{ package.standard_diss_line_count|pluralize }} per burn
                 </li>
+
+                {% if package.premium_diss_line_count %}
+                <li class="premium">
+                    <span class="feat-icon">🧠</span>
+                    {{ package.premium_diss_line_count }}
+                    Premium Diss Line{{ package.premium_diss_line_count|pluralize }} per burn
+                </li>
+                {% endif %}
+
                 {% if package.premium_category_count %}
                 <li class="premium">
                     <span class="feat-icon">🧠</span>
@@ -535,18 +545,23 @@
                     Categor{{ package.premium_category_count|pluralize:"y,ies" }}
                 </li>
                 {% endif %}
+
                 {% if package.deploy_burn_count %}
                 <li>
                     <span class="feat-icon">🔥</span>
-                    Deploy {{ package.deploy_burn_count }} Burn{{ package.deploy_burn_count|pluralize }}
+                    Deploy {{ package.deploy_burn_count }}
+                    Burn{{ package.deploy_burn_count|pluralize }}
                 </li>
                 {% endif %}
+
                 {% if package.riposte_count %}
                 <li>
                     <span class="feat-icon">⚔️</span>
-                    {{ package.riposte_count }} Riposte Invite{{ package.riposte_count|pluralize }}
+                    {{ package.riposte_count }}
+                    Riposte Invite{{ package.riposte_count|pluralize }}
                 </li>
                 {% endif %}
+
                 {% if package.includes_leaderboard %}
                 <li>
                     <span class="feat-icon">🏆</span>
@@ -556,7 +571,6 @@
             </ul>
 
             {% if package.already_owned %}
-            <!-- Owned: opens confirm modal, same as a fresh purchase -->
             <button type="button"
                     class="pack-cta buy-again-btn"
                     data-bs-toggle="modal"
@@ -576,22 +590,24 @@
 
         </div>
 
-        <!-- ═══════════════════════════════════════════
-             CONFIRM MODAL for this package — shows the
-             actual archetype / roast style / category
-             names before sending the user to Stripe.
-        ═══════════════════════════════════════════ -->
+        <!-- CONFIRM MODAL -->
         <div class="modal fade pack-modal" id="packModal{{ package.pk }}" tabindex="-1"
              aria-labelledby="packModalLabel{{ package.pk }}" aria-hidden="true">
+
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
+
                     <div class="modal-header">
                         <h2 class="modal-title" id="packModalLabel{{ package.pk }}">
                             🔥 {{ package.name }}
                         </h2>
-                        <button type="button" class="btn-close btn-close-white"
-                                data-bs-dismiss="modal" aria-label="Close"></button>
+
+                        <button type="button"
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                     </div>
+
                     <div class="modal-body">
 
                         {% if package.included_archetype_names %}
@@ -620,8 +636,16 @@
                             <div class="pm-group-label">💬 Diss Lines Per Burn</div>
                             <div class="pm-chip-list">
                                 <span class="pm-chip">
-                                    {{ package.max_line_selections }} line{{ package.max_line_selections|pluralize }} selectable
+                                    {{ package.standard_diss_line_count }}
+                                    standard line{{ package.standard_diss_line_count|pluralize }}
                                 </span>
+
+                                {% if package.premium_diss_line_count %}
+                                <span class="pm-chip premium">
+                                    {{ package.premium_diss_line_count }}
+                                    premium line{{ package.premium_diss_line_count|pluralize }}
+                                </span>
+                                {% endif %}
                             </div>
                         </div>
 
@@ -648,14 +672,20 @@
                         </div>
 
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="pm-cancel-btn" data-bs-dismiss="modal">
+                        <button type="button"
+                                class="pm-cancel-btn"
+                                data-bs-dismiss="modal">
                             Maybe Later
                         </button>
-                        <a href="{% url 'orders:checkout' package.pk %}" class="pm-confirm-btn">
-                            Confirm & Continue to Payment →
+
+                        <a href="{% url 'orders:checkout' package.pk %}"
+                           class="pm-confirm-btn">
+                            Confirm &amp; Continue to Payment →
                         </a>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -666,9 +696,7 @@
         </p>
         {% endfor %}
 
-        <!-- ═══════════════════════════════════════
-             COMING SOON — Roast Subscription
-        ═══════════════════════════════════════ -->
+        <!-- COMING SOON — Roast Subscription -->
         <div class="pack-coming-soon">
             <div class="pack-coming-soon-badge">🔒 COMING SOON</div>
 
@@ -699,30 +727,33 @@
 
     </div><!-- /pack-grid -->
 
-    <!-- ═══════════════════
-         GIFT A PACK
-    ═══════════════════ -->
+    <!-- GIFT A PACK -->
     {% if user.is_authenticated %}
     <div class="gift-section">
         <h3>🎁 GIFT A PACK</h3>
         <p>Buy a pack for mates who need to have a word.</p>
+
         <form method="POST" action="{% url 'orders:gift' %}" class="gift-form">
             {% csrf_token %}
+
             <select name="package_id" required>
                 <option value="">— Choose a pack —</option>
                 {% for pkg in packages %}
                 <option value="{{ pkg.pk }}">{{ pkg.name }} — £{{ pkg.price }}</option>
                 {% endfor %}
             </select>
+
             <input type="text"
                    name="recipient_username"
                    placeholder="Their username"
                    maxlength="150"
                    required>
+
             <input type="text"
                    name="gift_message"
                    placeholder="Message (optional)"
                    maxlength="200">
+
             <button type="submit" class="gift-btn">🎁 SEND PACK</button>
         </form>
     </div>
@@ -753,16 +784,27 @@ document.addEventListener("DOMContentLoaded", () => {
     function selectCard(card) {
         cards.forEach(c => {
             c.classList.remove("selected");
+
             const banner = c.querySelector(".pack-featured-badge");
-            if (banner) banner.style.display = "none";
+
+            if (banner) {
+                banner.style.display = "none";
+            }
         });
+
         card.classList.add("selected");
+
         const activeBanner = card.querySelector(".pack-featured-badge");
-        if (activeBanner) activeBanner.style.display = "inline-block";
+
+        if (activeBanner) {
+            activeBanner.style.display = "inline-block";
+        }
     }
 
     /* Default: select last real pack (Best Value) on load */
-    if (cards.length) selectCard(cards[cards.length - 1]);
+    if (cards.length) {
+        selectCard(cards[cards.length - 1]);
+    }
 
     cards.forEach(card => {
         card.addEventListener("click", () => selectCard(card));

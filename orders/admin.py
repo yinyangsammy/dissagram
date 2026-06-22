@@ -7,8 +7,11 @@ class PackageAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "price",
-        "archetype_count",      # replaces diss_count
+        "archetype_count",
         "roast_style_count",
+        "standard_diss_line_count",
+        "premium_diss_line_count",
+        "max_line_selections",
         "includes_leaderboard",
         "is_active",
         "display_order",
