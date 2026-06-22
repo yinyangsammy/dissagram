@@ -40,6 +40,7 @@ font-size: 2.2rem;
     background: #111;
     color: #888;
     font-size: 1.2rem;
+    cursor: pointer;
 }
 
 .site-footer a {
@@ -51,6 +52,15 @@ font-size: 2.2rem;
 }
 
 .site-footer a:hover {
+    color: #ff4500;
+}
+
+.site-footer h4 {
+    font-size: 1.2rem;
+}
+
+
+.site-footer h4:hover {
     color: #ff4500;
 }
 

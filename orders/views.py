@@ -66,14 +66,21 @@ def package_list(request):
 
     # Same ordered lists the unlock logic itself uses — single
     # source of truth, computed once rather than per package.
+    # unlock_priority here, NOT display_order — display_order only
+    # controls visual carousel layout, while unlock_priority controls
+    # which archetypes a pack tier actually unlocks.
     ordered_paid_archetypes = list(
         TargetArchetype.objects.filter(is_free=False)
-        .order_by("display_order")
+        .order_by("unlock_priority")
         .values_list("name", flat=True)
     )
+    # Roast styles use unlock_priority here, NOT display_order —
+    # display_order only controls visual grid layout (e.g. keeping
+    # certain coloured avatars grouped together), while unlock_priority
+    # independently controls which styles a pack tier actually unlocks.
     ordered_paid_styles = list(
         RoastStyle.objects.filter(is_free=False)
-        .order_by("display_order")
+        .order_by("unlock_priority")
         .values_list("name", flat=True)
     )
 

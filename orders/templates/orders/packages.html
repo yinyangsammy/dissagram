@@ -524,6 +524,10 @@
                     <span class="feat-icon">🎭</span>
                     {{ package.roast_style_count }} Roast Styles unlocked
                 </li>
+                <li>
+                    <span class="feat-icon">💬</span>
+                    Select {{ package.max_line_selections }} Diss Line{{ package.max_line_selections|pluralize }} per burn
+                </li>
                 {% if package.premium_category_count %}
                 <li class="premium">
                     <span class="feat-icon">🧠</span>
@@ -612,6 +616,15 @@
                         </div>
                         {% endif %}
 
+                        <div class="pm-group">
+                            <div class="pm-group-label">💬 Diss Lines Per Burn</div>
+                            <div class="pm-chip-list">
+                                <span class="pm-chip">
+                                    {{ package.max_line_selections }} line{{ package.max_line_selections|pluralize }} selectable
+                                </span>
+                            </div>
+                        </div>
+
                         {% if package.included_category_names %}
                         <div class="pm-group">
                             <div class="pm-group-label premium">🧠 Premium Diss Categories</div>
@@ -628,6 +641,10 @@
                             includes everything in the packs below it, plus more.
                             If you already own a smaller pack, you'll see some
                             overlap above — that's expected.
+                            <br><br>
+                            🎁 Your free archetype &amp; free roast style never
+                            disappear — they stay active and keep pairing with
+                            every new archetype or style you unlock, now or later.
                         </div>
 
                     </div>

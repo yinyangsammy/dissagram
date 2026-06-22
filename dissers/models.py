@@ -40,7 +40,25 @@ class RoastStyle(models.Model):
     description = models.TextField(blank=True)
     example_line = models.TextField(blank=True)
     emoji = models.CharField(max_length=10, blank=True)
-    display_order = models.PositiveIntegerField(default=0)
+
+    display_order = models.PositiveIntegerField(
+        default=0,
+        help_text=(
+            "Controls VISUAL layout position only — e.g. the order "
+            "styles appear in the Step 2 picker grid. Has no effect "
+            "on which pack unlocks which style — see Unlock Priority."
+        )
+    )
+    unlock_priority = models.PositiveIntegerField(
+        default=0,
+        help_text=(
+            "Controls which styles count as 'first' when a pack's "
+            "roast_style_count determines what's unlocked. Fully "
+            "independent of Display Order — change this freely to "
+            "control pack tiering without disturbing the picker "
+            "grid's visual layout."
+        )
+    )
 
     is_free = models.BooleanField(
         default=False,
@@ -94,7 +112,27 @@ class TargetArchetype(models.Model):
         blank=True,
         null=True
     )
-    display_order = models.PositiveIntegerField(default=0)
+
+    display_order = models.PositiveIntegerField(
+        default=0,
+        help_text=(
+            "Controls VISUAL layout position only — e.g. the order "
+            "archetypes appear in the Step 1 carousel within their "
+            "gender row. Has no effect on which pack unlocks which "
+            "archetype — see Unlock Priority."
+        )
+    )
+    unlock_priority = models.PositiveIntegerField(
+        default=0,
+        help_text=(
+            "Controls which archetypes count as 'first' when a pack's "
+            "archetype_count determines what's unlocked. Fully "
+            "independent of Display Order — change this freely to "
+            "control pack tiering without disturbing the carousel's "
+            "visual layout."
+        )
+    )
+
     is_free = models.BooleanField(
         default=False,
         help_text="Available to free-tier users."

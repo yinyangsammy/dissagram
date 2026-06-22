@@ -97,22 +97,33 @@ def _get_accessible_category_names(user):
 def _archetype_json(archetypes, user):
     """
     Builds the JSON payload for the archetype carousel.
-    Includes locked state, filtered diss lines, and gender
-    so the template JS can split into two carousel rows.
+    Includes locked state, filtered diss lines, gender (for
+    splitting into two carousel rows), and is_premium per
+    line (for grouping Diss Lines vs Premium Diss Categories
+    in Step 3).
+
+    `archetypes` is passed in DISPLAY order (controls the visual
+    carousel layout within each gender row). Locked state is
+    calculated SEPARATELY using `unlock_priority`, independent of
+    display_order — mirrors the same approach used for Roast
+    Styles below, so admin can rearrange carousel layout without
+    ever disturbing which archetypes a pack tier actually unlocks.
     """
     max_archetypes, _ = _get_user_unlocked_counts(user)
     accessible_categories = _get_accessible_category_names(user)
 
+    # Which specific archetype IDs are unlocked — by unlock_priority,
+    # NOT by whatever order `archetypes` happens to be in.
+    unlocked_ids = set(
+        TargetArchetype.objects.filter(is_free=False)
+        .order_by("unlock_priority")
+        .values_list("id", flat=True)[:max_archetypes]
+    )
+
     data = []
-    paid_count = 0
 
     for a in archetypes:
-        # Free archetypes always unlocked
-        if a.is_free:
-            locked = False
-        else:
-            paid_count += 1
-            locked = paid_count > max_archetypes
+        locked = (not a.is_free) and (a.id not in unlocked_ids)
 
         # Build disslines filtered by accessible categories
         lines_by_style = {}
@@ -121,8 +132,8 @@ def _archetype_json(archetypes, user):
         ).select_related("roast_style", "category").order_by("display_order"):
 
             cat_name = line.category.name if line.category else "Diss Line"
+            cat_is_free = line.category.is_free if line.category else True
 
-            # Skip lines in categories the user hasn't unlocked
             if cat_name not in accessible_categories:
                 continue
 
@@ -133,12 +144,11 @@ def _archetype_json(archetypes, user):
             lines_by_style[sid].append({
                 "id": line.id,
                 "type": cat_name,
+                "is_premium": not cat_is_free,
                 "content": line.content,
                 "roast_style_id": sid,
-                "is_premium": not (line.category.is_free if line.category else True),
             })
 
-        # Flatten disslines into a single list
         all_lines = [
             line
             for lines in lines_by_style.values()
@@ -160,7 +170,7 @@ def _archetype_json(archetypes, user):
             "difficulty_label": a.get_difficulty_level_display(),
             "is_free": a.is_free,
             "locked": locked,
-            "gender": a.gender,   # ← NEW: 'M' or 'F', used by JS to split carousels
+            "gender": a.gender,
             "diss_lines": all_lines,
         })
 
@@ -170,19 +180,30 @@ def _archetype_json(archetypes, user):
 def _roast_style_json(roast_styles, user):
     """
     Builds the JSON payload for the roast style selector.
-    Includes locked state per style.
+
+    `roast_styles` is passed in DISPLAY order (controls the visual
+    layout of the Step 2 picker grid — e.g. keeping certain coloured
+    avatars grouped together on the bottom row).
+
+    Locked state is calculated SEPARATELY using `unlock_priority`,
+    a dedicated field independent of display_order. This means the
+    grid layout can be rearranged freely in admin without changing
+    which styles a given pack tier actually unlocks, and vice versa.
     """
     _, max_roast_styles = _get_user_unlocked_counts(user)
 
+    # Which specific style IDs are unlocked — by unlock_priority,
+    # NOT by whatever order `roast_styles` happens to be in.
+    unlocked_ids = set(
+        RoastStyle.objects.filter(is_free=False)
+        .order_by("unlock_priority")
+        .values_list("id", flat=True)[:max_roast_styles]
+    )
+
     data = []
-    paid_count = 0
 
     for s in roast_styles:
-        if s.is_free:
-            locked = False
-        else:
-            paid_count += 1
-            locked = paid_count > max_roast_styles
+        locked = (not s.is_free) and (s.id not in unlocked_ids)
 
         data.append({
             "id": s.id,
@@ -306,7 +327,6 @@ def diss_edit(request, pk):
         "roast_styles_json": _roast_style_json(roast_styles, request.user),
         "archetypes": archetypes,
         "roast_styles": roast_styles,
-        # Pre-selected IDs — used by JS to restore carousel on edit
         "selected_archetype_id": diss.target_archetype_id or "",
         "selected_roast_style_id": diss.roast_style_id or "",
         "selected_line_ids": list(
@@ -318,20 +338,15 @@ def diss_edit(request, pk):
 
 
 def diss_detail(request, pk):
+    """
+    Public diss detail page.
+    Non-public disses only visible to their author.
+    """
     diss = get_object_or_404(Diss, pk=pk)
     if not diss.is_public and diss.author != request.user:
         from django.http import Http404
         raise Http404
-
-    # Order: standard lines (is_free=True) first, premium last
-    ordered_lines = diss.selected_lines.select_related(
-        "category"
-    ).order_by("-category__is_free", "display_order")
-
-    return render(request, "disses/diss_detail.html", {
-        "diss": diss,
-        "ordered_lines": ordered_lines,
-    })
+    return render(request, "disses/diss_detail.html", {"diss": diss})
 
 
 @login_required
@@ -349,18 +364,23 @@ def diss_delete(request, pk):
 
 
 def _get_max_line_selections(user):
-    """Returns max disslines user can select based on pack owned."""
+    """
+    Returns max disslines user can select based on pack owned.
+    Tiers: Free & Diss Pack = 2, Burn Pack = 3, Roast Pack = 4
+    (set per-package via Package.max_line_selections in admin —
+    this function just provides the free-tier baseline of 2).
+    """
     from orders.models import Order
 
     if not user.is_authenticated:
-        return 1
+        return 2  # free tier default
 
     completed = Order.objects.filter(
         user=user,
         status="complete"
     ).select_related("package")
 
-    max_lines = 1  # free tier default
+    max_lines = 2  # free tier default
     for order in completed:
         if order.package and order.package.max_line_selections:
             max_lines = max(max_lines, order.package.max_line_selections)
@@ -398,7 +418,6 @@ def deploy_burn(request, pk):
             )
             return redirect("disses:diss_detail", pk=diss.pk)
 
-        # Validate before doing anything
         if not diss.selected_lines.exists():
             messages.error(
                 request,
@@ -410,12 +429,10 @@ def deploy_burn(request, pk):
             messages.error(request, "⚠️ No target archetype selected.")
             return redirect("disses:diss_detail", pk=diss.pk)
 
-        # ── Step 1: Publish the diss FIRST ──────────────────
         diss.is_public = True
         diss.status = "published"
         diss.save()
 
-        # ── Step 2: Ensure Roast exists — separately ────────
         archetype_slug = slugify(diss.target_archetype.name)
 
         try:
@@ -431,7 +448,6 @@ def deploy_burn(request, pk):
                 is_published=True,
             )
 
-        # Safety — ensure slug is set even on existing roasts
         if not roast.slug:
             roast.slug = archetype_slug
             roast.save()
@@ -443,7 +459,6 @@ def deploy_burn(request, pk):
         )
         return redirect("roasts:roast_detail", slug=roast.slug)
 
-    # GET — confirmation page
     return render(
         request,
         "disses/deploy_burn_confirm.html",
