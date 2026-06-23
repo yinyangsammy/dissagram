@@ -290,6 +290,26 @@
     margin-bottom: 5px;
 }
 
+.type-Diss\.Line {
+  background: #0e3b1a;
+  color: #6be8a0;
+}
+
+.dissline-type-badge {
+  display: inline-block;
+  font-family: "Bangers", cursive;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  padding: 1px 8px;
+  border-radius: 20px;
+  margin-bottom: 4px;
+}
+
+.type-LinkedIn\.Endorsement {
+  background: #3A1A5E;
+  color: #9b59b6;
+}
+
 .type-trait       { background: #0c3a5e; color: #6bb3e8; }
 .type-weakness    { background: #3b0e0e; color: #e88080; }
 .type-catchphrase { background: #2e1f00; color: #ffac2b; }
@@ -674,7 +694,7 @@
 
             {% for line in lines %}
             <div class="burn-line-card">
-                <span class="burn-line-type-badge">
+                <span class="dissline-type-badge type-Diss.Line">
                     {% if line.category %}{{ line.category.emoji }} {{ line.category.name }}{% endif %}
                 </span>
                 <div class="burn-line-text">"{{ line.content }}"</div>
@@ -756,10 +776,12 @@
             <i class="fas fa-fire-flame-curved"></i> Recall Burn
         </button>
     </form>
-    <a href="{% url 'roasts:roast_detail' diss.target_archetype.roast.slug %}"
+    {% if roast_slug %}
+    <a href="{% url 'roasts:roast_detail' roast_slug %}"
        class="btn-diss-view-burn">
         <i class="fas fa-eye"></i> View Burn Page
     </a>
+    {% endif %}
     {% else %}
     <!-- Not deployed yet -->
     <a href="{% url 'disses:deploy_burn' diss.pk %}"

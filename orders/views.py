@@ -284,8 +284,13 @@ def _send_order_confirmation(order):
     """
     Send order confirmation email to the purchasing user.
     Uses plain text template for maximum email client compatibility.
-    Fails silently — email errors must never affect order processing.
+
+    Returns True if an email was sent, otherwise False.
+    Email errors must never affect order processing.
     """
+    if not order.user.email:
+        return False
+
     try:
         subject = f"🔥 Your {order.package.name} is Locked and Loaded!"
 
@@ -306,8 +311,10 @@ def _send_order_confirmation(order):
             fail_silently=True,
         )
 
+        return True
+
     except Exception:
-        pass
+        return False
 
 
 # ═══════════════════════════════════════════════════════

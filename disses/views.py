@@ -341,12 +341,51 @@ def diss_detail(request, pk):
     """
     Public diss detail page.
     Non-public disses only visible to their author.
+
+    Passes selected diss lines explicitly as ordered_lines so the
+    template can render them reliably.
     """
-    diss = get_object_or_404(Diss, pk=pk)
+    diss = get_object_or_404(
+        Diss.objects.select_related(
+            "author",
+            "target_archetype",
+            "roast_style",
+        ).prefetch_related(
+            "selected_lines",
+        ),
+        pk=pk,
+    )
+
     if not diss.is_public and diss.author != request.user:
         from django.http import Http404
         raise Http404
-    return render(request, "disses/diss_detail.html", {"diss": diss})
+
+    # Selected burn lines for display.
+    ordered_lines = (
+        diss.selected_lines
+        .select_related("category", "roast_style")
+        .order_by("display_order", "id")
+    )
+
+    # Safely resolve the Roast page slug for the "View Burn Page" button.
+    roast_slug = None
+
+    if diss.target_archetype:
+        try:
+            roast = diss.target_archetype.roast
+            roast_slug = roast.slug or None
+        except Exception:
+            roast_slug = None
+
+    return render(
+        request,
+        "disses/diss_detail.html",
+        {
+            "diss": diss,
+            "ordered_lines": ordered_lines,
+            "roast_slug": roast_slug,
+        }
+    )
 
 
 @login_required

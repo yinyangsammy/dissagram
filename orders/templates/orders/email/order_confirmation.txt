@@ -1,25 +1,35 @@
 Hi {{ user.username }}!
 
-🔥 Your {{ package.name }} is confirmed and locked and loaded.
+Thanks for using Dissagram 👊
+
+🔥 Your {{ package.name }} is confirmed, locked and loaded.
 
 ────────────────────────
 ORDER CONFIRMATION
 ────────────────────────
-Order #{{ order.pk }}
-Pack: {{ package.name }}
-Amount: £{{ order.amount_paid }}
+
+* Order #{{ order.pk }}
+* Pack: {{ package.name }}
+* Amount: £{{ order.amount_paid }}
+* Order status: {{ order.status }}
 
 WHAT YOU'VE UNLOCKED:
-✅ {{ package.archetype_count }} Archetypes
-✅ {{ package.roast_style_count }} Roast Styles
+✅ {{ package.archetype_count }} paid Archetype{{ package.archetype_count|pluralize }} plus your free starter Archetype
+✅ {{ package.roast_style_count }} paid Roast Style{{ package.roast_style_count|pluralize }} plus your free starter Roast Style
+✅ {{ package.standard_diss_line_count }} Diss Line{{ package.standard_diss_line_count|pluralize }} per burn
+{% if package.premium_diss_line_count %}✅ {{ package.premium_diss_line_count }} Premium Diss Line{{ package.premium_diss_line_count|pluralize }} per burn{% endif %}
 {% if package.premium_category_count %}✅ {{ package.premium_category_count }} Premium Diss Categor{{ package.premium_category_count|pluralize:"y,ies" }}{% endif %}
 {% if package.includes_leaderboard %}✅ Leaderboard & Rankings{% endif %}
 {% if package.deploy_burn_count %}✅ Deploy {{ package.deploy_burn_count }} Burn{{ package.deploy_burn_count|pluralize }}{% endif %}
+{% if package.riposte_count %}✅ {{ package.riposte_count }} Riposte Invite{{ package.riposte_count|pluralize }}{% endif %}
 
-Head back and start firing:
-http://dissagram.com/disses/create/
+Your newly unlocked content is ready to use the next time you build a diss.
 
-Have a word. 💀
+Head back and have a word here:
+https://dissagram.com/disses/create/
+
+You can also view your order history from your Dissagram account.
 
 — The Dissagram Team
-Dissagram — Because some things need to be said.
+
+Dissagram — Because some things need to be said 💀

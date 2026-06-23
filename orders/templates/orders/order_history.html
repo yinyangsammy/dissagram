@@ -558,23 +558,40 @@
                 <!-- What the pack unlocked -->
                 {% if order.package and order.status == 'complete' %}
                 <div class="unlock-pills">
-                    <span class="unlock-pill">
-                        🎴 {{ order.package.archetype_count }} Archetypes
-                    </span>
-                    <span class="unlock-pill">
-                        🎭 {{ order.package.roast_style_count }} Roast Styles
-                    </span>
-                    {% if order.package.premium_category_count %}
-                    <span class="unlock-pill premium">
-                        🧠 {{ order.package.premium_category_count }} Premium
-                        Categor{{ order.package.premium_category_count|pluralize:"y,ies" }}
-                    </span>
-                    {% endif %}
-                    {% if order.package.includes_leaderboard %}
-                    <span class="unlock-pill">
-                        🏆 Leaderboard
-                    </span>
-                    {% endif %}
+                    <span>🎴 {{ order.package.archetype_count }} Paid Archetype{{ order.package.archetype_count|pluralize }}</span>
+
+                <span>🎭 {{ order.package.roast_style_count }} Paid Roast Style{{ order.package.roast_style_count|pluralize }}</span>
+
+                <span>
+                    💬 {{ order.package.standard_diss_line_count }}
+                    Diss Line{{ order.package.standard_diss_line_count|pluralize }}
+                </span>
+
+                {% if order.package.premium_diss_line_count %}
+                <span>
+                    🧠 {{ order.package.premium_diss_line_count }}
+                    Premium Diss Line{{ order.package.premium_diss_line_count|pluralize }}
+                </span>
+                {% endif %}
+
+                {% if order.package.premium_category_count %}
+                <span>
+                    🧠 {{ order.package.premium_category_count }}
+                    Premium Categor{{ order.package.premium_category_count|pluralize:"y,ies" }}
+                </span>
+                {% endif %}
+
+                {% if order.package.riposte_count %}
+                <span>
+                    ⚔️ Ripostes <small style="color:#777;">(coming soon)</small>
+                </span>
+                {% endif %}
+
+                {% if order.package.includes_leaderboard %}
+                <span>
+                    🏆 Leaderboard <small style="color:#777;">(coming soon)</small>
+                </span>
+                {% endif %}
                 </div>
                 {% endif %}
 

@@ -200,7 +200,7 @@ font-size: 2.2rem;
   border-radius: 12px;
   padding: 15px;
   -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: 0.3s;
 }
@@ -1044,4 +1044,12 @@ font-size: 2.2rem;
 .profile-submit {
     border: 0;
     cursor: pointer;
+}
+
+
+.order-chip.soon,
+.pack-features small {
+    color: #777;
+    font-style: italic;
+    font-size: 0.78rem;
 }
