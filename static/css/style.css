@@ -1053,3 +1053,334 @@ font-size: 2.2rem;
     font-style: italic;
     font-size: 0.78rem;
 }
+
+
+/* =====================================================
+   BASE + INDEX MOBILE POLISH — 775px DOWN ONLY
+   Surgical patch: header logo, homepage slogan, manifesto,
+   and footer text. Does not affect desktop.
+===================================================== */
+
+@media (max-width: 775px) {
+
+    /* ---------- BASE HEADER ---------- */
+
+    .navbar .container {
+        padding: 1.15rem 1rem;
+        overflow: hidden;
+    }
+
+    .navbar-brand.logo {
+        max-width: calc(100vw - 5rem);
+        overflow: hidden;
+        margin-right: 0;
+    }
+
+    .navbar-brand.logo h1 {
+        font-size: clamp(2.15rem, 8.5vw, 3.35rem);
+        line-height: 1;
+        white-space: nowrap;
+        margin: 0;
+    }
+
+    .navbar-brand.logo .tagline {
+        font-size: clamp(1.05rem, 3.4vw, 1.55rem);
+        white-space: nowrap;
+    }
+
+    .navbar-toggler {
+        margin-left: auto;
+        padding: 0.25rem 0.4rem;
+    }
+
+
+    /* ---------- INDEX HERO TAGLINE ---------- */
+
+    body.home-page .hero-content {
+        padding-inline: 0.75rem;
+    }
+
+    body.home-page .hero-tagline {
+        font-size: clamp(2.15rem, 7.2vw, 3.4rem);
+        line-height: 1.28;
+        max-width: 86vw;
+        margin-inline: auto;
+        padding: 1rem 0.85rem;
+    }
+
+    body.home-page .hero-tagline i {
+        font-size: 0.82em;
+        vertical-align: middle;
+    }
+
+
+    /* ---------- INDEX MANIFESTO TEXT ---------- */
+
+    body.home-page .manifesto-section p {
+        font-size: clamp(1.25rem, 4.4vw, 1.65rem);
+        line-height: 1.55;
+        max-width: 90vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    body.home-page .manifesto-section h2 {
+        font-size: clamp(2.15rem, 8vw, 3.2rem);
+        line-height: 1.12;
+        letter-spacing: 2px;
+        max-width: 90vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    body.home-page .hero-logo {
+        font-size: clamp(2.2rem, 9vw, 3.3rem);
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    body.home-page .hero-buttons {
+        gap: 1rem;
+        padding-inline: 1rem;
+    }
+
+
+    /* ---------- BASE FOOTER TEXT ONLY ---------- */
+
+    .site-footer h4 {
+        font-size: clamp(0.82rem, 3.2vw, 1rem);
+        line-height: 1.45;
+        padding-inline: 1rem;
+        margin-bottom: 0.4rem;
+    }
+}
+
+/* =====================================================
+   DISSAGRAM RESPONSIVE HEADER / HOME HERO / FOOTER PATCH
+   Safe override: paste at the very bottom of style.css.
+===================================================== */
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* ---------- HOME HERO IMAGE + TEXT ---------- */
+
+body.home-page .hero-section {
+    position: relative;
+    min-height: clamp(460px, calc(100svh - 92px), 940px);
+    padding: clamp(2rem, 6vw, 5rem) 0;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+body.home-page .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+        radial-gradient(circle at center, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.58)),
+        linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.52));
+    pointer-events: none;
+}
+
+body.home-page .hero-content {
+    position: relative;
+    z-index: 2;
+    width: min(100% - 2rem, 760px);
+    max-width: none;
+    min-height: min(58svh, 600px);
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.home-page .hero-tagline {
+    width: min(100%, 760px);
+    margin: 0;
+    padding: clamp(0.85rem, 2.1vw, 1.45rem);
+    font-size: clamp(1.65rem, 4.4vw, 4.4rem);
+    line-height: 1.2;
+    font-weight: 700;
+    text-align: center;
+    color: #d5d7dd;
+    text-shadow: 2px 2px 0 #000;
+    background: rgba(18, 18, 18, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+body.home-page .hero-tagline i {
+    font-size: 0.86em;
+    vertical-align: middle;
+}
+
+@media (min-width: 992px) {
+    body.home-page .hero-content {
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: center;
+    }
+}
+
+
+@media (max-width: 991.98px) {
+    body.home-page .hero-section {
+        min-height: clamp(430px, 76svh, 760px);
+        background-position: center center;
+    }
+
+    body.home-page .hero-content {
+        min-height: 52svh;
+    }
+}
+
+@media (max-width: 575.98px) {
+    body.home-page .hero-section {
+        min-height: 64svh;
+        padding: 2rem 0;
+        background-position: center top;
+    }
+
+    body.home-page .hero-content {
+        width: min(100% - 1.25rem, 420px);
+        min-height: 44svh;
+    }
+
+    body.home-page .hero-tagline {
+        max-width: 92vw;
+        font-size: clamp(1.25rem, 7.4vw, 2.15rem);
+        line-height: 1.16;
+        padding: 0.85rem 0.7rem;
+        border-radius: 12px;
+    }
+
+    body.home-page .hero-tagline br {
+        display: none;
+    }
+}
+
+/* ---------- HOME MANIFESTO / BUTTONS ---------- */
+
+body.home-page .manifesto-section {
+    padding: clamp(4rem, 9vw, 8rem) 1rem;
+}
+
+body.home-page .manifesto-section p {
+    font-size: clamp(1.25rem, 3.8vw, 1.9rem);
+    line-height: 1.45;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body.home-page .manifesto-section h2 {
+    font-size: clamp(2.25rem, 7vw, 5rem);
+    line-height: 1.05;
+}
+
+body.home-page .hero-logo {
+    font-size: clamp(3rem, 10vw, 7rem);
+    line-height: 0.95;
+    overflow-wrap: anywhere;
+}
+
+body.home-page .hero-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+body.home-page .hero-buttons .btn {
+    width: auto;
+    min-width: min(100%, 190px);
+    white-space: normal;
+}
+
+@media (max-width: 575.98px) {
+    body.home-page .manifesto-section p {
+        margin-bottom: 1.35rem;
+    }
+
+    body.home-page .hero-buttons {
+        flex-direction: column;
+        width: min(100%, 340px);
+        margin-inline: auto;
+    }
+
+    body.home-page .hero-buttons .btn {
+        width: 100%;
+    }
+}
+
+/* ---------- FOOTER ---------- */
+
+.site-footer {
+    margin-top: auto !important;
+    padding-inline: 1rem;
+}
+
+.site-footer h4 {
+    max-width: 95vw;
+    margin: 0 auto 0.7rem;
+    font-size: clamp(0.9rem, 2.6vw, 1.2rem);
+    line-height: 1.35;
+}
+
+.footer-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(0.65rem, 2.7vw, 1.1rem);
+}
+
+.site-footer a {
+    margin: 0;
+    font-size: clamp(1.45rem, 5.5vw, 2rem);
+    line-height: 1;
+}
+
+/* FINAL HERO TAGLINE CENTERING FIX */
+body.home-page .hero-section {
+    position: relative;
+}
+
+body.home-page .hero-content.container {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: clamp(1rem, 4vw, 3rem);
+    padding-right: clamp(1rem, 4vw, 3rem);
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+body.home-page .hero-tagline {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+}
+
+/* FINAL HERO TAGLINE SIZE TWEAK */
+body.home-page .hero-tagline {
+    font-size: clamp(1.05rem, 3vw, 3.5rem) !important;
+    line-height: 1.18;
+}
