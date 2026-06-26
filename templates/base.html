@@ -324,7 +324,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{% url 'roasts:roast_feed' %}">
-                                <i class="fas fa-skull me-2"></i>Roast Feed</a></li>
+                                <i class="fas fa-scroll me-2"></i>Roast Feed</a></li>
                             <li><a class="dropdown-item" href="{% url 'home:how_it_works' %}">
                                 <i class="fas fa-circle-question me-2"></i>How It Works</a></li>
                             <li><a class="dropdown-item" href="{% url 'contact' %}">
@@ -345,9 +345,9 @@
                             <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">
                                 <i class="fas fa-circle-user me-2"></i>Profile</a></li>
                             <li><a class="dropdown-item" href="{% url 'disses:my_disses' %}">
-                                <i class="fas fa-paper-plane me-2"></i>My Disses</a></li>
+                                <i class="fas fa-fire me-2"></i>My Disses</a></li>
                             <li><a class="dropdown-item" href="{% url 'roasts:my_roasts' %}">
-                                <i class="fas fa-scroll me-2"></i>My Roasts</a></li>
+                                <i class="fas fa-skull me-2"></i>My Roasts</a></li>
                             <li><hr class="dropdown-divider border-secondary"></li>
                             <li><a class="dropdown-item" href="{% url 'account_logout' %}">
                                 <i class="fas fa-sign-out-alt me-2"></i>Sign Out</a></li>
@@ -355,7 +355,7 @@
                         {% else %}
                         <a class="nav-link dropdown-toggle" href="#" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user me-1"></i> Account
+                            <i class="fas fa-user me-2"></i> Account
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{% url 'account_signup' %}">
@@ -380,45 +380,45 @@
                     <li class="mobile-only"><span class="mobile-group-header">🛒 Store</span></li>
                     <li class="nav-item mobile-only">
                         <a class="nav-link" href="{% url 'orders:packages' %}">
-                            <i class="fa-solid fa-cart-arrow-down me-1"></i> Get Packs</a></li>
+                            <i class="fa-solid fa-cart-arrow-down me-2"></i> Get Packs</a></li>
                     {% if user.is_authenticated %}
                     <li class="nav-item mobile-only">
                         <a class="nav-link" href="{% url 'orders:history' %}">
-                            <i class="fa-solid fa-dumpster-fire me-1"></i> My Orders</a></li>
+                            <i class="fa-solid fa-dumpster-fire me-2"></i> My Orders</a></li>
                     {% endif %}
 
                     <!-- About -->
                     <li class="mobile-only"><span class="mobile-group-header">💀 About</span></li>
                     <li class="nav-item mobile-only">
                         <a class="nav-link" href="{% url 'roasts:roast_feed' %}">
-                            <i class="fas fa-skull me-1"></i> Roast Feed</a></li>
+                            <i class="fas fa-scroll me-2"></i> Roast Feed</a></li>
                     <li class="nav-item mobile-only">
                         <a class="nav-link" href="{% url 'home:how_it_works' %}">
-                            <i class="fas fa-circle-question me-1"></i> How It Works</a></li>
+                            <i class="fas fa-circle-question me-2"></i> How It Works</a></li>
                     <li class="nav-item mobile-only">
                         <a class="nav-link" href="{% url 'contact' %}">
-                            <i class="fas fa-envelope me-1"></i> Contact</a></li>
+                            <i class="fas fa-envelope me-2"></i> Contact</a></li>
 
                     <!-- My Stuff (authenticated) / Account (guest) -->
                     {% if user.is_authenticated %}
                     <li class="mobile-only"><span class="mobile-group-header">👤 My Stuff</span></li>
                     <li class="nav-item mobile-only">
                         <a class="nav-link" href="{% url 'disses:my_disses' %}">
-                            <i class="fas fa-paper-plane me-1"></i> My Disses</a></li>
+                            <i class="fas fire me-2"></i> My Disses</a></li>
                     <li class="nav-item mobile-only">
                         <a class="nav-link" href="{% url 'roasts:my_roasts' %}">
-                            <i class="fas fa-scroll me-1"></i> My Roasts</a></li>
+                            <i class="fas fa-skull me-2"></i> My Roasts</a></li>
                     <li class="nav-item mobile-only">
                         <a class="nav-link" href="{% url 'account_logout' %}">
-                            <i class="fas fa-sign-out-alt me-1"></i> Sign Out</a></li>
+                            <i class="fas fa-sign-out-alt me-2"></i> Sign Out</a></li>
                     {% else %}
                     <li class="mobile-only"><span class="mobile-group-header">👤 Account</span></li>
                     <li class="nav-item mobile-only">
                         <a class="nav-link" href="{% url 'account_signup' %}">
-                            <i class="fas fa-user-plus me-1"></i> Join The Arena</a></li>
+                            <i class="fas fa-user-plus me-2"></i> Join The Arena</a></li>
                     <li class="nav-item mobile-only">
                         <a class="nav-link" href="{% url 'account_login' %}">
-                            <i class="fas fa-sign-in-alt me-1"></i> Sign In</a></li>
+                            <i class="fas fa-sign-in-alt me-2"></i> Sign In</a></li>
                     {% endif %}
 
                 </ul>
