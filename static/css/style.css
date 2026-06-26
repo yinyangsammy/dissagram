@@ -1336,7 +1336,7 @@ body.home-page .hero-buttons .btn {
 .site-footer h4 {
     max-width: 95vw;
     margin: 0 auto 0.7rem;
-    font-size: clamp(0.9rem, 2.6vw, 1.2rem);
+    font-size: clamp(0.85rem, 2.6vw, 1.2rem);
     line-height: 1.35;
 }
 
@@ -1383,4 +1383,74 @@ body.home-page .hero-tagline {
 body.home-page .hero-tagline {
     font-size: clamp(1.05rem, 3vw, 3.5rem) !important;
     line-height: 1.18;
+}
+
+/* FINAL DESKTOP HERO IMAGE UNCROP FIX */
+@media (min-width: 1170px) {
+    body.home-page .hero-section {
+        height: calc(100vw * 0.8003) !important;
+        min-height: calc(100vw * 0.8003) !important;
+        max-height: none !important;
+
+        padding: 0 !important;
+
+        background-size: 100% auto !important;
+        background-position: center top !important;
+        background-repeat: no-repeat !important;
+
+        overflow: visible !important;
+    }
+
+    body.home-page .hero-content {
+        min-height: 100% !important;
+    }
+}
+
+/* FINAL HERO TAGLINE PANEL TRIM */
+body.home-page .hero-tagline {
+    width: fit-content !important;
+    max-width: min(92vw, 680px) !important;
+
+    padding: clamp(0.45rem, 1vw, 0.75rem)
+             clamp(0.75rem, 2vw, 1.25rem) !important;
+
+    margin-left: auto !important;
+    margin-right: auto !important;
+
+    display: inline-flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 0 !important;
+
+    line-height: 1.08 !important;
+    box-sizing: border-box;
+}
+
+body.home-page .hero-tagline span {
+    display: block;
+    max-width: 100%;
+    text-align: center;
+    letter-spacing: 1.5px;
+}
+
+body.home-page .tagline-divider {
+    display: block;
+    width: 72%;
+    max-width: 420px !important;
+    height: 1px;
+    margin: clamp(0.35rem, 0.9vw, 0.6rem) auto !important;
+    background: rgba(255, 255, 255, 0.16);
+}
+
+/* FINAL HERO TAGLINE ICON SPACING */
+body.home-page .hero-tagline .tagline-line {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.55rem, 1.4vw, 1.1rem);
+    white-space: nowrap;
+}
+
+body.home-page .hero-tagline .tagline-line i {
+    flex: 0 0 auto;
 }
