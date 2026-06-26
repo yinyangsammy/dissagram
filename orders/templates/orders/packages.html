@@ -525,22 +525,22 @@
                 </li>
 
                 <li>
-                    <span class="feat-icon">💬</span>
+                    <span class="feat-icon">🔥</span>
                     {{ package.standard_diss_line_count }}
-                    Diss Line{{ package.standard_diss_line_count|pluralize }} per burn
+                    Diss Line{{ package.standard_diss_line_count|pluralize }} per Roast
                 </li>
 
                 {% if package.premium_diss_line_count %}
                 <li class="premium">
-                    <span class="feat-icon">🧠</span>
+                    <span class="feat-icon">💣</span>
                     {{ package.premium_diss_line_count }}
-                    Premium Diss Line{{ package.premium_diss_line_count|pluralize }} per burn
+                    Premium Diss Line{{ package.premium_diss_line_count|pluralize }} per Roast
                 </li>
                 {% endif %}
 
                 {% if package.premium_category_count %}
                 <li class="premium">
-                    <span class="feat-icon">🧠</span>
+                    <span class="feat-icon">💎</span>
                     {{ package.premium_category_count }} Premium Diss
                     Categor{{ package.premium_category_count|pluralize:"y,ies" }}
                 </li>
@@ -548,9 +548,14 @@
 
                 {% if package.deploy_burn_count %}
                 <li>
-                    <span class="feat-icon">🔥</span>
-                    Deploy {{ package.deploy_burn_count }}
-                    Burn{{ package.deploy_burn_count|pluralize }}
+                    <span class="feat-icon">💀</span>
+                    Fire {{ package.deploy_burn_count }} Roast{{ package.deploy_burn_count|pluralize }}
+                </li>
+
+                <li>
+                    <span class="feat-icon">♨️</span>
+                    Deploy {{ package.deploy_burn_count }} Burn{{ package.deploy_burn_count|pluralize }}
+                    <small style="color:#777; font-style:italic;">(coming soon)</small>
                 </li>
                 {% endif %}
 
@@ -718,14 +723,18 @@
 
             <ul class="pack-features">
                 <li><span class="feat-icon">🎴</span> 5 New Archetypes Monthly</li>
-                <li><span class="feat-icon">🎭</span> All Roast Styles</li>
-                <li><span class="feat-icon">🧠</span> All Premium Diss Categories</li>
-                <li><span class="feat-icon">🔥</span> Unlimited Deploy Burns</li>
-                <li><span class="feat-icon">⚔️</span> Battle Arena Access</li>
+                <li><span class="feat-icon">🎭</span> 5 Roast Styles</li>
+                <li><span class="feat-icon">🔥</span> 4 Diss Lines per Roast</li>
+                <li><span class="feat-icon">💣</span> 3 Premium Diss Lines</li>
+                <li><span class="feat-icon">💎</span> 3 Premium Diss Categories</li>
+                <li><span class="feat-icon">💀</span> Fire 10 Roasts</li>
+                <li><span class="feat-icon">♨️</span> Deploy 10 Burns</li>
+                <li><span class="feat-icon">⚔️</span> 5 Riposte Invites</li>
                 <li><span class="feat-icon">🏆</span> Seasonal Rankings &amp; Prizes</li>
                 <li><span class="feat-icon">👑</span> Exclusive Expansion Drops</li>
                 <li><span class="feat-icon">🎨</span> Early Access Roast Styles</li>
             </ul>
+
 
             <div class="pack-coming-soon-btn">🔒 COMING SOON</div>
         </div>
