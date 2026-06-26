@@ -563,21 +563,34 @@
                 <span>🎭 {{ order.package.roast_style_count }} Paid Roast Style{{ order.package.roast_style_count|pluralize }}</span>
 
                 <span>
-                    💬 {{ order.package.standard_diss_line_count }}
+                    🔥 {{ order.package.standard_diss_line_count }}
                     Diss Line{{ order.package.standard_diss_line_count|pluralize }}
                 </span>
 
                 {% if order.package.premium_diss_line_count %}
                 <span>
-                    🧠 {{ order.package.premium_diss_line_count }}
+                    💣 {{ order.package.premium_diss_line_count }}
                     Premium Diss Line{{ order.package.premium_diss_line_count|pluralize }}
                 </span>
                 {% endif %}
 
                 {% if order.package.premium_category_count %}
                 <span>
-                    🧠 {{ order.package.premium_category_count }}
+                    💎 {{ order.package.premium_category_count }}
                     Premium Categor{{ order.package.premium_category_count|pluralize:"y,ies" }}
+                </span>
+                {% endif %}
+
+                {% if order.package.deploy_burn_count %}
+                <span>
+                    💀 Fire {{ order.package.deploy_burn_count }}
+                    Roast{{ order.package.deploy_burn_count|pluralize }}
+                </span>
+
+                <span>
+                     ♨️ Deploy {{ order.package.deploy_burn_count }}
+                    Burn{{ order.package.deploy_burn_count|pluralize }}
+                    <small style="color:#777; font-style:italic;">(coming soon)</small>
                 </span>
                 {% endif %}
 
