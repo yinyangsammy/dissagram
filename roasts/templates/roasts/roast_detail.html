@@ -471,7 +471,7 @@
     <!-- ── FILTER BAR ── -->
     <div class="diss-filter-bar">
         <div class="section-title">
-            <i class="fas fa-bolt"></i> The Burns
+            <i class="fas fa-fire-burner"></i> The Roasts
         </div>
         {% if public_disses.count > 0 %}
         <form method="GET" style="display:flex; gap:8px; align-items:center;">
@@ -512,8 +512,8 @@
 
                     <div class="burn-header-info">
                         <div class="burn-author">
-                            <i class="fas fa-fire"
-                               style="color:#ff4500; font-size:0.65rem;"></i>
+                            <i class="fas fa-skull"
+                               style="color:white; font-size:0.65rem;"></i>
                             {{ diss.author.username }}
                         </div>
                         {% if diss.roast_style %}
@@ -569,7 +569,7 @@
                         <i class="fas fa-bolt"
                            style="color:#ffac2b;"></i>
                         {{ diss.selected_lines.count }}
-                        burn{{ diss.selected_lines.count|pluralize }}
+                        {% if diss.selected_lines.count == 1 %}Diss{% else %}Disses{% endif %}
                     </div>
                 </div>
 
