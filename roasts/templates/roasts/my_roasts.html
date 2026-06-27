@@ -164,7 +164,8 @@
     letter-spacing: 2px;
     padding: 11px 32px;
     border-radius: 10px;
-    background: #ffac2b;
+    background: linear-gradient(135deg, #ff6b1a, #d4a017);
+    padding: 14px 42px;
     color: #0a0a0a;
     border: none;
     text-decoration: none;
@@ -175,10 +176,84 @@
 }
 
 .btn-create:hover {
-    background: #f5c842;
-    color: #0a0a0a;
-    transform: translateY(-2px);
+    background: #ff4500;
+    color: #fff;
 }
+
+/* Action buttons instead of fake tabs */
+.roast-action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #1e1e1e;
+    padding-bottom: 1.4rem;
+}
+
+.roast-action-btn {
+    font-family: "Bangers", cursive;
+    font-size: 1rem;
+    letter-spacing: 1.7px;
+    padding: 11px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition:
+        background 0.15s,
+        color 0.15s,
+        border-color 0.15s,
+        transform 0.15s,
+        box-shadow 0.15s;
+}
+
+.roast-action-left {
+    background: #ffac2b;
+    color: #0a0a0a;
+    border: 1.5px solid #ffac2b;
+}
+
+.roast-action-right {
+    background: transparent;
+    color: #ff4500;
+    border: 1.5px solid #ff4500;
+}
+
+.roast-action-left {
+    background: #111;
+    color: #ffac2b;
+    border: 1.5px solid #ffac2b;
+}
+
+.roast-action-left:hover {
+    background: #ffac2b;
+    color: #111;
+    border-color: #ffac2b;;
+}
+
+.roast-action-right:hover {
+    background: white;
+    color: #111;
+    border-color: #111;
+}
+
+/* Mobile stack */
+@media (max-width: 575.98px) {
+    .roast-action-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .roast-action-btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+
 </style>
 {% endblock %}
 
@@ -187,7 +262,7 @@
 <div class="container my-roasts-page">
 
     <div class="page-header">
-        <h1>📜 My Roasts</h1>
+        <h1>💀 My Roasts</h1>
 
         <h2>Your published roasts and public pile-ons live here.</h2>
         <p>
@@ -203,23 +278,25 @@
     <div class="col-lg-8 mx-auto">
 
         <!-- Tab nav -->
-        <div class="roast-tab-nav">
-            <a href="{% url 'disses:my_disses' %}" class="roast-tab">
-                <i class="fas fa-lock"></i> All My Disses
-            </a>
-            <a href="{% url 'roasts:my_roasts' %}" class="roast-tab active">
-                <i class="fas fa-globe"></i> Public Roasts
-            </a>
-            <a href="{% url 'roasts:roast_feed' %}" class="roast-tab">
-                <i class="fas fa-skull"></i> Roast Feed
-            </a>
-        </div>
+        <div class="roast-action-row">
 
-        <div class="text-center mb-4">
-            <a href="{% url 'disses:diss_create' %}" class="btn-create">
-                <i class="fas fa-plus"></i> Build a New Diss
-            </a>
-        </div>
+    <a href="{% url 'disses:my_disses' %}" class="roast-action-btn roast-action-left">
+    <i class="fas fa-fire"></i>
+    Deploy More Disses
+</a>
+
+    <a href="{% url 'roasts:roast_feed' %}" class="roast-action-btn roast-action-right">
+        <i class="fas fa-skull"></i>
+        Behold The Roast Feed
+    </a>
+
+</div>
+
+<div class="text-center mb-4">
+    <a href="{% url 'disses:diss_create' %}" class="btn-create">
+        <i class="fas fa-plus"></i> Build a New Diss
+    </a>
+</div>
 
         {% if user.is_authenticated %}
             {% if roasts %}
@@ -265,7 +342,7 @@
                                     Published
                                 </div>
                                 <div class="meta-chip">
-                                    <i class="fas fa-bolt"></i>
+                                    <i class="fas fa-fire"></i>
                                     {{ diss.selected_lines.count }} line{{ diss.selected_lines.count|pluralize }}
                                 </div>
                                 <div class="meta-chip">
