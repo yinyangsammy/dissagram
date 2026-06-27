@@ -341,9 +341,7 @@ def diss_detail(request, pk):
     """
     Public diss detail page.
     Non-public disses only visible to their author.
-
-    Passes selected diss lines explicitly as ordered_lines so the
-    template can render them reliably.
+    Splits selected lines into standard and premium sections.
     """
     diss = get_object_or_404(
         Diss.objects.select_related(
@@ -360,14 +358,21 @@ def diss_detail(request, pk):
         from django.http import Http404
         raise Http404
 
-    # Selected burn lines for display.
     ordered_lines = (
         diss.selected_lines
         .select_related("category", "roast_style")
         .order_by("display_order", "id")
     )
 
-    # Safely resolve the Roast page slug for the "View Burn Page" button.
+    standard_lines = []
+    premium_lines = []
+
+    for line in ordered_lines:
+        if line.category and not line.category.is_free:
+            premium_lines.append(line)
+        else:
+            standard_lines.append(line)
+
     roast_slug = None
 
     if diss.target_archetype:
@@ -382,7 +387,8 @@ def diss_detail(request, pk):
         "disses/diss_detail.html",
         {
             "diss": diss,
-            "ordered_lines": ordered_lines,
+            "standard_lines": standard_lines,
+            "premium_lines": premium_lines,
             "roast_slug": roast_slug,
         }
     )
@@ -430,7 +436,7 @@ def _get_max_line_selections(user):
 @login_required
 def deploy_burn(request, pk):
     """
-    Deploy a diss as a public Burn.
+    Deploy a diss as a public Roast.
     Creates or retrieves the Roast for the archetype,
     publishes the diss, redirects to the public roast page.
     Mirrors publish/unpublish pattern from HipTripHooray.
@@ -453,14 +459,14 @@ def deploy_burn(request, pk):
             diss.status = "draft"
             diss.save()
             messages.success(
-                request, "🔒 Burn recalled — diss set back to draft."
+                request, "🔒 Roast back on its leash — diss set back to draft."
             )
             return redirect("disses:diss_detail", pk=diss.pk)
 
         if not diss.selected_lines.exists():
             messages.error(
                 request,
-                "⚠️ Add at least one burn line before deploying."
+                "⚠️ Add at least one diss line before publishing."
             )
             return redirect("disses:diss_detail", pk=diss.pk)
 
@@ -493,8 +499,8 @@ def deploy_burn(request, pk):
 
         messages.success(
             request,
-            f"🔥 Burn deployed! "
-            f"{diss.target_archetype.name} has been roasted publicly."
+            f"🔥Roast unleashed! "
+            f"{diss.target_archetype.name} is now awaiting a public pile-on in the Roast Feed."
         )
         return redirect("roasts:roast_detail", slug=roast.slug)
 
