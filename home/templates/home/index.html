@@ -4,6 +4,40 @@
 {% block meta_description %}Dissagram — Have A Word.{% endblock %}
 {% block body_class %}home-page{% endblock %}
 
+{% block extra_css %}
+<style>
+.hero-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+.hero-cta-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Bangers", cursive;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: #0a0a0a !important;
+    background: linear-gradient(135deg, #ff6b1a, #d4a017) !important;
+    padding: 14px 42px;
+    border-radius: 14px;
+    text-decoration: none !important;
+    box-shadow: 0 8px 24px rgba(212,160,23,0.25);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.hero-cta-main:hover {
+   background: #ff5a1f !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(255, 90, 31, 0.32);
+}
+</style>
+{% endblock %}
+
 {% block content %}
 
 
@@ -84,6 +118,18 @@
             <a href="{% url 'home:how_it_works' %}" class="btn btn-danger">
                 How It Works 🎯
             </a>
+
+            {% if user.is_authenticated %}
+    <a href="{% url 'disses:diss_create' %}" 
+       class="hero-cta-main">
+        🔥 Build a Diss
+    </a>
+    {% else %}
+    <a href="{% url 'account_signup' %}" 
+       class="hero-cta-main">
+        🔥 Get a Free Diss
+    </a>
+    {% endif %}
 
             <a href="{% url 'roasts:roast_feed' %}" class="btn btn-outline-light">
                 Check Roast Feed 💀
