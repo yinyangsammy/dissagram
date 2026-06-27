@@ -1326,6 +1326,29 @@ body.home-page .hero-buttons .btn {
     }
 }
 
+.index-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Bangers", cursive;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: #0a0a0a;
+    background: linear-gradient(135deg, #ff6b1a, #d4a017);
+    padding: 14px 42px;
+    border-radius: 14px;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(212,160,23,0.25);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.index-cta-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(212,160,23,0.35);
+    color: #0a0a0a;
+    text-decoration: none;
+}
+
 /* ---------- FOOTER ---------- */
 
 .site-footer {
@@ -1454,3 +1477,5 @@ body.home-page .hero-tagline .tagline-line {
 body.home-page .hero-tagline .tagline-line i {
     flex: 0 0 auto;
 }
+
+
