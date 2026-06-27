@@ -272,54 +272,205 @@
     background: #0a0a0a;
     border: 1px solid #1e1e1e;
     border-left: 3px solid #ffac2b;
-    border-radius: 0 8px 8px 0;
-    padding: 12px 16px;
-    margin-bottom: 10px;
-    transition: border-left-color 0.2s;
+    border-radius: 0 12px 12px 0;
+    padding: 13px 15px 15px;
+    margin-bottom: 13px;
+    transition: border-left-color 0.2s, background 0.2s, transform 0.15s;
 }
 
-.burn-line-card:hover { border-left-color: #ff4500; }
+.burn-line-card:hover {
+    border-left-color: #ff4500;
+    background: #101010;
+    transform: translateY(-1px);
+}
 
 .burn-line-type-badge {
     display: inline-block;
     font-family: "Bangers", cursive;
-    font-size: 1.4rem;
+    font-size: 1.05rem;
     letter-spacing: 1px;
-    padding: 2px 8px;
+    padding: 2px 9px;
     border-radius: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
 }
 
+/* Badge colours for your current category names */
 .type-Diss\.Line {
-  background: #0e3b1a;
-  color: #6be8a0;
+    background: #0c3a5e;
+    color: #6bb3e8;
 }
 
-.dissline-type-badge {
-  display: inline-block;
-  font-family: "Bangers", cursive;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
-  padding: 1px 8px;
-  border-radius: 20px;
-  margin-bottom: 4px;
+.type-Internal\.Monologue {
+  background: #c23347;
+  color: #e48787;
 }
 
 .type-LinkedIn\.Endorsement {
-  background: #3A1A5E;
-  color: #9b59b6;
+    background: #311247;
+    color: #c47cff;
 }
 
-.type-trait       { background: #0c3a5e; color: #6bb3e8; }
-.type-weakness    { background: #3b0e0e; color: #e88080; }
-.type-catchphrase { background: #2e1f00; color: #ffac2b; }
+
+/* Django-friendly badge classes */
+.type-DissLine {
+    background: #0c3a5e;
+    color: #6bb3e8;
+}
+
+.type-InternalMonologue {
+    background: #c23347;
+    color: #ffe0e0;
+}
+
+.type-LinkedInEndorsement {
+    background: #3A1A5E;
+    color: #d7a6ff;
+}
+
+/* Premium section title */
+.premium-burn-title {
+    color: #ff4500;
+    margin-top: 1.4rem;
+}
+
+/* Category-specific card accents */
+.cat-DissLine {
+    border-left-color: #2f9be6;
+}
+
+.cat-InternalMonologue {
+    border-left-color: #c23347;
+}
+
+.cat-LinkedInEndorsement {
+    border-left-color: #8e44ad;
+}
+
+/* Subtle category-specific bubble shadows */
+.cat-DissLine .burn-line-quote-bubble {
+    box-shadow:
+        4px 4px 0 rgba(47, 155, 230, 0.75),
+        0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+}
+
+.cat-InternalMonologue .burn-line-quote-bubble {
+    box-shadow:
+        4px 4px 0 rgba(194, 51, 71, 0.78),
+        0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+}
+
+.cat-LinkedInEndorsement .burn-line-quote-bubble {
+    box-shadow:
+        4px 4px 0 rgba(142, 68, 173, 0.78),
+        0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+}
+
+
+/* Fallback / older category classes */
+.type-trait {
+    background: #0c3a5e;
+    color: #6bb3e8;
+}
+
+.type-weakness {
+    background: #3b0e0e;
+    color: #e88080;
+}
+
+.type-catchphrase {
+    background: #2e1f00;
+    color: #ffac2b;
+}
+
+/* Comic speech bubble for the actual burn */
+.burn-line-quote-bubble {
+    position: relative;
+    background: #fff1cf;
+    border: 2.5px solid #111;
+    border-radius: 18px;
+    padding: 13px 18px;
+    box-shadow:
+        4px 4px 0 rgba(255, 172, 43, 0.85),
+        0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+}
+
+/* Rounded speech bubble tail */
+.burn-line-quote-bubble::before {
+    content: "";
+    position: absolute;
+    left: -11px;
+    top: 18px;
+    width: 20px;
+    height: 20px;
+    background: #fff1cf;
+    border-left: 2.5px solid #111;
+    border-bottom: 2.5px solid #111;
+    border-radius: 0 0 0 5px;
+    transform: rotate(45deg);
+    z-index: 1;
+}
+
+/* Small gold shadow behind the tail */
+/* Category-coloured shadow behind the speech bubble tail */
+.burn-line-quote-bubble::after {
+    content: "";
+    position: absolute;
+    left: -15px;
+    top: 21px;
+    width: 20px;
+    height: 20px;
+    background: #2f9be6; /* default Diss Line blue */
+    border-radius: 0 0 0 5px;
+    transform: rotate(45deg);
+    z-index: 0;
+}
+
+.burn-line-quote-bubble::before {
+    content: "";
+    position: absolute;
+    left: -11px;
+    top: 18px;
+    width: 20px;
+    height: 20px;
+    background: #fff1cf;
+    border-left: 2.5px solid #111;
+    border-bottom: 2.5px solid #111;
+    border-radius: 0 0 0 5px;
+    transform: rotate(45deg);
+    z-index: 2;
+}
+
+.cat-DissLine .burn-line-quote-bubble::after {
+    background: #2f9be6;
+}
+
+.cat-LinkedInEndorsement .burn-line-quote-bubble::after {
+    background: #8e44ad;
+}
+
+.cat-InternalMonologue .burn-line-quote-bubble::after {
+    background: #c23347;
+}
 
 .burn-line-text {
-    font-size: 1.15rem;
-    color: #e0e0e0;
-    line-height: 1.55;
-    font-style: italic;
+    position: relative;
+    z-index: 2;
+    font-family: "Lato", sans-serif;
+    font-size: 1.08rem;
+    font-weight: 900;
+    color: #050505;
+    line-height: 1.48;
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+    font-style: normal;
 }
+
+.burn-line-text {
+    position: relative;
+    z-index: 3;
+}
+
 
 /* ── CUSTOM NOTE ── */
 .custom-note-block {
@@ -686,30 +837,61 @@
             <div class="diss-divider"></div>
 
             <!-- BURN LINES -->
-            {% with lines=ordered_lines %}
-            {% if lines %}
-            <div class="burn-lines-title">
-                <i class="fas fa-bolt"></i> The Burns
-            </div>
+{% if standard_lines or premium_lines %}
 
-            {% for line in lines %}
-            <div class="burn-line-card">
-                <span class="dissline-type-badge type-Diss.Line">
-                    {% if line.category %}{{ line.category.emoji }} {{ line.category.name }}{% endif %}
-                </span>
-                <div class="burn-line-text">"{{ line.content }}"</div>
-            </div>
-            {% endfor %}
+    {% if standard_lines %}
+    <div class="burn-lines-title">
+        <i class="fas fa-bolt"></i> Diss Lines
+    </div>
 
+    {% for line in standard_lines %}
+    <div class="burn-line-card cat-{{ line.category.name|default:'Diss Line'|cut:' ' }}">
+        <span class="burn-line-type-badge type-{{ line.category.name|default:'Diss Line'|cut:' ' }}">
+            {% if line.category %}
+                {{ line.category.emoji }} {{ line.category.name }}
             {% else %}
-            <p style="color:#444; font-style:italic; font-size:0.85rem; text-align:center; padding: 1rem 0;">
-                No burn lines selected yet.
-                {% if user == diss.author %}
-                    <a href="{% url 'disses:diss_edit' diss.pk %}" style="color:#ffac2b;">Edit this diss</a> to add some.
-                {% endif %}
-            </p>
+                🔥 Diss Line
             {% endif %}
-            {% endwith %}
+        </span>
+
+        <div class="burn-line-quote-bubble">
+            <div class="burn-line-text">{{ line.content }}</div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+
+    {% if premium_lines %}
+    <div class="burn-lines-title premium-burn-title">
+        <i class="fas fa-gem"></i> Premium Diss Categories
+    </div>
+
+    {% for line in premium_lines %}
+    <div class="burn-line-card premium-burn-card cat-{{ line.category.name|default:'Premium'|cut:' ' }}">
+        <span class="burn-line-type-badge type-{{ line.category.name|default:'Premium'|cut:' ' }}">
+            {% if line.category %}
+                {{ line.category.emoji }} {{ line.category.name }}
+            {% else %}
+                💎 Premium
+            {% endif %}
+        </span>
+
+        <div class="burn-line-quote-bubble">
+            <div class="burn-line-text">{{ line.content }}</div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+{% else %}
+<p style="color:#444; font-style:italic; font-size:0.85rem; text-align:center; padding: 1rem 0;">
+    No burn lines selected yet.
+    {% if user == diss.author %}
+        <a href="{% url 'disses:diss_edit' diss.pk %}" style="color:#ffac2b;">Edit this diss</a> to add some.
+    {% endif %}
+</p>
+{% endif %}
 
             <!-- CUSTOM NOTE -->
             {% if diss.custom_note %}
@@ -727,7 +909,7 @@
         <div class="diss-card-footer">
             <div class="footer-meta">
                 <div class="footer-meta-item">
-                    <i class="fas fa-fire" style="color:#ff4500;"></i>
+                    <i class="fas fa-skull" style="color:white"></i>
                     <span>{{ diss.author.username }}</span>
                 </div>
                 <div class="footer-meta-item">
@@ -736,10 +918,13 @@
                 </div>
                 {% if diss.selected_lines.count %}
                 <div class="footer-meta-item">
-                    <i class="fas fa-bolt" style="color:#ffac2b;"></i>
-                    <span>{{ diss.selected_lines.count }} burn{{ diss.selected_lines.count|pluralize }}</span>
+                    <i class="fas fa-fire" style="color:#ff4500;"></i>
+                    <span>
+                        {{ diss.selected_lines.count }}
+                        {% if diss.selected_lines.count == 1 %}Diss{% else %}Disses{% endif %}
+                    </span>
                 </div>
-                {% endif %}
+{% endif %}
             </div>
 
             <div>
@@ -773,20 +958,20 @@
         {% csrf_token %}
         <input type="hidden" name="action" value="undeploy">
         <button type="submit" class="btn-diss-undeploy">
-            <i class="fas fa-fire-flame-curved"></i> Recall Burn
+            <i class="fas fa-fire-flame-curved"></i> Recall Roast
         </button>
     </form>
     {% if roast_slug %}
     <a href="{% url 'roasts:roast_detail' roast_slug %}"
        class="btn-diss-view-burn">
-        <i class="fas fa-eye"></i> View Burn Page
+        <i class="fas fa-eye"></i> View Roast Page
     </a>
     {% endif %}
     {% else %}
     <!-- Not deployed yet -->
     <a href="{% url 'disses:deploy_burn' diss.pk %}"
        class="btn-deploy-burn">
-        <i class="fas fa-fire"></i> Deploy as Burn 🔥
+        <i class="fas fa-fire"></i> Fire as Roast 🔥
     </a>
     {% endif %}
 
