@@ -42,10 +42,13 @@
     align-items: center;
     gap: 8px;
     transition: background 0.15s, transform 0.15s;
+    color: #0a0a0a !important;
+    background: linear-gradient(135deg, #ff6b1a, #d4a017) !important;
+    text-decoration: none !important;
 }
 .btn-create-diss:hover {
-    background: #ff5a1f;
-    color: #fff;
+    background: #ff5a1f !important;
+    color: #fff !important;
     transform: translateY(-2px);
     box-shadow: 0 14px 34px rgba(255, 90, 31, 0.32);
 }
@@ -270,7 +273,7 @@
 <div class="container my-disses-page">
 
     <div class="page-header">
-        <h1>✉️ My Disses</h1>
+        <h1>🔥 My Disses</h1>
         <p>
             {% if disses %}
                 {{ disses|length }} diss{{ disses|length|pluralize:",es" }} loaded and ready to fire.
@@ -343,7 +346,7 @@
                                 {% endif %}
                             </span>
                             <div class="diss-meta-chip">
-                                <i class="fas fa-bolt"></i>
+                                <i class="fas fa-fire"></i>
                                 {{ diss.selected_lines.count }}
                                 line{{ diss.selected_lines.count|pluralize }}
                             </div>
@@ -379,7 +382,7 @@
                         {% if diss.target_archetype.roast %}
                         <a href="{% url 'roasts:roast_detail' diss.target_archetype.roast.slug %}"
                            class="diss-act-btn act-view-burn">
-                            <i class="fas fa-fire"></i> View Burn Page
+                            <i class="fas fa-fire"></i> View Roast Page
                         </a>
                         {% endif %}
 
@@ -389,7 +392,7 @@
                             {% csrf_token %}
                             <input type="hidden" name="action" value="undeploy">
                             <button type="submit" class="diss-act-btn act-recall">
-                                <i class="fas fa-undo"></i> Recall Burn
+                                <i class="fas fa-undo"></i> Recall Roast
                             </button>
                         </form>
 
@@ -397,7 +400,7 @@
                         <!-- Not deployed -->
                         <a href="{% url 'disses:deploy_burn' diss.pk %}"
                            class="diss-act-btn act-deploy">
-                            <i class="fas fa-fire"></i> Deploy as Burn 🔥
+                            <i class="fas fa-fire"></i> Unleash Roast 🔥
                         </a>
                     {% endif %}
 
