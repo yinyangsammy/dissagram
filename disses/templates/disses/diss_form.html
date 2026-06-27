@@ -404,66 +404,47 @@
 .disslines-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
 }
 
-/* ── DISS LINE GROUP HEADERS (Diss Lines / Premium Diss Categories) ── */
-.dissline-section-label {
-    font-family: "Bangers", cursive;
-    font-size: 1.05rem;
-    letter-spacing: 1.5px;
-    color: #888;
-    margin: 4px 0 4px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.dissline-section-label.premium {
-    color: #9b59b6;
-}
-
-.dissline-section-label:first-child {
-    margin-top: 0;
-}
-
-.dissline-section-label i { font-size: 0.9rem; }
-
+/* Outer selectable row stays dark, so the page keeps its Dissagram mood */
 .dissline-item {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    padding: 10px 14px;
+    gap: 13px;
+    padding: 16px 18px;
     border: 1.5px solid #1e1e1e;
-    border-radius: 8px;
+    border-radius: 14px;
     background: #0d0d0d;
     cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
 }
 
-.dissline-item:hover { border-color: #333; background: #111; }
+.dissline-item:hover {
+    border-color: #333;
+    background: #111;
+    transform: translateY(-1px);
+}
 
 .dissline-item:has(input:checked) {
     border-color: #ffac2b;
     background: #111;
+    box-shadow: 0 0 0 2px rgba(255, 172, 43, 0.12);
 }
 
 .dissline-item input[type="checkbox"] {
-    margin-top: 2px;
+    margin-top: 6px;
     flex-shrink: 0;
     accent-color: #ffac2b;
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
 }
 
-.dissline-content { flex: 1; }
-
-.dissline-text {
-    font-size: 1.2rem;
-    color: #ccc;
-    line-height: 1.5;
+.dissline-content {
+    flex: 1;
 }
 
+/* Category badge stays separate and colourful */
 .dissline-type-badge {
     display: inline-block;
     font-family: "Bangers", cursive;
@@ -471,11 +452,92 @@
     letter-spacing: 1px;
     padding: 1px 8px;
     border-radius: 20px;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+}
+
+/* The actual burn now pops like a speech bubble */
+.dissline-quote-bubble {
+    position: relative;
+    background: #fff4dc;
+    border: 2px solid #d4a017;
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow:
+        3px 3px 0 rgba(0, 0, 0, 0.45),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+/* Little speech bubble tail */
+.dissline-quote-bubble {
+    position: relative;
+    background: #fff1cf;
+    border: 2.5px solid #111;
+    border-radius: 18px;
+    padding: 13px 18px;
+    box-shadow:
+        4px 4px 0 rgba(255, 172, 43, 0.85),
+        0 0 0 1px rgba(255, 255, 255, 0.35) inset;
+}
+
+/* Rounded speech bubble tail */
+.dissline-quote-bubble::before {
+    content: "";
+    position: absolute;
+    left: -11px;
+    top: 18px;
+    width: 20px;
+    height: 20px;
+    background: #fff1cf;
+    border-left: 2.5px solid #111;
+    border-bottom: 2.5px solid #111;
+    border-radius: 0 0 0 5px;
+    transform: rotate(45deg);
+}
+
+/* Small gold shadow behind the tail */
+.dissline-quote-bubble::after {
+    content: "";
+    position: absolute;
+    left: -15px;
+    top: 21px;
+    width: 20px;
+    height: 20px;
+    background: #ffac2b;
+    border-radius: 0 0 0 5px;
+    transform: rotate(45deg);
+    z-index: -1;
+}
+
+.dissline-text {
+    position: relative;
+    z-index: 1;
+    font-family: "Lato", sans-serif;
+    font-size: 1.18rem;
+    font-weight: 900;
+    color: #050505;
+    line-height: 1.48;
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+@media (max-width: 520px) {
+    .dissline-item {
+        padding: 10px;
+        gap: 8px;
+    }
+
+    .dissline-text {
+        font-size: 0.95rem;
+    }
+
+    .dissline-quote-bubble {
+        padding: 9px 12px;
+    }
 }
 
 .type-Diss\.Line            { background: #0c3a5e; color: #6bb3e8; }
 .type-Internal\.Monologue   { background: #2e1f00; color: #ffac2b; }
+.type-Internal\.Monologue   {background: #c23347;color: #e48787;}
 .type-LinkedIn\.Endorsement { background: #0e3b1a; color: #6be8a0; }
 .type-LinkedIn\.Endorsement { background: #3A1A5E; color: #9b59b6; }
 
@@ -712,6 +774,45 @@
     from { opacity: 1; transform: translateY(0); }
     to   { opacity: 0; transform: translateY(12px); }
 }
+
+/* ── TINY MOBILE STEPPER FIX ── */
+@media (max-width: 450px) {
+    .step-track {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        gap: 0;
+        margin-bottom: 2rem;
+        padding-inline: 0.25rem;
+    }
+
+    .step-item {
+        gap: 4px;
+        font-size: 0.62rem;
+        letter-spacing: 0.2px;
+        line-height: 1.05;
+        flex: 0 1 auto;
+    }
+
+    .step-item span {
+        display: inline-block;
+        max-width: 44px;
+        line-height: 1.05;
+    }
+
+    .step-num {
+        width: 22px;
+        height: 22px;
+        min-width: 22px;
+        font-size: 0.65rem;
+    }
+
+    .step-sep {
+        width: 12px;
+        margin: 0 2px;
+    }
+}
+
 </style>
 {% endblock %}
 
@@ -1134,7 +1235,7 @@ function createCarousel(data, trackId, dotsId, prevId, nextId) {
             card.addEventListener("click", () => {
                 if (isLocked) {
                     showLockToast();
-                    setTimeout(() => { window.location.href = "/orders/"; }, 1800);
+                    setTimeout(() => { window.location.href = "/orders/"; }, 4200);
                     return;
                 }
                 selectArchetype(arch, card);
@@ -1145,7 +1246,7 @@ function createCarousel(data, trackId, dotsId, prevId, nextId) {
                     e.preventDefault();
                     if (isLocked) {
                         showLockToast();
-                        setTimeout(() => { window.location.href = "/orders/"; }, 1800);
+                        setTimeout(() => { window.location.href = "/orders/"; }, 4200);
                         return;
                     }
                     selectArchetype(arch, card);
@@ -1374,20 +1475,27 @@ function renderDissLines(lines) {
 
 function buildLineItems(lines) {
     return lines.map(line => {
-        /* CSS classes use dots, not spaces — e.g. "LinkedIn Endorsement"
-           becomes "type-LinkedIn.Endorsement" to match the stylesheet */
+        /*
+           CSS classes use dots, not spaces — e.g. "LinkedIn Endorsement"
+           becomes "type-LinkedIn.Endorsement" to match the stylesheet.
+        */
         const typeClass = line.type.replace(/\s+/g, ".");
+
         return `
         <label class="dissline-item">
             <input type="checkbox"
                    name="selected_lines"
                    value="${line.id}"
                    ${INIT_LINE_IDS.includes(line.id) ? "checked" : ""}>
+
             <div class="dissline-content">
                 <span class="dissline-type-badge type-${typeClass}">
                     ${line.type}
                 </span>
-                <div class="dissline-text">${line.content}</div>
+
+                <div class="dissline-quote-bubble">
+                    <div class="dissline-text">${line.content}</div>
+                </div>
             </div>
         </label>`;
     }).join("");
@@ -1457,7 +1565,39 @@ function showLimitToast() {
     setTimeout(() => {
         toast.style.animation = "toastOut 0.3s ease forwards";
         setTimeout(() => toast.remove(), 350);
-    }, 2500);
+    }, 4200);
+}
+
+function showEmptyLinesToast() {
+    const existing = document.getElementById("empty-lines-toast");
+    if (existing) existing.remove();
+
+    const toast = document.createElement("div");
+    toast.id = "empty-lines-toast";
+    toast.style.cssText = `
+        position: fixed; bottom: 2rem; right: 2rem;
+        background: #111; border: 1.5px solid #ffac2b;
+        color: #f0f0f0; font-family: 'Bangers', cursive;
+        font-size: 1rem; letter-spacing: 1.5px;
+        padding: 14px 22px; border-radius: 10px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+        z-index: 9999; display: flex; align-items: center;
+        gap: 10px; animation: toastIn 0.35s ease forwards;
+        max-width: 420px;
+        line-height: 1.35;
+    `;
+
+    toast.innerHTML = `
+        💌 So, you want to fire a diss with no diss lines?
+        Bold strategy. Maybe buy a Hallmark card.
+    `;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = "toastOut 0.3s ease forwards";
+        setTimeout(() => toast.remove(), 350);
+    }, 2800);
 }
 
 /* =====================================================
@@ -1479,18 +1619,46 @@ document.getElementById("diss-form").addEventListener("submit", function(e) {
         alert("Please select a target archetype first!");
         return;
     }
+
     if (!hiddenStyle.value) {
         e.preventDefault();
+
         const grid = document.getElementById("style-avatar-grid");
         grid.style.outline = "1.5px solid #c0392b";
-        setTimeout(() => grid.style.outline = "", 1500);
+
+        setTimeout(() => {
+            grid.style.outline = "";
+        }, 1500);
+
         return;
     }
+
     const checked = document.querySelectorAll("input[name='selected_lines']:checked");
+
     if (!checked.length) {
         e.preventDefault();
-        linesList.style.outline = "1.5px solid #c0392b";
-        setTimeout(() => linesList.style.outline = "", 1500);
+
+        showEmptyLinesToast();
+
+        linesList.style.outline = "1.5px solid #ffac2b";
+
+        if (premiumLinesList) {
+            premiumLinesList.style.outline = "1.5px solid #ffac2b";
+        }
+
+        setTimeout(() => {
+            linesList.style.outline = "";
+
+            if (premiumLinesList) {
+                premiumLinesList.style.outline = "";
+            }
+        }, 6800);
+
+        sectionLines.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
         return;
     }
 });
