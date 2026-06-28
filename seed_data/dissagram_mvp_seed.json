@@ -1,0 +1,1117 @@
+[
+{
+  "model": "dissers.roastcategory",
+  "pk": 1,
+  "fields": {
+    "name": "Diss Line",
+    "emoji": "🔥",
+    "display_order": 1,
+    "is_free": true,
+    "required_pack_level": 0
+  }
+},
+{
+  "model": "dissers.roastcategory",
+  "pk": 2,
+  "fields": {
+    "name": "Internal Monologue",
+    "emoji": "🧠",
+    "display_order": 2,
+    "is_free": false,
+    "required_pack_level": 2
+  }
+},
+{
+  "model": "dissers.roastcategory",
+  "pk": 3,
+  "fields": {
+    "name": "LinkedIn Endorsement",
+    "emoji": "💼",
+    "display_order": 3,
+    "is_free": false,
+    "required_pack_level": 1
+  }
+},
+{
+  "model": "dissers.roaststyle",
+  "pk": 1,
+  "fields": {
+    "name": "Shakespearean Savage",
+    "slug": "shakespearean-savage",
+    "tagline": "For Shame - Thy Bloodline Endeth With A Fool!",
+    "description": "Billy the Bad Bad Bard - Elizabethan disrespect meets psychological warfare",
+    "example_line": "“Thou speaketh boldly for one whose bloodline peaked at village jester.”",
+    "emoji": "👺",
+    "display_order": 1,
+    "unlock_priority": 1,
+    "is_free": true,
+    "avatar": "roast_styles/shakespearean-savage.jpg"
+  }
+},
+{
+  "model": "dissers.roaststyle",
+  "pk": 2,
+  "fields": {
+    "name": "Haughty Headmistress",
+    "slug": "haughty-headmistress",
+    "tagline": "Beatings & Strangulations, Bally Stinker!",
+    "description": "Bally Stinkers Beware - Draconian Authoritarian Disciplinarian",
+    "example_line": "“You remind me of a cat I once had. Or rather, the filthy skidmark it left on my carpet\"",
+    "emoji": "📏",
+    "display_order": 6,
+    "unlock_priority": 2,
+    "is_free": false,
+    "avatar": "roast_styles/haughty-headmistress.jpg"
+  }
+},
+{
+  "model": "dissers.roaststyle",
+  "pk": 3,
+  "fields": {
+    "name": "Battle Rapper",
+    "slug": "battle-rapper",
+    "tagline": "Bars hella ill drillin fo da kill",
+    "description": "rhythmic swagger chaos",
+    "example_line": "",
+    "emoji": "🎤",
+    "display_order": 4,
+    "unlock_priority": 6,
+    "is_free": false,
+    "avatar": "roast_styles/battle-rapper.jpg"
+  }
+},
+{
+  "model": "dissers.roaststyle",
+  "pk": 4,
+  "fields": {
+    "name": "Moonshine Shaman",
+    "slug": "moonshine-shaman",
+    "tagline": "Woo Wee - I'ma make me a belt from this here dewy fuzzbucket!",
+    "description": "weirdly insightful\r\naggressively incorrect\r\nspiritually fermented\r\nemotionally unlicensed\r\nsomehow profound\r\nsomehow banned from several counties",
+    "example_line": "",
+    "emoji": "🐊",
+    "display_order": 2,
+    "unlock_priority": 4,
+    "is_free": false,
+    "avatar": "roast_styles/moonshine-shaman.jpg"
+  }
+},
+{
+  "model": "dissers.roaststyle",
+  "pk": 5,
+  "fields": {
+    "name": "Big Tone Down The Pub",
+    "slug": "big-tone-down-the-pub",
+    "tagline": "Someone's havin' a bubble - time to make them squeak!",
+    "description": "",
+    "example_line": "",
+    "emoji": "🍺",
+    "display_order": 3,
+    "unlock_priority": 5,
+    "is_free": false,
+    "avatar": "roast_styles/big-tone-best3_0lKGtzR.png"
+  }
+},
+{
+  "model": "dissers.roaststyle",
+  "pk": 6,
+  "fields": {
+    "name": "Middle School Mean Girl",
+    "slug": "middle-school-mean-girl",
+    "tagline": "When You Break, I'll Slow Clap Your Tears!",
+    "description": "",
+    "example_line": "You know the game - hide and seek - when you play - we don't seek!",
+    "emoji": "🍭",
+    "display_order": 5,
+    "unlock_priority": 3,
+    "is_free": false,
+    "avatar": "roast_styles/middleschool-meangirl-cut.jpg"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 1,
+  "fields": {
+    "name": "Fake Guru",
+    "slug": "fake-guru",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/fake-guru.jpg",
+    "display_order": 1,
+    "unlock_priority": 1,
+    "is_free": false,
+    "gender": "M"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 2,
+  "fields": {
+    "name": "Gym Narcissist",
+    "slug": "gym-narcissist",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/gym-narc.jpg",
+    "display_order": 0,
+    "unlock_priority": 2,
+    "is_free": true,
+    "gender": "M"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 3,
+  "fields": {
+    "name": "Amateur Gangster",
+    "slug": "amateur-gangster",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/amateur-gangster-best.jpg",
+    "display_order": 3,
+    "unlock_priority": 4,
+    "is_free": false,
+    "gender": "M"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 4,
+  "fields": {
+    "name": "The Player",
+    "slug": "the-player",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/player-finalv1.png",
+    "display_order": 5,
+    "unlock_priority": 6,
+    "is_free": false,
+    "gender": "M"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 5,
+  "fields": {
+    "name": "Wannabe Podcaster",
+    "slug": "wannabe-podcaster",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/wannabe-podcaster.jpg",
+    "display_order": 2,
+    "unlock_priority": 3,
+    "is_free": false,
+    "gender": "M"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 6,
+  "fields": {
+    "name": "Neckbeard IT Guy",
+    "slug": "neckbeard-it-guy",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/neckbeard-it-bestv2.png",
+    "display_order": 4,
+    "unlock_priority": 5,
+    "is_free": false,
+    "gender": "M"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 7,
+  "fields": {
+    "name": "Pick Me Bunny",
+    "slug": "pick-me-bunny",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/pickmebunny_P3VfJML.PNG",
+    "display_order": 3,
+    "unlock_priority": 4,
+    "is_free": false,
+    "gender": "F"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 8,
+  "fields": {
+    "name": "Miss Andry",
+    "slug": "miss-andry",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/missandry.PNG",
+    "display_order": 4,
+    "unlock_priority": 5,
+    "is_free": false,
+    "gender": "F"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 9,
+  "fields": {
+    "name": "Trauma TikToker",
+    "slug": "trauma-tiktoker",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/trauma-tiktoker-best.PNG",
+    "display_order": 6,
+    "unlock_priority": 6,
+    "is_free": false,
+    "gender": "F"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 10,
+  "fields": {
+    "name": "Super Karen",
+    "slug": "super-karen",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/super-karen_T1UtqM6.png",
+    "display_order": 0,
+    "unlock_priority": 1,
+    "is_free": false,
+    "gender": "F"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 11,
+  "fields": {
+    "name": "Power Drunk Principal",
+    "slug": "power-drunk-principal",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/power-drunk-principal_78fmOdf.png",
+    "display_order": 2,
+    "unlock_priority": 2,
+    "is_free": false,
+    "gender": "F"
+  }
+},
+{
+  "model": "dissers.targetarchetype",
+  "pk": 12,
+  "fields": {
+    "name": "Psycho Psychiatrist",
+    "slug": "psycho-psychiatrist",
+    "description": "",
+    "emoji": "",
+    "traits": "",
+    "weaknesses": "",
+    "difficulty_level": "mid",
+    "catchphrase": "",
+    "avatar": "archetypes/psycho-psychiatrist.PNG",
+    "display_order": 5,
+    "unlock_priority": 3,
+    "is_free": false,
+    "gender": "F"
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "archetype": 1,
+    "roast_style": 2,
+    "content": "“Your sermons take me be back to being on safari and the dawn squeals of a constipated hippo.”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 2,
+  "fields": {
+    "category": 1,
+    "archetype": 1,
+    "roast_style": 2,
+    "content": "“If I wanted to listen to repetitive jibber-jabber all day, I'd buy a bally parrot.”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 3,
+  "fields": {
+    "category": 1,
+    "archetype": 1,
+    "roast_style": 2,
+    "content": "“What's that pungent aroma of patchouli, perversion and failed marriages - oh - of course - it's you!”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 3
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 4,
+  "fields": {
+    "category": 3,
+    "archetype": 1,
+    "roast_style": null,
+    "content": "Sales visionary!\r\nCould sell you the shirt off his illegitimate child's back, then convince you to return it ... because karma. \r\nIn fact, that's exactly what he did.",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": true,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 5,
+  "fields": {
+    "category": 1,
+    "archetype": 2,
+    "roast_style": 2,
+    "content": "\"Such a shame, the two most important muscles seem to have been neglected!\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 6,
+  "fields": {
+    "category": 1,
+    "archetype": 2,
+    "roast_style": 2,
+    "content": "\"You know - of the many statues I've beheld, not one has had less to say for themselves than you!\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 7,
+  "fields": {
+    "category": 1,
+    "archetype": 2,
+    "roast_style": 2,
+    "content": "\"How many himbos does it take to change a lightbulb? No, really - I'm genuinely intrigued?\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 3
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 8,
+  "fields": {
+    "category": 3,
+    "archetype": 2,
+    "roast_style": null,
+    "content": "Astounding commitment  to winning at every mirror in every room (and glass windows).",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": true,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 9,
+  "fields": {
+    "category": 1,
+    "archetype": 2,
+    "roast_style": 1,
+    "content": "“Thou art a marble statue given breath by mistake and wisdom by no one.”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": true,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 10,
+  "fields": {
+    "category": 1,
+    "archetype": 2,
+    "roast_style": 1,
+    "content": "“Were vanity a kingdom, thou wouldst be its shirtless village idiot.”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": true,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 11,
+  "fields": {
+    "category": 1,
+    "archetype": 2,
+    "roast_style": 1,
+    "content": "“Thy reflection is thy council, thy biceps thy bible, and thy short shorts thy undoing.”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": true,
+    "display_order": 3
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 12,
+  "fields": {
+    "category": 2,
+    "archetype": 2,
+    "roast_style": null,
+    "content": "“If I say ‘bruh’ before and after every sentence, maybe no one will notice I have the mental age of a six-year-old.”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 13,
+  "fields": {
+    "category": 1,
+    "archetype": 2,
+    "roast_style": 6,
+    "content": "“Every time you flex, you make the face of someone who just smelled himself and hit rock bottom.”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 14,
+  "fields": {
+    "category": 1,
+    "archetype": 2,
+    "roast_style": 6,
+    "content": "“You spent so long practising your personality in the locker room mirror, yet you still chose the worst angle.”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 15,
+  "fields": {
+    "category": 1,
+    "archetype": 2,
+    "roast_style": 6,
+    "content": "\"You’re the reason gym machines have diagrams and mirrors have regrets.”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 3
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 16,
+  "fields": {
+    "category": 1,
+    "archetype": 5,
+    "roast_style": 1,
+    "content": "\"A Dotard Sayeth What?!\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 17,
+  "fields": {
+    "category": 1,
+    "archetype": 1,
+    "roast_style": 6,
+    "content": "\"Wow! They do MBAs in begging now?\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 18,
+  "fields": {
+    "category": 1,
+    "archetype": 1,
+    "roast_style": 6,
+    "content": "\"I can see why people feel blessed in your presence - blessed to not look and smell like you!\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 19,
+  "fields": {
+    "category": 1,
+    "archetype": 1,
+    "roast_style": 6,
+    "content": "\"So, when are you going to grace everyone with your absence?\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 3
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 20,
+  "fields": {
+    "category": 1,
+    "archetype": 1,
+    "roast_style": 3,
+    "content": "\"You don’t manifest abundance, you invoice insecurity,\r\n\r\nPreaching growth every day, still allergic to maturity.\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 21,
+  "fields": {
+    "category": 1,
+    "archetype": 11,
+    "roast_style": 1,
+    "content": "\"Thou commandest respect as a pigeon commandeth Trafalgar Square — loudly, messily, and without consent.\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 22,
+  "fields": {
+    "category": 1,
+    "archetype": 11,
+    "roast_style": 1,
+    "content": "\"Were tyranny a school policy, thou wouldst wed it, breed with it, and call the offspring 'Zero' & 'Tolerance'.\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 23,
+  "fields": {
+    "category": 1,
+    "archetype": 11,
+    "roast_style": 1,
+    "content": "\"Thou art the unelected Commander-in-Chief of unresolved childhood issues and BO!\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 3
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 24,
+  "fields": {
+    "category": 2,
+    "archetype": 11,
+    "roast_style": null,
+    "content": "One day they’ll thank me for micromanaging them. Under their breath. To themselves. And if not — no matter — they’re fired.",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 25,
+  "fields": {
+    "category": 3,
+    "archetype": 11,
+    "roast_style": null,
+    "content": "A true changemaker. Within days, she transformed the staffroom atmosphere from “strained” to “only benzos will cut it.”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 26,
+  "fields": {
+    "category": 2,
+    "archetype": 1,
+    "roast_style": null,
+    "content": "Everyone has a shadow self. Mine just has a Stripe account.",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 27,
+  "fields": {
+    "category": 2,
+    "archetype": 1,
+    "roast_style": null,
+    "content": "Healing begins when the follow-up questions end.",
+    "status": "pending",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 28,
+  "fields": {
+    "category": 2,
+    "archetype": 1,
+    "roast_style": null,
+    "content": "Om. I must remain humble. Publicly. However much it pains me. Until every last dollar they own is in my Stripe account. Om.",
+    "status": "pending",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 3
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 29,
+  "fields": {
+    "category": 2,
+    "archetype": 1,
+    "roast_style": null,
+    "content": "If I say “alignment” slowly enough, nobody asks for credentials.",
+    "status": "pending",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 4
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 30,
+  "fields": {
+    "category": 2,
+    "archetype": 1,
+    "roast_style": null,
+    "content": "I am merely a vessel. A vessel with excellent margins.",
+    "status": "pending",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 5
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 31,
+  "fields": {
+    "category": 2,
+    "archetype": 1,
+    "roast_style": null,
+    "content": "I can feel their trauma. More importantly, I can monetise it.",
+    "status": "pending",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 6
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 32,
+  "fields": {
+    "category": 1,
+    "archetype": 10,
+    "roast_style": 1,
+    "content": "\"Thy voice could sour milk, summon guards, and frighten reason from the building.\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 33,
+  "fields": {
+    "category": 1,
+    "archetype": 10,
+    "roast_style": 1,
+    "content": "\"Thou art not wronged, madam — thou art merely an inconvenienced inconvenience.\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 0
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 34,
+  "fields": {
+    "category": 1,
+    "archetype": 10,
+    "roast_style": 1,
+    "content": "\"Were entitlement a crown, thou wouldst demand a larger throne and a written apology from the kingdom.\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 35,
+  "fields": {
+    "category": 1,
+    "archetype": 10,
+    "roast_style": 2,
+    "content": "\"Do stop pointing. The staff already know where the problem is standing.\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 0
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 36,
+  "fields": {
+    "category": 1,
+    "archetype": 10,
+    "roast_style": 2,
+    "content": "\"Yes, you are loud, obnoxious, and impressively committed. Unfortunately, none of those are arguments.\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 37,
+  "fields": {
+    "category": 1,
+    "archetype": 10,
+    "roast_style": 2,
+    "content": "\"Could someone kindly fetch this precociously dressed toddler a nappy before she has an accident?\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 38,
+  "fields": {
+    "category": 1,
+    "archetype": 10,
+    "roast_style": 6,
+    "content": "\"Your whole vibe is 'I paid full price for this latte - no coupons - so now everyone’s my slave.'\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 0
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 39,
+  "fields": {
+    "category": 1,
+    "archetype": 10,
+    "roast_style": 6,
+    "content": "\"Newsflash, final boss of compensation — the manager’s day off is not a hate crime!\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 40,
+  "fields": {
+    "category": 1,
+    "archetype": 10,
+    "roast_style": 6,
+    "content": "\"You're so mad at policy, people be like, \"Did Terms & Conditions steal her childhood.\"",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 41,
+  "fields": {
+    "category": 3,
+    "archetype": 10,
+    "roast_style": null,
+    "content": "A true gamechanger. Few people can walk into a shop and immediately create professional development opportunities for seven members of staff.",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 42,
+  "fields": {
+    "category": 2,
+    "archetype": 10,
+    "roast_style": null,
+    "content": "If everyone’s staring, that means I’m winning, right?!",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 43,
+  "fields": {
+    "category": 1,
+    "archetype": 1,
+    "roast_style": 1,
+    "content": "If thy third eye hath truly opened, why doth it see no farther than thy belly, thy libido, and thy leased Lambo?",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 44,
+  "fields": {
+    "category": 1,
+    "archetype": 1,
+    "roast_style": 1,
+    "content": "The universe whispereth unto thee? Nay. ’Tis merely the herb thou dost inbibe at every waking hour.",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 45,
+  "fields": {
+    "category": 1,
+    "archetype": 1,
+    "roast_style": 1,
+    "content": "Thou art not a vessel of light — thou art a chalice of buffoonery and skulduggery for the terminally gullible.",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 0
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 46,
+  "fields": {
+    "category": 1,
+    "archetype": 11,
+    "roast_style": 2,
+    "content": "Your leadership style is what happens when a traffic warden gets a bazooka.",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 0
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 47,
+  "fields": {
+    "category": 1,
+    "archetype": 11,
+    "roast_style": 2,
+    "content": "I’ve seen more emotional intelligence from a mosquito trapped in a pair of underpants.",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 48,
+  "fields": {
+    "category": 1,
+    "archetype": 11,
+    "roast_style": 2,
+    "content": "Do sit down. The empire of self-loathing and corridor passes can survive without you for ten minutes.",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 2
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 49,
+  "fields": {
+    "category": 1,
+    "archetype": 11,
+    "roast_style": 6,
+    "content": "You call it “firm boundaries.” We call it a god complex with constipation.",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 0
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 50,
+  "fields": {
+    "category": 1,
+    "archetype": 11,
+    "roast_style": 6,
+    "content": "Your whole vibe is, “I wasn’t invited to the staff party — or any party ever — so now everyone is expelled.”",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 1
+  }
+},
+{
+  "model": "disses.dissline",
+  "pk": 51,
+  "fields": {
+    "category": 1,
+    "archetype": 11,
+    "roast_style": 6,
+    "content": "Whoever convinced you that “Clipboard Mussolini with a ballet-mum bun” was a good look... was LYING.",
+    "status": "approved",
+    "suggested_by": null,
+    "is_free": false,
+    "display_order": 3
+  }
+},
+{
+  "model": "orders.package",
+  "pk": 1,
+  "fields": {
+    "name": "DISS PACK",
+    "tagline": "🔥 STARTER PACK",
+    "price": "3.99",
+    "description": "🔥 STARTER PACK \r\n£3.99 for one pack\r\nIncludes:\r\n2 new Archetypes\r\n1 new Roast Styles\r\n1 Premium - Extra Diss Category - LinkedIn Endorsement or Inner Monologue\r\nDeploy 2 burns\r\nIncludes 2 Riposte Invites\r\nThe ability to publish and join the leaderboard",
+    "archetype_count": 2,
+    "roast_style_count": 1,
+    "premium_category_count": 1,
+    "deploy_burn_count": 2,
+    "riposte_count": 2,
+    "includes_leaderboard": true,
+    "stripe_price_id": "",
+    "display_order": 1,
+    "is_active": true,
+    "standard_diss_line_count": 2,
+    "premium_diss_line_count": 1,
+    "max_line_selections": 3
+  }
+},
+{
+  "model": "orders.package",
+  "pk": 2,
+  "fields": {
+    "name": "BURN PACK",
+    "tagline": "🎯 VALUE PACK",
+    "price": "5.99",
+    "description": "🎯VALUE PACK\r\n£5.99\r\nStarter Pack + 2 new Archetypes \r\nStarter Pack + 1 new Roast Style\r\nStarter Pack + 1 Premium - Extra Diss Category - LinkedIn Endorsement or Inner Monologue\r\nPublish Disses\r\nDeploy 5 Burns\r\n5 Riposte Invites\r\nLeaderboard participation\r\nSeasonal rankings & rewards \r\nEarly access drops",
+    "archetype_count": 3,
+    "roast_style_count": 2,
+    "premium_category_count": 2,
+    "deploy_burn_count": 5,
+    "riposte_count": 5,
+    "includes_leaderboard": true,
+    "stripe_price_id": "",
+    "display_order": 2,
+    "is_active": true,
+    "standard_diss_line_count": 3,
+    "premium_diss_line_count": 2,
+    "max_line_selections": 5
+  }
+}
+]
