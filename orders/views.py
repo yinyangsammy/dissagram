@@ -150,9 +150,16 @@ def checkout(request, package_id):
     package = get_object_or_404(Package, pk=package_id, is_active=True)
 
     try:
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=["card"],
-            line_items=[{
+        # Build the base URL first, then append Stripe's placeholder.
+        # This prevents Django from URL-encoding the curly braces.
+        success_url = (
+            request.build_absolute_uri("/orders/success/")
+            + "?session_id={CHECKOUT_SESSION_ID}"
+        )
+
+        checkout_session_data = {
+            "payment_method_types": ["card"],
+            "line_items": [{
                 "price_data": {
                     "currency": "gbp",
                     "unit_amount": int(package.price * 100),
@@ -163,16 +170,24 @@ def checkout(request, package_id):
                 },
                 "quantity": 1,
             }],
-            mode="payment",
-            success_url=request.build_absolute_uri(
-                f"/orders/success/?session_id={{CHECKOUT_SESSION_ID}}"
-            ),
-            cancel_url=request.build_absolute_uri("/orders/cancel/"),
-            metadata={
-                "user_id": request.user.pk,
-                "package_id": package.pk,
-            }
+            "mode": "payment",
+            "success_url": success_url,
+            "cancel_url": request.build_absolute_uri("/orders/cancel/"),
+            "metadata": {
+                "user_id": str(request.user.pk),
+                "package_id": str(package.pk),
+            },
+        }
+
+        # If the account has an email, pre-fill Stripe Checkout with it.
+        # If not, Stripe Checkout can still collect one during payment.
+        if request.user.email:
+            checkout_session_data["customer_email"] = request.user.email
+
+        checkout_session = stripe.checkout.Session.create(
+            **checkout_session_data
         )
+
         return redirect(checkout_session.url, code=303)
 
     except stripe.error.StripeError as e:
@@ -185,19 +200,50 @@ def checkout_success(request):
     """
     Landing page after successful Stripe payment.
     Order status is updated via webhook — this is UX confirmation only.
-    Looks up the most recent completed order for this user.
+
+    If Stripe sends back a real Checkout Session ID, we use it to look up
+    the matching completed order. If not found, we fall back to the most
+    recent completed order for this user.
     """
     session_id = request.GET.get("session_id")
+    order = None
 
-    try:
-        order = Order.objects.filter(
-            user=request.user,
-            status="complete",
-            stripe_payment_id__icontains=session_id[:20]
-            if session_id else ""
-        ).latest("created_on")
-    except Order.DoesNotExist:
-        order = None
+    if session_id and session_id != "{CHECKOUT_SESSION_ID}":
+        try:
+            stripe_session = stripe.checkout.Session.retrieve(session_id)
+            stripe_session_data = stripe_session.to_dict_recursive()
+
+            payment_intent = stripe_session_data.get("payment_intent", "")
+
+            possible_refs = [
+                ref for ref in [payment_intent, session_id] if ref
+            ]
+
+            if possible_refs:
+                order = (
+                    Order.objects.filter(
+                        user=request.user,
+                        status="complete",
+                        stripe_payment_id__in=possible_refs,
+                    )
+                    .select_related("package")
+                    .order_by("-created_on")
+                    .first()
+                )
+
+        except stripe.error.StripeError:
+            order = None
+
+    if order is None:
+        order = (
+            Order.objects.filter(
+                user=request.user,
+                status="complete",
+            )
+            .select_related("package")
+            .order_by("-created_on")
+            .first()
+        )
 
     messages.success(request, "🔥 Pack unlocked! Your arsenal is ready.")
     return render(request, "orders/success.html", {"order": order})
@@ -225,8 +271,8 @@ def stripe_webhook(request):
     This is the ONLY place order status is set to 'complete'.
     Using webhook-only confirmation prevents success URL manipulation.
 
-    We parse metadata from the raw JSON payload (not the StripeObject)
-    because StripeObject does not support .get() on nested objects.
+    We parse metadata from the raw JSON payload because it behaves
+    predictably as a normal Python dictionary.
     """
     payload = request.body
     sig_header = request.META.get("HTTP_STRIPE_SIGNATURE", "")
@@ -245,7 +291,20 @@ def stripe_webhook(request):
 
         user_id = metadata.get("user_id")
         package_id = metadata.get("package_id")
+
+        session_id = session_data.get("id", "")
         payment_intent = session_data.get("payment_intent", "")
+
+        customer_details = session_data.get("customer_details") or {}
+        checkout_email = (
+            customer_details.get("email")
+            or session_data.get("customer_email")
+            or ""
+        )
+
+        # Prefer PaymentIntent because that is the actual payment reference.
+        # Fall back to Checkout Session ID if needed.
+        payment_reference = payment_intent or session_id
 
         if user_id and package_id:
             try:
@@ -254,18 +313,32 @@ def stripe_webhook(request):
                 user = User.objects.get(pk=user_id)
                 package = Package.objects.get(pk=package_id)
 
-                order = Order.objects.create(
-                    user=user,
-                    package=package,
-                    amount_paid=package.price,
-                    status="complete",
-                    stripe_payment_id=payment_intent or "",
-                )
+                order = Order.objects.filter(
+                    stripe_payment_id=payment_reference
+                ).first()
 
-                try:
-                    _send_order_confirmation(order)
-                except Exception:
-                    pass
+                created = False
+
+                if order is None:
+                    order = Order.objects.create(
+                        user=user,
+                        package=package,
+                        amount_paid=package.price,
+                        status="complete",
+                        stripe_payment_id=payment_reference,
+                    )
+                    created = True
+
+                # Only send the email on first creation, so Stripe retries
+                # do not repeatedly email the same customer.
+                if created:
+                    try:
+                        _send_order_confirmation(
+                            order,
+                            fallback_email=checkout_email
+                        )
+                    except Exception:
+                        pass
 
             except Exception as e:
                 import logging
@@ -280,15 +353,22 @@ def stripe_webhook(request):
     return HttpResponse(status=200)
 
 
-def _send_order_confirmation(order):
+def _send_order_confirmation(order, fallback_email=None):
     """
     Send order confirmation email to the purchasing user.
-    Uses plain text template for maximum email client compatibility.
+    Uses the user's account email first, then falls back to the email
+    entered during Stripe Checkout.
 
     Returns True if an email was sent, otherwise False.
     Email errors must never affect order processing.
     """
-    if not order.user.email:
+    recipient_email = (
+        order.user.email
+        or fallback_email
+        or ""
+    ).strip()
+
+    if not recipient_email:
         return False
 
     try:
@@ -307,7 +387,7 @@ def _send_order_confirmation(order):
             subject,
             message,
             settings.DEFAULT_FROM_EMAIL,
-            [order.user.email],
+            [recipient_email],
             fail_silently=True,
         )
 
@@ -479,7 +559,7 @@ def cache_checkout_data(request):
     Cache order data before Stripe redirect.
     Included to demonstrate awareness of the Boutique Ado
     payment intent caching pattern, though Dissagram uses
-    Stripe Checkout (hosted) rather than a custom card element.
+    Stripe Checkout hosted payment rather than a custom card element.
     """
     if request.method == "POST":
         try:
