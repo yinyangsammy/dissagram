@@ -26,7 +26,7 @@ WHAT YOU'VE UNLOCKED:
 Your newly unlocked content is ready to use the next time you build a diss.
 
 Head back and have a word here:
-https://dissagram.com/disses/create/
+https://dissagram-75687e7c9019.herokuapp.com/disses/create/
 
 You can also view your order history from your Dissagram account.
 

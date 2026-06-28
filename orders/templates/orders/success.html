@@ -83,8 +83,8 @@
     flex-wrap: wrap;
 }
 .btn-fire {
-    background: linear-gradient(135deg, #e8621a, #c0392b);
-    color: #fff;
+    background: linear-gradient(135deg, rgb(255, 107, 26), rgb(212, 160, 23));
+    color: #111;
     font-family: 'Bangers', cursive;
     font-size: 1.15rem;
     letter-spacing: 2px;
@@ -93,22 +93,26 @@
     text-decoration: none;
     transition: opacity 0.2s;
 }
-.btn-fire:hover { opacity: 0.88; color: #fff; text-decoration: none; }
+.btn-fire:hover { 
+    background: linear-gradient(135deg, #e8621a, #c0392b);
+    color: #fff;
+}
+
 .btn-ghost {
     background: transparent;
-    color: #888;
+    color: #ffac2b;
     font-family: 'Bangers', cursive;
     font-size: 1.05rem;
     letter-spacing: 1.5px;
     padding: 12px 24px;
     border-radius: 10px;
-    border: 1.5px solid #333;
+    border: 1.5px solid #ffac2b;
     text-decoration: none;
     transition: border-color 0.2s, color 0.2s;
 }
 .btn-ghost:hover {
-    border-color: #ffac2b;
-    color: #ffac2b;
+    border-color: #27ae60;
+    color: #27ae60;
     text-decoration: none;
 }
 </style>
