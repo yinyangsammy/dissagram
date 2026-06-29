@@ -8,11 +8,11 @@ Dissagram is a satirical "Diss card" game, giving users the chance to assemble p
 
 After selecting an archetype card, users can choose the voice the Diss is delivered in, the Diss lines they find most amusing and a selection of Premium Diss Categories ro round off their comedic burn.
 
-After finalizing how their Diss will look, the users can either keep it as a private trading card or publish it publicly as a Roast for the community to enjoy. Very soon, users will be able to deploy the cards as Burns to anyone they believe their archetype card and amusing diss lines might resemble..
+After finalizing how their Diss will look, the users can either keep it as a private trading card or publish it publicly as a Roast for the community to enjoy. Very soon, users will be able to deploy the cards as Roasts to anyone they believe their archetype card and amusing diss lines might resemble..
 
 It's part trading-card game, part roast battle, and part cathartic release valve when certain people in your life deserve a light ribbing.
 
-Get started right here: ([Dissagram](https://your-app-name.herokuapp.com/))
+Get started right here: ([Dissagram](https://dissagram-75687e7c9019.herokuapp.com/))
 
 <br>
 <br>
@@ -73,7 +73,7 @@ Rather than leaving users to compose their own insults (badly, in the heat of th
 The value proposition is threefold:
 
 - **For the user** — a satisfying, funny, low-stakes creative outlet, with a freemium structure that lets them try the product for free before unlocking the full roster of archetypes, voices and premium categories.
-- **For the community** — a public Roast Feed where deployed Burns pile up against each archetype, turning individual disses into a shared, crowd-sourced takedown.
+- **For the community** — a public Roast Feed where published Roasts pile up against each archetype, turning individual disses into a shared, crowd-sourced takedown.
 - **For the business model** — a one-off pack-purchase structure (rather than only subscription) keeps the barrier to entry low, with gifting built in to encourage organic, social growth.
 
 <br>
@@ -109,21 +109,21 @@ The value proposition is threefold:
 - :white_check_mark: *to save a diss as a private draft before deciding whether to share it*.
 - :white_check_mark: *to edit a diss after creating it*.
 - :white_check_mark: *to delete a diss I no longer want*.
-- :white_check_mark: *to deploy my diss publicly as a "Burn" for others to see*.
-- :white_check_mark: *to recall a deployed Burn back to draft if I change my mind*.
-- :white_check_mark: *to browse a public feed of all deployed Burns, filterable by archetype and roast style*.
-- :white_check_mark: *to view a dedicated public page for each archetype, showing every Burn deployed against them*.
+- :white_check_mark: *to publish my diss publicly as a "Roast" for others to see*.
+- :white_check_mark: *to recall a deployed Roast back to draft if I change my mind*.
+- :white_check_mark: *to browse a public feed of all deployed Roasts, filterable by archetype and roast style*.
+- :white_check_mark: *to view a dedicated public page for each archetype, showing every Roast deployed against them*.
 - :white_check_mark: *clear, animated, non-intrusive notifications when I take an action (success, error, info)*.
 - :white_check_mark: *to view and edit my own arena profile*.
 - :white_check_mark: *to get in touch with the Dissagram team via a contact form, with a reason for my enquiry*.
 - :white_check_mark: *to use the site on any device — mobile, tablet or desktop*.
 
-- :x: *to leave comments on public Burns*.
-- :x: *to rate Burns out of 5 flames, feeding into a leaderboard*.
+- :x: *to leave comments on public Roasts*.
+- :x: *to rate Roasts out of 5 flames, feeding into a leaderboard*.
 - :x: *to see a leaderboard of the most-roasted archetypes and highest-rated burns*.
 - :x: *to subscribe to a monthly "Roast Pack" for unlimited access and exclusive monthly drops*.
 - :x: *to gift a pack to someone by email, even if they don't yet have an account*.
-- :x: *to reply to a Burn with a "Riposte" of my own, building a chain*.
+- :x: *to reply to a Roast with a "Riposte" of my own, building a chain*.
 - :x: *to access a Battle Arena where users can go head-to-head*.
 - :x: *to physically purchase a Dissagram board game*.
 
@@ -206,16 +206,16 @@ The value proposition is threefold:
 | Home | Landing page introducing the concept with a hero image and call to action |
 | How It Works | Static explainer page walking new users through the diss-building process |
 | Sign In / Register | Authentication pages powered by django-allauth, restyled to match the Dissagram aesthetic |
-| Get Your Pack | Pack store — Diss Pack, Burn Pack and a "Coming Soon" Roast Pack subscription teaser |
+| Get Your Pack | Pack store — Diss Pack, Roast Pack and a "Coming Soon" Roast Pack subscription teaser |
 | Checkout | Stripe-hosted Checkout session for purchasing a pack |
 | Pack Unlocked | Post-purchase confirmation page |
 | My Orders | Dashboard of the logged-in user's order history, with cancel / reinstate / delete options and gifting stats |
-| Build a Diss | The 5-step diss builder — Pick Target → Roast Style → Burn Lines → Premium Category → Final Touches |
+| Build a Diss | The 5-step diss builder — Pick Target → Roast Style → Roast Lines → Premium Category → Final Touches |
 | Edit Diss | Same builder, pre-populated with an existing diss's saved values |
-| My Disses | Dashboard of the logged-in user's disses, with CRUD and Deploy/Recall Burn actions |
+| My Disses | Dashboard of the logged-in user's disses, with CRUD and Deploy/Recall Roast actions |
 | Diss Detail | Trading-card-style view of a single diss |
-| Roast Feed | Public feed of all deployed Burns, filterable by archetype and roast style |
-| Roast Detail | Public pile-on page for a single archetype, showing every Burn deployed against them |
+| Roast Feed | Public feed of all deployed Roasts, filterable by archetype and roast style |
+| Roast Detail | Public pile-on page for a single archetype, showing every Roast deployed against them |
 | My Roasts | Dashboard of the logged-in user's own published (deployed) disses |
 | Profile / Edit Profile | The logged-in user's arena profile — bio, avatar and favourite roast style |
 | Contact | Contact form with categorised enquiry reasons |
@@ -256,7 +256,7 @@ Full user authentication is handled by [django-allauth](https://django-allauth.r
 
 ### Get Your Pack — Freemium Store
 
-A pack store offering the Diss Pack (starter) and Burn Pack (best value), each unlocking a defined number of archetypes, roast styles, premium diss categories and Deploy Burns. A greyed-out "Coming Soon" Roast Pack subscription card previews a planned future tier without being purchasable.
+A pack store offering the Diss Pack (starter) and Roast Pack (best value), each unlocking a defined number of archetypes, roast styles, premium diss categories and Deploy Roasts. A greyed-out "Coming Soon" Roast Pack subscription card previews a planned future tier without being purchasable.
 
 <h3 align="center"><img src="static/readme/packages.png"></h3>
 
@@ -292,7 +292,7 @@ The centrepiece of the platform. A progressive, 5-step diss builder:
 
 1. **Pick Your Target** — a dual carousel (♂ Male Archetypes / ♀ Female Archetypes) of illustrated trading-card archetypes, with locked archetypes clearly greyed out and a friendly toast nudging the user toward the pack store.
 2. **Roast Style** — a grid of illustrated persona avatars representing the voice the diss will be delivered in.
-3. **Pick Your Burn Lines** — standard diss lines for the chosen archetype + roast style combination, with a live selection counter respecting the user's pack-tier limit.
+3. **Pick Your Roast Lines** — standard diss lines for the chosen archetype + roast style combination, with a live selection counter respecting the user's pack-tier limit.
 4. **Pick Your Extra Diss Category** — premium categories (LinkedIn Endorsement, Internal Monologue, etc.), shown only when the user has unlocked them and only when premium lines actually exist for that archetype.
 5. **Final Touches** — an optional custom note and a Draft / Published visibility toggle.
 
@@ -310,21 +310,21 @@ A personal dashboard listing every diss the user has created, with inline View /
 
 <h3 align="center"><img src="static/readme/my-disses.png"></h3>
 
-### Deploy Burn / Recall Burn
+### Deploy Roast / Recall Roast
 
-A single click publishes a diss publicly as a "Burn" against its target archetype. The first Burn deployed against any archetype automatically creates a public Roast page for that archetype; subsequent Burns simply join the existing pile-on. Burns can be recalled back to draft at any time.
+A single click publishes a diss publicly as a "Roast" against its target archetype. The first Roast deployed against any archetype automatically creates a public Roast page for that archetype; subsequent Roasts simply join the existing pile-on. Roasts can be recalled back to draft at any time.
 
 <h3 align="center"><img src="static/readme/deploy-burn.png"></h3>
 
 ### Roast Feed
 
-A public, browsable feed of every archetype with at least one deployed Burn, with a stacked-card visual effect and filters by archetype and roast style.
+A public, browsable feed of every archetype with at least one deployed Roast, with a stacked-card visual effect and filters by archetype and roast style.
 
 <h3 align="center"><img src="static/readme/roast-feed.png"></h3>
 
 ### Roast Detail — Public Pile-On Page
 
-A dedicated public page per archetype, aggregating every Burn the community has deployed against them, filterable by roast style.
+A dedicated public page per archetype, aggregating every Roast the community has deployed against them, filterable by roast style.
 
 <h3 align="center"><img src="static/readme/roast-detail.png"></h3>
 
@@ -354,12 +354,12 @@ Dissagram is fully responsive across all screen sizes — mobile, tablet and des
 
 -   ## Future Features
 
-- :x: *Comments on public Burns — short community reactions on deployed disses*
-- :x: *A 1–5 flame rating system on Burns, feeding into a community leaderboard*
-- :x: *A leaderboard ranking the most-roasted archetypes and highest-rated Burns*
-- :x: *A monthly "Roast Pack" subscription tier with unlimited Deploy Burns and exclusive monthly archetype drops*
+- :x: *Comments on public Roasts — short community reactions on deployed disses*
+- :x: *A 1–5 flame rating system on Roasts, feeding into a community leaderboard*
+- :x: *A leaderboard ranking the most-roasted archetypes and highest-rated Roasts*
+- :x: *A monthly "Roast Pack" subscription tier with unlimited Deploy Roasts and exclusive monthly archetype drops*
 - :x: *Gifting a pack by email address, so the recipient doesn't need an existing account*
-- :x: *Riposte chains — replying to a Burn with a Burn of your own*
+- :x: *Riposte chains — replying to a Roast with a Roast of your own*
 - :x: *A Battle Arena for head-to-head roast contests*
 - :x: *A physical Dissagram card/board game, building on the digital archetype roster*
 
@@ -368,9 +368,25 @@ Dissagram is fully responsive across all screen sizes — mobile, tablet and des
 
 # Wireframes
 
--   ## Get Your Pack & Build Your Diss
+-   ## Homepage
 
-<h3 align="center"><img src="static/readme/dissagram-wireframes.png"></h3>
+<h3 align="center"><img src="static/readme/wireframe-home.png"></h3>
+
+-   ## Homepage
+
+<h3 align="center"><img src="static/readme/wireframe-how.png"></h3>
+
+-   ## Homepage
+
+<h3 align="center"><img src="static/readme/wireframe-form.png"></h3>
+
+-   ## Homepage
+
+<h3 align="center"><img src="static/readme/wireframe-feed.png"></h3>
+
+-   ## Homepage
+
+<h3 align="center"><img src="static/readme/wireframe-store.png"></h3>
 
 <br>
 <br>
@@ -385,7 +401,7 @@ This approach allows:
 
 - admins to expand the archetype/roast-style/diss-line roster without touching code,
 - users to freely build and re-build private disses without affecting anything public,
-- a single click to "publish" a diss as a community-visible Burn,
+- a single click to "publish" a diss as a community-visible Roast,
 - and a clean freemium boundary that can be checked from a handful of small, reusable helper functions rather than scattered permission checks.
 
 The database structure prioritises:
@@ -482,7 +498,7 @@ The database structure prioritises:
 | created_on / updated_on                  |
 +----------------------------------------+
         |
-        | 1-to-1 (per archetype, first Deploy Burn)
+        | 1-to-1 (per archetype, first Deploy Roast)
         v
 +--------------------+
 | Roast               |
@@ -520,7 +536,7 @@ The database structure prioritises:
 
 -   Original ERD generated during planning
 
-<h3 align="center"><img src="static/readme/dissagram-erd.png"></h3>
+<h3 align="center"><img src="static/readme/original-erd.png"></h3>
 
 <br>
 <br>
@@ -808,13 +824,13 @@ Stub `tests.py` files exist in `orders`, `roasts`, `dissers` and `contact` — t
 
 ---
 
-### Deploy Burn & Roast Feed
+### Deploy Roast & Roast Feed
 
 | Test | Action | Expected Result | Pass/Fail |
 |---|---|---|---|
 | Deploy a diss with no lines selected | Attempt to deploy an empty diss | Error toast shown, deploy blocked | ✅ Pass |
 | Deploy a valid diss | Deploy a diss with at least one line | Diss marked public/published, Roast created if first for that archetype | ✅ Pass |
-| Recall a deployed Burn | Click Recall Burn on a published diss | Diss returns to draft/private | ✅ Pass |
+| Recall a deployed Roast | Click Recall Roast on a published diss | Diss returns to draft/private | ✅ Pass |
 | Roast Feed filter by archetype | Apply archetype filter | Only matching roasts shown | ✅ Pass |
 | Roast Feed filter by roast style | Apply roast style filter | Only roasts with a public diss in that style shown | ✅ Pass |
 | Roast Detail filter by style | Apply roast style filter on a roast page | Only disses in that style shown | ✅ Pass |
@@ -872,8 +888,8 @@ Stub `tests.py` files exist in `orders`, `roasts`, `dissers` and `contact` — t
 | Gift a pack to another user | :white_check_mark: |
 | Save a diss as a draft | :white_check_mark: |
 | Edit and delete a diss | :white_check_mark: |
-| Deploy a diss publicly as a Burn | :white_check_mark: |
-| Recall a deployed Burn | :white_check_mark: |
+| Deploy a diss publicly as a Roast | :white_check_mark: |
+| Recall a deployed Roast | :white_check_mark: |
 | Browse the public Roast Feed | :white_check_mark: |
 | View a public archetype Roast page | :white_check_mark: |
 | Receive clear, animated notifications for my actions | :white_check_mark: |
