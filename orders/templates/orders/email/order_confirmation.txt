@@ -2,7 +2,7 @@ Hi {{ user.username }}!
 
 Thanks for using Dissagram 👊
 
-🔥 Your {{ package.name }} is confirmed, locked and loaded.
+🔥 Your {{ package.name }} is locked and loaded.
 
 ────────────────────────
 ORDER CONFIRMATION
@@ -19,9 +19,9 @@ WHAT YOU'VE UNLOCKED:
 ✅ {{ package.standard_diss_line_count }} Diss Line{{ package.standard_diss_line_count|pluralize }} per burn
 {% if package.premium_diss_line_count %}✅ {{ package.premium_diss_line_count }} Premium Diss Line{{ package.premium_diss_line_count|pluralize }} per burn{% endif %}
 {% if package.premium_category_count %}✅ {{ package.premium_category_count }} Premium Diss Categor{{ package.premium_category_count|pluralize:"y,ies" }}{% endif %}
-{% if package.includes_leaderboard %}✅ Leaderboard & Rankings{% endif %}(coming soon)
-{% if package.deploy_burn_count %}✅ Deploy {{ package.deploy_burn_count }} Burn{{ package.deploy_burn_count|pluralize }}{% endif %}(coming soon)
-{% if package.riposte_count %}✅ {{ package.riposte_count }} Riposte Invite{{ package.riposte_count|pluralize }}{% endif %}(coming soon)
+{% if package.includes_leaderboard %}✅ Leaderboard & Rankings{% endif %} (coming soon)
+{% if package.deploy_burn_count %}✅ Deploy {{ package.deploy_burn_count }} Burn{{ package.deploy_burn_count|pluralize }}{% endif %} (coming soon)
+{% if package.riposte_count %}✅ {{ package.riposte_count }} Riposte Invite{{ package.riposte_count|pluralize }}{% endif %} (coming soon)
 
 Your newly unlocked content is ready to use the next time you build a diss.
 
