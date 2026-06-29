@@ -370,23 +370,23 @@ Dissagram is fully responsive across all screen sizes — mobile, tablet and des
 
 -   ## Homepage
 
-<h3 align="center"><img src="static/readme/wireframe-home.jpg"></h3>
+<h3 align="center"><img src="static/readme/wireframe-home-best.png"></h3>
 
 -   ## Homepage
 
-<h3 align="center"><img src="static/readme/wireframe-how.jpg"></h3>
+<h3 align="center"><img src="static/readme/wireframe-how-best.jpg"></h3>
 
 -   ## Homepage
 
-<h3 align="center"><img src="static/readme/wireframe-form.jpg"></h3>
+<h3 align="center"><img src="static/readme/wireframe-form-best.png"></h3>
 
 -   ## Homepage
 
-<h3 align="center"><img src="static/readme/wireframe-feed.jpg"></h3>
+<h3 align="center"><img src="static/readme/wireframe-feed-best.png"></h3>
 
 -   ## Homepage
 
-<h3 align="center"><img src="static/readme/wireframe-store.jpg"></h3>
+<h3 align="center"><img src="static/readme/wireframe-store-best.jpg"></h3>
 
 <br>
 <br>
