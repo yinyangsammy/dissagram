@@ -1,6 +1,6 @@
 <h1 align="center" bold>🔥 Dissagram</h1>
 
-<h3 align="center"><img src="static/readme/mockup.png"></h3>
+<h3 align="center"><img src="static/readme/dissagram-mockup.jpg"></h3>
 
 <br>
 
@@ -374,19 +374,19 @@ Dissagram is fully responsive across all screen sizes — mobile, tablet and des
 
 -   ## Homepage
 
-<h3 align="center"><img src="static/readme/wireframe-how.png"></h3>
+<h3 align="center"><img src="static/readme/wireframe-how.jpg"></h3>
 
 -   ## Homepage
 
-<h3 align="center"><img src="static/readme/wireframe-form.png"></h3>
+<h3 align="center"><img src="static/readme/wireframe-form.jpg"></h3>
 
 -   ## Homepage
 
-<h3 align="center"><img src="static/readme/wireframe-feed.png"></h3>
+<h3 align="center"><img src="static/readme/wireframe-feed.jpg"></h3>
 
 -   ## Homepage
 
-<h3 align="center"><img src="static/readme/wireframe-store.png"></h3>
+<h3 align="center"><img src="static/readme/wireframe-store.jpg"></h3>
 
 <br>
 <br>
