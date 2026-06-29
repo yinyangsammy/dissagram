@@ -370,7 +370,7 @@ Dissagram is fully responsive across all screen sizes — mobile, tablet and des
 
 -   ## Homepage
 
-<h3 align="center"><img src="static/readme/wireframe-home.png"></h3>
+<h3 align="center"><img src="static/readme/wireframe-home.jpg"></h3>
 
 -   ## Homepage
 
