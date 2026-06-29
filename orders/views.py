@@ -200,50 +200,20 @@ def checkout_success(request):
     """
     Landing page after successful Stripe payment.
     Order status is updated via webhook — this is UX confirmation only.
+    Shows the most recent completed order for this user.
 
-    If Stripe sends back a real Checkout Session ID, we use it to look up
-    the matching completed order. If not found, we fall back to the most
-    recent completed order for this user.
+    Kept deliberately simple so the Stripe return page cannot fail
+    because of Checkout Session lookup issues.
     """
-    session_id = request.GET.get("session_id")
-    order = None
-
-    if session_id and session_id != "{CHECKOUT_SESSION_ID}":
-        try:
-            stripe_session = stripe.checkout.Session.retrieve(session_id)
-            stripe_session_data = stripe_session.to_dict_recursive()
-
-            payment_intent = stripe_session_data.get("payment_intent", "")
-
-            possible_refs = [
-                ref for ref in [payment_intent, session_id] if ref
-            ]
-
-            if possible_refs:
-                order = (
-                    Order.objects.filter(
-                        user=request.user,
-                        status="complete",
-                        stripe_payment_id__in=possible_refs,
-                    )
-                    .select_related("package")
-                    .order_by("-created_on")
-                    .first()
-                )
-
-        except stripe.error.StripeError:
-            order = None
-
-    if order is None:
-        order = (
-            Order.objects.filter(
-                user=request.user,
-                status="complete",
-            )
-            .select_related("package")
-            .order_by("-created_on")
-            .first()
+    order = (
+        Order.objects.filter(
+            user=request.user,
+            status="complete",
         )
+        .select_related("package")
+        .order_by("-created_on")
+        .first()
+    )
 
     messages.success(request, "🔥 Pack unlocked! Your arsenal is ready.")
     return render(request, "orders/success.html", {"order": order})
