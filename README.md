@@ -965,9 +965,9 @@ The [W3C Markup Validator](https://validator.w3.org/#validate_by_input) and [W3C
 
 ## JSHint JavaScript Validator
 
-The diss builder's carousel and step-reveal logic (the most substantial JavaScript on the site) was validated using [JSHint](https://jshint.com/), with only stylistic warnings and no errors reported.
+The diss builder's carousel and step-reveal logic (the most substantial JavaScript on the site) was validated using [JSHint](https://jshint.com/), with only an unused variable warning (for future features) and no errors reported.
 
-<h2 align="center"><img src="static/readme/jshint-diss-form.png"></h2>
+<h2 align="center"><img src="static/readme/jshint.png"></h2>
 
 <br>
 <br>
