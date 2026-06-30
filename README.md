@@ -4,13 +4,13 @@
 
 <br>
 
-Dissagram is a satirical "Diss card" game, giving users the chance to assemble premium, professionally-crafted insults against a rotating cast of universally recognizable archetypes — the Fake Guru, the Gym Narcissist, the Player, the Pick-Me Bunny, the Super Karen etc. 
+Dissagram is a satirical “Diss card” game where users assemble premium, professionally crafted insults against a rotating cast of instantly recognisable archetypes — from the Fake Guru and Gym Narcissist to the Player, Pick-Me Bunny and Super Karen.
 
-After selecting an archetype card, users can choose the voice the Diss is delivered in, the Diss lines they find most amusing and a selection of Premium Diss Categories ro round off their comedic burn.
+Users choose an archetype card, select the voice their Diss will be delivered in, pick their favourite roast lines, and add Premium Diss Categories to round off the burn.
 
-After finalizing how their Diss will look, the users can either keep it as a private trading card or publish it publicly as a Roast for the community to enjoy. Very soon, users will be able to deploy the cards as Roasts to anyone they believe their archetype card and amusing diss lines might resemble..
+Once complete, each Diss can be saved privately as a collectible trading card or published publicly as a Roast for the community to enjoy. Future features will allow users to deploy Roasts directly to people who suspiciously resemble the archetypes in question.
 
-It's part trading-card game, part roast battle, and part cathartic release valve when certain people in your life deserve a light ribbing.
+Part trading-card game, part roast battle, and part cathartic release valve, Dissagram turns everyday irritation into polished, shareable comedy.
 
 Get started right here: ([Dissagram](https://dissagram-75687e7c9019.herokuapp.com/))
 
@@ -680,11 +680,11 @@ order = get_object_or_404(Order, pk=order_id, user=request.user)
 
 # Testing
 
-The Dissagram website has been tested using the following methods:
+The Dissagram website has been tested throughout development using a mixture of automated Django tests, manual user-flow testing, code validation, Lighthouse audits and responsive/device checks.
 
+- [Testing User Stories](#testing-user-stories)
 - [Automated Tests](#automated-tests)
 - [Manual Testing](#manual-testing)
-- [Testing User Stories](#testing-user-stories)
 - [Code Validation](#code-validation)
     - [W3C HTML Validator](#w3c-html-validator)
     - [W3C CSS Validator](#w3c-css-validator)
@@ -709,39 +709,64 @@ The Dissagram website has been tested using the following methods:
 
 ### Automated
 
-**Using automated testing to test code has several advantages over manual testing:**
+**Automated testing was used where fast, repeatable checks were most valuable:**
 
-* Quicker — multiple tests can be run on the same piece of code concurrently, and in a short space of time.
-
-* More holistic — the ability to very quickly establish how the site will perform as a whole.
-
-* More exact — the ability to find more bugs, including unknown bugs.
-
-* More accurate — less room for human error; tests are only as good as the tester(s), and can therefore end up being purely decorative.
-
-* More honest — less prone to manipulation or corruption.
+* Quicker — multiple tests can be run across the codebase in seconds.
+* More holistic — automated tests help confirm that key model and view logic still works together.
+* More exact — tests can catch hidden regressions that may not appear during a single manual check.
+* More accurate — repeatable tests reduce the chance of human error.
+* More honest — tests either pass or fail, making them useful as project health checks.
 
 ### Manual
 
-**Using manual testing to test code has several advantages over automated testing:**
+**Manual testing was used where user experience, visual behaviour and end-to-end journeys mattered most:**
 
-* More precise — no waiting for other tests to finish; one specific piece can be perfected.
+* More precise — individual features can be checked exactly as a real user would experience them.
+* More adaptive — issues can be spotted while building and immediately retested after fixes.
+* More visual — responsive layouts, animations, toasts and locked-content states need human review.
+* More organic — manual testing gives a clearer picture of the overall UX than automated checks alone.
 
-* More initiative — tests can be written while programming, so that errors can be picked up as early as possible during development.
+<br>
+<br>
 
-* More adaptive / flexible — tests can remain within the codebase for the future (*regressive testing*), so that if future developments conflict with current functionality, the programmer is alerted immediately.
+## Testing User Stories
 
-* More organic — automated tests don't test the User Experience beyond the performative, so manual testing is essential for a full picture of UX.
+<br>
+
+| User Story | Result |
+|------------|--------|
+| Register for an account and log in securely | :white_check_mark: |
+| Build a diss using archetype, roast style and burn lines | :white_check_mark: |
+| Browse archetypes via a visual, split-by-gender carousel | :white_check_mark: |
+| See locked content clearly and be guided to unlock it | :white_check_mark: |
+| Purchase a pack securely via Stripe | :white_check_mark: |
+| Receive clear feedback on payment success/failure | :white_check_mark: |
+| Receive an order confirmation email | :white_check_mark: |
+| View and manage order history | :white_check_mark: |
+| Gift a pack to another user | :white_check_mark: |
+| Save a diss as a draft | :white_check_mark: |
+| Edit and delete a diss | :white_check_mark: |
+| Deploy a diss publicly as a Roast | :white_check_mark: |
+| Recall a deployed Roast | :white_check_mark: |
+| Browse the public Roast Feed | :white_check_mark: |
+| View a public archetype Roast page | :white_check_mark: |
+| Receive clear, animated notifications for my actions | :white_check_mark: |
+| View and edit my arena profile | :white_check_mark: |
+| Contact the Dissagram team via a form | :white_check_mark: |
+| Use the site on mobile, tablet and desktop | :white_check_mark: |
 
 <br>
 <br>
 
 ## Automated Tests
 
-Automated Django tests currently cover the `disses` and `accounts` apps:
+Automated Django tests currently cover the `disses`, `accounts` and `orders` apps:
 
-- `disses/tests.py` — model-level tests covering `DissLine` (string representation, archetype/roast-style relationships, category, default approval status, ordering, and the approved-only queryset) and `Diss` (string representation, draft-by-default status, private-by-default visibility, author relationship, and empty selected_lines by default).
-- `accounts/tests.py` — view-level tests covering the profile page (login-required redirect, successful view for an authenticated user, automatic `Disser` creation on first visit), the profile edit page (login-required access, successful email update, and syncing the updated email to the allauth `EmailAddress` record).
+- `disses/tests.py` — model-level tests covering `DissLine` and `Diss`, including string representation, relationships, default status, default visibility, ordering and selected-line behaviour.
+- `accounts/tests.py` — view-level tests covering login-required redirects, authenticated profile access, automatic `Disser` creation, profile editing, email updates and syncing with the allauth `EmailAddress` record.
+- `orders/tests.py` — view and helper tests covering login-required access to the packages page, successful package-page rendering, package display counts including free starter content, standard and premium diss-line wording, completed-order ownership badges, and order confirmation email behaviour.
+
+The `orders` tests also check that confirmation emails are sent to users with a valid email address, and are not sent when the user account has no email address stored.
 
 Run all Django tests with:
 
@@ -749,7 +774,7 @@ Run all Django tests with:
 python manage.py test
 ```
 
-or for a specific app:
+Or run individual app tests with:
 
 ```bash
 python manage.py test disses
@@ -757,7 +782,7 @@ python manage.py test accounts
 python manage.py test orders
 ```
 
-Stub `tests.py` files exist in `roasts`, `dissers` and `contact` — these are flagged as a known gap; given the project's tight timeline, testing effort was prioritised on the freemium content-locking logic (`disses`) and the newest, most recently changed area (`accounts`), with the remaining apps covered comprehensively by the manual testing below.
+Stub `tests.py` files exist in `roasts`, `dissers` and `contact`. These are documented as a known gap; due to the tight project timeline, automated testing was prioritised for the freemium diss-building logic, the most recently changed account/profile functionality, and the pack/order purchase flow, while the remaining apps were covered through the manual testing below.
 
 <br>
 <br>
@@ -872,147 +897,114 @@ Stub `tests.py` files exist in `roasts`, `dissers` and `contact` — these are f
 <br>
 <br>
 
-## Testing User Stories
-
-<br>
-
-| User Story | Result |
-|------------|--------|
-| Register for an account and log in securely | :white_check_mark: |
-| Build a diss using archetype, roast style and burn lines | :white_check_mark: |
-| Browse archetypes via a visual, split-by-gender carousel | :white_check_mark: |
-| See locked content clearly and be guided to unlock it | :white_check_mark: |
-| Purchase a pack securely via Stripe | :white_check_mark: |
-| Receive clear feedback on payment success/failure | :white_check_mark: |
-| Receive an order confirmation email | :white_check_mark: |
-| View and manage order history | :white_check_mark: |
-| Gift a pack to another user | :white_check_mark: |
-| Save a diss as a draft | :white_check_mark: |
-| Edit and delete a diss | :white_check_mark: |
-| Deploy a diss publicly as a Roast | :white_check_mark: |
-| Recall a deployed Roast | :white_check_mark: |
-| Browse the public Roast Feed | :white_check_mark: |
-| View a public archetype Roast page | :white_check_mark: |
-| Receive clear, animated notifications for my actions | :white_check_mark: |
-| View and edit my arena profile | :white_check_mark: |
-| Contact the Dissagram team via a form | :white_check_mark: |
-| Use the site on mobile, tablet and desktop | :white_check_mark: |
-
-<br>
-<br>
-
 ## Code Validation
 
-The [W3C Markup Validator](https://validator.w3.org/#validate_by_input) and [W3C CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_input) were used to validate every page of the project.
+Rendered browser output was validated rather than raw Django template files, because raw templates can trigger false-positive validator errors from Django template syntax.
 
 ### W3C HTML Validator
 
-- Due to the use of Django templating syntax, direct validation of raw template files produces false-positive errors within the W3C validator.
-- To ensure accurate validation, rendered HTML output from the browser was validated instead, page by page, after Django had rendered all dynamic content.
-- Where appropriate, Django/template-related warnings were filtered during validation review.
-
+The [W3C Markup Validator](https://validator.w3.org/#validate_by_input) was used to validate the rendered HTML of the main public, account and diss-building pages.
 
 <br>
 
--   ### Home
+#### Home
 
 <h2 align="right"><img src="static/readme/home-html.png"></h2>
 
 <br>
 
--   ### How It Works
+#### How It Works
 
 <h2 align="right"><img src="static/readme/how-html.png"></h2>
 
 <br>
 
--   ### Get Your Pack
+#### Get Your Pack
 
 <h2 align="right"><img src="static/readme/packs-html.png"></h2>
 
 <br>
 
--   ### Build Your Diss
+#### Build Your Diss
 
 <h2 align="right"><img src="static/readme/form-html.png"></h2>
 
 <br>
 
--   ### My Disses
+#### My Disses
 
 <h2 align="right"><img src="static/readme/disses-html.png"></h2>
 
 <br>
 
--   ### Roast Feed
+#### Roast Feed
 
 <h2 align="right"><img src="static/readme/feed-html.png"></h2>
 
 <br>
 
--   ### Contact
+#### Contact
 
 <h2 align="right"><img src="static/readme/contact-html.png"></h2>
 
 <br>
 
-## W3C CSS Validator
+### W3C CSS Validator
+
+The [W3C CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_input) was used to validate the project's CSS.
 
 <h2 align="center"><img src="static/readme/css.png"></h2>
 
 <br>
 <br>
 
-## JSHint JavaScript Validator
+### JSHint JavaScript Validator
 
-The diss builder's carousel and step-reveal logic (the most substantial JavaScript on the site) was validated using [JSHint](https://jshint.com/), with only an unused variable warning (for future features) and no errors reported.
+The diss builder's carousel and step-reveal logic — the most substantial JavaScript on the site — was validated using [JSHint](https://jshint.com/). Only an unused-variable warning for future functionality was reported; no JavaScript errors were found.
 
 <h2 align="center"><img src="static/readme/jshint.png"></h2>
 
 <br>
 <br>
 
-## PEP8 / Python Validation
+### PEP8 / Python Validation
 
-All Python code was checked for [PEP8](https://peps.python.org/pep-0008/) compliance using the [CI Python Linter](https://pep8ci.herokuapp.com/).
+Python code was checked for [PEP8](https://peps.python.org/pep-0008/) compliance using the [CI Python Linter](https://pep8ci.herokuapp.com/).
 
--   ### Disses Models
+#### Disses Models
 
 <h2 align="right"><img src="static/readme/disses-models.png"></h2>
 
 <br>
 
--   ### Roasts Models
+#### Roasts Models
 
 <h2 align="right"><img src="static/readme/roasts-models.png"></h2>
 
 <br>
 
--   ### Roasts Views
+#### Roasts Views
 
 <h2 align="right"><img src="static/readme/roasts-views.png"></h2>
 
 <br>
 
--   ### Orders Models
+#### Orders Models
 
 <h2 align="right"><img src="static/readme/orders-models.png"></h2>
 
 <br>
 
--   ### Orders Views
+#### Orders Views
 
 <h2 align="right"><img src="static/readme/orders-views.png"></h2>
-
-<br>
-
 
 <br>
 <br>
 
 ## Lighthouse
 
-[Google Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/) reports were used to examine key pages for Performance, Accessibility, Best Practices and SEO.
+[Google Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/) was used to review Performance, Accessibility, Best Practices and SEO on the project's key pages.
 
 ### Homepage
 
@@ -1034,35 +1026,39 @@ All Python code was checked for [PEP8](https://peps.python.org/pep-0008/) compli
 
 <h3 align="center"><img src="static/readme/dissagram-feed.png"></h3>
 
--   The Roast Feed page performance will be improved in dissagram v2.0 by compressing all backend images uploaded through the admin panel. Owing to time constraints, this was not possible for the current iteration.
+The Roast Feed page performance will be improved in Dissagram v2.0 by compressing all backend images uploaded through the admin panel. Due to the project deadline, this optimisation was documented for the next iteration rather than added to the current submission.
 
 <br>
 <br>
 
 ## Responsiveness
 
-Dissagram was tested across the following breakpoints using Chrome DevTools device emulation and physical devices:
+Dissagram was tested across common device sizes using Chrome DevTools device emulation and custom high-resolution viewport checks. The main layout, navigation, cards, forms, carousels and CTA buttons remained usable across mobile, tablet and desktop screen sizes.
 
-- ### iPhone
+### iPhone
 
 <h3 align="center"><img src="static/readme/iphone.png"></h3>
 
-- ### iPad
+### iPad
 
 <h3 align="center"><img src="static/readme/ipad.png"></h3>
 
-### Nest Hub Max 
+### Nest Hub Max
+
 <h2 align="center"><img src="static/readme/nest-hub-max.png"></h2>
 
--   I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 2160) screens to verify the web pages would work across monitor sizes. 
+Custom settings were also created for FHD (1920x1080), 2K (2560x1440) and 4K (3840 x 2160) screens to verify the site across larger monitor sizes.
 
-### FHD (1920x1080) 
+### FHD (1920x1080)
+
 <h2 align="center"><img src="static/readme/full-hd.png"></h2>
 
-### 2k (2560x1440)
+### 2K (2560x1440)
+
 <h2 align="center"><img src="static/readme/2k.png"></h2>
 
 ### 4K (3840 x 2160)
+
 <h2 align="center"><img src="static/readme/4k.png"></h2>
 
 <br>
@@ -1072,209 +1068,38 @@ Dissagram was tested across the following breakpoints using Chrome DevTools devi
 
 ### Resolved
 
-## Debugging
-
-### Resolved
-
 The following bugs were identified and fixed during development:
-
----
-
-#### 1. Stripe CLI not found in Git Bash
-
-| | |
-|---|---|
-| **Symptom** | `bash: stripe: command not found` when running `stripe listen` |
-| **Cause** | Git Bash on Windows does not inherit the Windows system PATH where the Stripe CLI is installed, so it cannot locate the `stripe` executable |
-| **Fix** | Switched to PowerShell and ran the PATH refresh command before calling the CLI: `$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")` |
-
----
-
-#### 2. Stripe CLI authentication expired mid-project
-
-| | |
-|---|---|
-| **Symptom** | `FATAL Error while authenticating with Stripe: Post "https://api.stripe.com/v1/stripecli/sessions": context canceled` |
-| **Cause** | The Stripe CLI authentication token expires after 90 days; the pairing code had expired since the previous session |
-| **Fix** | Re-authenticated by running `stripe login` in PowerShell, which opened a browser confirmation page. Confirmed that the listener (`stripe listen --forward-to localhost:8000/orders/webhook/`) should always be started in a **separate terminal** before making any test purchases |
-
----
-
-#### 3. `requirements.txt` saved as UTF-16, breaking Heroku deployment
-
-| | |
-|---|---|
-| **Symptom** | `pip install -r requirements.txt` would fail on Heroku — the file appeared corrupt |
-| **Cause** | Generated on Windows using PowerShell's `>` redirect operator (`pip freeze > requirements.txt`), which defaults to UTF-16LE with BOM encoding rather than UTF-8. Pip requires plain UTF-8/ASCII |
-| **Fix** | Re-saved using `iconv -f utf-16 -t utf-8 requirements.txt > requirements_fixed.txt`. In future: use `pip freeze \| Out-File -Encoding utf8 requirements.txt` in PowerShell, or check VS Code's bottom-right status bar for the file's encoding before committing |
-
----
-
-#### 4. Orders page showed "No orders yet" immediately after a successful test payment
-
-| | |
-|---|---|
-| **Symptom** | User completed a test Stripe payment and reached the "Pack Unlocked" page, but the My Orders page showed no orders |
-| **Cause** | The Stripe CLI webhook listener was not running (or not authenticated) during the test purchase, so the `checkout.session.completed` event never reached the Django webhook endpoint — and since Dissagram creates orders **only** inside the webhook handler, no `Order` record was ever created |
-| **Fix** | Re-authenticated the Stripe CLI (`stripe login`) and confirmed the listener was running in a separate terminal **before** starting the test. Documented the correct three-terminal workflow: (1) Django `runserver`, (2) Stripe listener, (3) browser testing |
-
----
-
-#### 5. Stripe webhook returning `500` on `checkout.session.completed`
-
-| | |
-|---|---|
-| **Symptom** | Stripe CLI output showed `<-- [500] POST http://localhost:8000/orders/webhook/` on the `checkout.session.completed` event, while other events returned 200 |
-| **Cause** | An unhandled exception inside the order-creation block was crashing the webhook view before a response could be returned. The exception intermittently surfaced when the email-sending code also encountered an error, and neither was wrapped safely |
-| **Fix** | Separated the order creation and email sending into distinct `try/except` blocks. Email failure is now completely isolated — it can never crash the webhook or prevent the order from being created. The outer block logs the error and returns `500` only if the order itself cannot be created |
-
----
-
-#### 6. Order confirmation email "not arriving"
-
-| | |
-|---|---|
-| **Symptom** | After a successful test purchase, no confirmation email arrived in the inbox |
-| **Cause** | In development, Django was correctly using the `console.EmailBackend`, which **prints emails to the terminal** rather than sending them to a real inbox. This was mistaken for the feature not working |
-| **Fix** | Confirmed expected behaviour — the email output was visible in the Django `runserver` terminal. Documented the `DEBUG`-controlled backend switch: `console.EmailBackend` in development, SMTP in production |
-
----
-
-#### 7. Gift a Pack section not appearing on the Packages page
-
-| | |
-|---|---|
-| **Symptom** | The Gift a Pack form was invisible even for logged-in users who owned a pack |
-| **Cause** | The template condition was `{% if user_owned_packages %}`, but the `package_list` view was not correctly computing or passing `user_owned_packages` in all cases |
-| **Fix** | Changed the template condition to `{% if user.is_authenticated %}` so the gift form is shown to any logged-in user — which is the correct behaviour, since gifting doesn't require the sender to already own the pack they're gifting |
-
----
-
-#### 8. Coming Soon Roast Pack card not displaying in the pack grid
-
-| | |
-|---|---|
-| **Symptom** | The Coming Soon card was either invisible or floating outside the grid with no border styling |
-| **Cause** | The HTML for the Coming Soon card was placed **outside** the closing `</div>` of `.pack-grid`, so it was not part of the CSS grid layout. It also lacked the `.pack-coming-soon` CSS class and the required styles |
-| **Fix** | Moved the Coming Soon card inside `.pack-grid` (before the closing `</div>`), added the correct `.pack-coming-soon` class, and added CSS for the dashed border, greyed-out opacity (`0.45`), `grayscale(0.5)` filter and `cursor: not-allowed` to clearly signal it is not yet purchasable |
-
----
-
-#### 9. Django messages rendering twice on some pages
-
-| | |
-|---|---|
-| **Symptom** | Notifications appeared as both a Bootstrap alert banner at the top of the page **and** as an animated toast in the bottom-right corner simultaneously |
-| **Cause** | `base.html` contained two separate message-rendering blocks: the original Bootstrap `alert-dismissible` loop (from the initial project setup) and the new custom toast block added later |
-| **Fix** | Removed the old Bootstrap alert block entirely, leaving only the custom toast system. All Django `messages` framework output now routes exclusively through the toast notification system |
-
----
-
-#### 10. Both archetype carousels stopped rendering entirely
-
-| | |
-|---|---|
-| **Symptom** | After adding the premium diss lines section to `diss_form.html`, both the male and female archetype carousels became completely blank. No JavaScript errors were shown in the browser console |
-| **Cause** | The `querySelectorAll()` calls inside `enforceDissLineLimit()` used multi-line string literals (strings split across two lines using a line break inside the quotes). In JavaScript, regular quoted strings cannot contain literal newlines — this produced a silent `SyntaxError` that halted the **entire script** before the carousel `build()` functions could run |
-| **Fix** | Collapsed both selector strings onto a single line each: `document.querySelectorAll("#disslines-list input[name='selected_lines'], #premium-lines-list input[name='selected_lines']")` |
-
----
-
-#### 11. Premium diss categories never appeared in the diss builder
-
-| | |
-|---|---|
-| **Symptom** | Users who had purchased a pack with premium category access (e.g. LinkedIn Endorsement) never saw Step 4 — the premium diss lines section — even after buying a pack and returning to the diss builder |
-| **Cause** | The `is_premium` flag was missing from the diss line objects in the JSON payload built by `_archetype_json`. The JavaScript split `const premiumLines = lines.filter(l => l.is_premium)` therefore always returned an empty array, so Step 4 was never revealed |
-| **Fix** | Added `"is_premium": not (line.category.is_free if line.category else True)` to each diss line dictionary in `_archetype_json`, deriving the flag from the line's `RoastCategory.is_free` field |
-
----
-
-#### 12. Pack level returning `0` even for users who had purchased a pack
-
-| | |
-|---|---|
-| **Symptom** | After purchasing the Diss Pack, `_get_user_pack_level()` still returned `0`, meaning no premium categories were unlocked |
-| **Cause** | The `_get_user_pack_level()` helper reads `package.display_order` to determine tier — `0 = free, 1 = Diss Pack, 2 = Burn Pack`. The packages in the Django admin had `display_order = 0` for both packs (the default value was never changed), so the function always returned `0` regardless of what was purchased |
-| **Fix** | Updated the Package records in Django admin: Diss Pack → `display_order = 1`, Burn Pack → `display_order = 2`. Premium categories immediately became accessible after the fix |
-
----
-
-#### 13. Diss Detail page listed the Premium diss category above standard diss lines
-
-| | |
-|---|---|
-| **Symptom** | When viewing a saved diss, a LinkedIn Endorsement line appeared at the top of the burn list, above the standard Diss Lines — the reverse of the intended order |
-| **Cause** | `diss.selected_lines.all()` used the model's default ordering. In SQLite, `NULL` values sort **before** non-null values, so premium lines (which have `roast_style = NULL`) sorted to the top |
-| **Fix** | The `diss_detail` view now passes an explicitly ordered queryset: `diss.selected_lines.select_related("category").order_by("-category__is_free", "display_order")` — this puts free (standard) lines first, premium lines last, and respects `display_order` within each group |
-
----
-
-#### 14. `ACCOUNT_EMAIL_VERIFICATION = 'mandatory'` blocked registration in development
-
-| | |
-|---|---|
-| **Symptom** | New user registrations appeared to succeed but users were then unable to log in, as allauth required email verification before granting access |
-| **Cause** | `ACCOUNT_EMAIL_VERIFICATION` was set to `'mandatory'` in settings. In development, Django uses the console email backend — so the verification email was printed to the terminal, not delivered to the user's inbox, making it impossible to complete verification through normal browser flow |
-| **Fix** | Changed to `ACCOUNT_EMAIL_VERIFICATION = 'none'` — appropriate for assessment purposes and straightforward for the assessor to test. Email verification can be re-enabled for a production launch |
-
----
-
-#### 15. `hero-cta-main` button on homepage had no visible styling
-
-| | |
-|---|---|
-| **Symptom** | The centre "Build a Diss" / "Get a Free Diss" button on the homepage appeared as plain underlined text rather than a styled button |
-| **Cause** | The `.hero-cta-main` CSS was defined in the `{% block extra_css %}` of the How It Works template — a completely separate page. The homepage (`index.html`) had no `{% block extra_css %}` block at all, so the styles were never loaded for that page |
-| **Fix** | Added a `{% block extra_css %}` block to `index.html` containing the `.hero-cta-main` and `.hero-buttons` CSS. Long-term, both classes should be moved to the global `static/css/style.css` so they're available site-wide without duplication |
-
----
-
-#### 16. Edit Diss form did not restore the previously selected roast style
-
-| | |
-|---|---|
-| **Symptom** | Opening "Edit Diss" on a saved diss correctly highlighted the saved archetype in the carousel, but the roast style avatar grid showed no selection — the user had to re-select their roast style before they could save |
-| **Cause** | The `INIT_ROAST_STYLE_ID` restoration logic used `styleSelect.dispatchEvent(new Event("change"))`, but `styleSelect` was a hidden input — not the avatar grid card. The avatar card click handler (which sets the visual selected state) was never triggered |
-| **Fix** | Updated the init block to also find and `.click()` the matching style card in the avatar grid after a short `setTimeout`, so the visual selection state is restored alongside the hidden input value |
-
----
-
-#### 17. Procfile and runtime.txt missing from project root
-
-| | |
-|---|---|
-| **Symptom** | Not a runtime error, but a pre-deployment gap — Heroku requires a `Procfile` to know how to start the application, and `runtime.txt` to pin the Python version |
-| **Cause** | Neither file had been created during development (the project was run locally via `python manage.py runserver`) |
-| **Fix** | Created `Procfile` containing `web: gunicorn dissagram.wsgi` and `runtime.txt` containing `python-3.12.3` in the project root |
-
----
-
-### Known Issues
-
-| Issue | Status |
-|---|---|
-| Automated tests only cover `disses` and `accounts` apps — `orders`, `roasts`, `dissers` and `contact` rely on manual testing | Documented gap; comprehensive manual test coverage provided in the interim. Full automated test suite is planned post-submission |
-| Comments, flame ratings and the leaderboard are not yet implemented | Deliberately deferred to post-submission V2 — the `includes_leaderboard` flag already exists on the `Package` model as a foundation. See [Future Features](#future-features) |
-| Deploy Burn count limits are not yet enforced at the model level | The `deploy_burn_count` field exists on `Package` and is displayed on the packages page, with a coming soon notification, but the enforcement logic is a planned V2 addition |
-| Gift a Pack currently requires the recipient to have an existing Dissagram account | A future enhancement will accept an email address and send an invitation to non-registered recipients |
 
 | Issue | Cause | Fix |
 |---|---|---|
-| Both archetype carousels stopped rendering entirely | A multi-line JavaScript string literal inside `querySelectorAll()` produced a silent `SyntaxError`, halting the whole script before carousel build functions ran | Collapsed the selector strings onto single lines |
-| Premium diss categories never appeared in the builder | The `is_premium` flag was missing from the JSON payload built in `_archetype_json`, so the front-end split between standard/premium lines always returned an empty premium list | Added `is_premium` to each diss line dict, derived from the line's `RoastCategory.is_free` |
-| Orders page showed "No orders yet" immediately after a successful test payment | The Stripe CLI webhook listener was not running/authenticated during the test purchase, so `checkout.session.completed` never reached the Django webhook endpoint and no `Order` was created | Re-authenticated the Stripe CLI (`stripe login`) and confirmed the listener was running before testing |
-| Webhook returned `500` on `checkout.session.completed` | An unhandled exception inside the order-creation block (intermittently surfaced when email sending also failed) crashed before a response was returned | Wrapped order creation and email sending in clearly separated `try/except` blocks, with email failure isolated so it can never break order creation |
-| Order confirmation email "not arriving" | Emails were correctly being sent via Django's **console** email backend in development, which prints to the terminal rather than an inbox — this was mistaken for the feature not working | Confirmed expected behaviour; documented console vs SMTP backend switch via `DEBUG` |
-| Diss Detail page listed the Premium diss category above standard diss lines | `selected_lines.all()` used the model's default ordering, and `NULL` (premium lines have no `roast_style`) sorts before populated values in SQLite | View now explicitly orders lines by `-category__is_free` before display order |
-| `requirements.txt` saved as UTF-16 | Generated via Windows PowerShell's `>` redirect, which defaults to UTF-16LE with BOM rather than UTF-8 | Re-saved as UTF-8; `pip install -r requirements.txt` confirmed working |
+| Stripe CLI not found in Git Bash | Git Bash did not inherit the Windows system PATH where Stripe CLI was installed | Switched to PowerShell and refreshed the PATH before running Stripe commands |
+| Stripe CLI authentication expired | The Stripe CLI pairing code/session had expired | Re-ran `stripe login` and confirmed the webhook listener should run in a separate terminal |
+| `requirements.txt` broke Heroku deployment | The file had been generated in UTF-16LE via PowerShell redirection | Re-saved as UTF-8 and documented safer PowerShell export commands |
+| Orders page showed no orders after payment | The Stripe webhook listener was not running/authenticated, so `checkout.session.completed` never reached Django | Re-authenticated Stripe CLI and confirmed the three-terminal workflow: Django server, Stripe listener, browser test |
+| Stripe webhook returned `500` on `checkout.session.completed` | Order creation and email sending errors were not safely separated | Split order creation and email sending into separate `try/except` blocks so email failure cannot block order creation |
+| Order confirmation email appeared not to arrive | Development email uses Django's console backend, which prints to terminal instead of sending to an inbox | Confirmed expected behaviour and documented the `DEBUG`-controlled console/SMTP backend switch |
+| Gift a Pack form did not appear | The template depended on `user_owned_packages`, which was not always passed correctly | Changed the display condition to `user.is_authenticated` |
+| Coming Soon Roast Pack card displayed incorrectly | The card sat outside `.pack-grid` and lacked the correct class/styles | Moved it inside the grid and added the coming-soon styling |
+| Django messages rendered twice | `base.html` contained both the old Bootstrap alert loop and the new toast loop | Removed the Bootstrap alert loop so all messages use the custom toast system |
+| Archetype carousels stopped rendering | A multi-line JavaScript selector string caused a silent `SyntaxError` | Collapsed the selector strings onto single lines |
+| Premium diss categories never appeared | The `is_premium` flag was missing from the JSON payload | Added `is_premium`, derived from `RoastCategory.is_free`, to each diss line object |
+| Pack level stayed at `0` after purchase | Package `display_order` values were still set to the default value in admin | Updated pack display orders so Diss Pack and Burn Pack return the correct access level |
+| Premium lines appeared above standard lines | SQLite sorted `NULL` roast styles before populated values | Explicitly ordered selected lines by `-category__is_free` and `display_order` |
+| Mandatory allauth email verification blocked registration | Development emails were printed to console, making browser verification awkward for assessment | Set `ACCOUNT_EMAIL_VERIFICATION = 'none'` for the submitted assessment build |
+| Homepage CTA button was unstyled | CTA CSS existed only inside the How It Works template | Added the required CTA CSS to the homepage template |
+| Edit Diss did not restore the selected roast style visually | The hidden input value restored, but the visible avatar card state did not | Triggered the matching style card click during edit-form initialisation |
+| Procfile and runtime.txt were missing | Heroku needed explicit startup and Python runtime files | Added `Procfile` and `runtime.txt` to the project root |
+
+<br>
 
 ### Known Issues
 
 | Issue | Status |
 |---|---|
-| `orders`, `roasts`, `dissers` and `contact` apps currently rely on manual rather than automated testing | Documented as a future improvement; manual test coverage is comprehensive for these areas in the interim |
-| Comments, ratings and the leaderboard are not yet implemented | Deliberately deferred to a post-submission V2 — see [Future Features](#future-features) |
+| `roasts`, `dissers` and `contact` currently rely on manual rather than automated tests | Documented gap; full automated coverage is planned post-submission |
+| Comments, flame ratings and leaderboards are not yet implemented | Deliberately deferred to Dissagram v2.0 — see [Future Features](#future-features) |
+| Deploy Burn count limits are not yet enforced at model level | The `deploy_burn_count` field exists and is displayed, but enforcement is planned for v2.0 |
+| Gift a Pack currently requires the recipient to have an existing Dissagram account | Future enhancement will allow gifting by email and invite non-registered recipients |
 
 <br>
 <br>
