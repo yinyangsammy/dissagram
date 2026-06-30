@@ -254,11 +254,15 @@ A dedicated explainer page breaks down the diss-building process step by step fo
 
 Full user authentication is handled by [django-allauth](https://django-allauth.readthedocs.io/), with custom-styled login, signup and logout templates matching Dissagram's dark, fire-themed aesthetic rather than allauth's plain defaults.
 
-<h3 align="center"><img src="static/readme/sign-in.png"></h3>
+<h3 align="center"><img src="static/readme/login.png"></h3>
 
 ### Get Your Pack — Freemium Store
 
 A pack store offering the Diss Pack (starter) and Roast Pack (best value), each unlocking a defined number of archetypes, roast styles, premium diss categories and Deploy Roasts. A greyed-out "Coming Soon" Roast Pack subscription card previews a planned future tier without being purchasable.
+
+### Gift a Pack
+
+At the bottom of the page, users who own at least one pack can gift any pack to another registered Dissagram user by username.
 
 <h3 align="center"><img src="static/readme/packages.png"></h3>
 
@@ -280,13 +284,7 @@ A clear "Pack Unlocked" confirmation page greets the user immediately after a su
 
 A personal dashboard listing every order the user has placed, with colour-coded status pills, the ability to cancel a pending order, reinstate a cancelled order, or permanently delete failed/cancelled orders. Completed orders can never be deleted, preserving an accurate financial record.
 
-<h3 align="center"><img src="static/readme/order-history.png"></h3>
-
-### Gift a Pack
-
-Users who own at least one pack can gift any pack to another registered Dissagram user by username.
-
-<h3 align="center"><img src="static/readme/gift-a-pack.png"></h3>
+<h3 align="center"><img src="static/readme/order-orders.png"></h3>
 
 ### Build Your Diss — 5-Step Builder
 
@@ -316,13 +314,13 @@ A personal dashboard listing every diss the user has created, with inline View /
 
 A single click publishes a diss publicly as a "Roast" against its target archetype. The first Roast deployed against any archetype automatically creates a public Roast page for that archetype; subsequent Roasts simply join the existing pile-on. Roasts can be recalled back to draft at any time.
 
-<h3 align="center"><img src="static/readme/deploy-burn.png"></h3>
+<h3 align="center"><img src="static/readme/unleash_roast.png"></h3>
 
 ### Roast Feed
 
 A public, browsable feed of every archetype with at least one deployed Roast, with a stacked-card visual effect and filters by archetype and roast style.
 
-<h3 align="center"><img src="static/readme/roast-feed.png"></h3>
+<h3 align="center"><img src="static/readme/roast-feed-page.png"></h3>
 
 ### Roast Detail — Public Pile-On Page
 
@@ -1484,7 +1482,7 @@ To clone this repository:
 
 Dissagram has been created as part of the developer's portfolio, and will continue being developed with new features added in the near future.
 
-<h4 align="center">yinyangsammy 2026</h4>
+<h4 align="center">©️ yinyangsammy 2026</h4>
 
 <br>
 <br>
