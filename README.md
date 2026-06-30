@@ -1,6 +1,6 @@
 <h1 align="center" bold>🔥 Dissagram</h1>
 
-<h3 align="center"><img src="static/readme/dissagram-mockup.jpg"></h3>
+<h3 align="center"><img src="static/readme/mockup.jpg"></h3>
 
 <br>
 
