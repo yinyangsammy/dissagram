@@ -7,6 +7,36 @@
 Dissagram 404 page — this page has been roasted beyond recognition.
 {% endblock %}
 
+<style>
+.btn-fire-diss {
+  background: linear-gradient(135deg, rgb(255, 107, 26), rgb(212, 160, 23));
+}
+
+  .btn-fire-diss:hover {
+            background: rgb(255, 107, 26);
+            color: #fff;
+  }
+
+  
+element {
+}
+.btn-get-pack {
+  background: transparent;
+  color: #ffac2b;
+  
+  border: 1.5px solid #ffac2b;
+  text-decoration: none;
+}
+
+.btn-get-pack:hover {
+     border-color: #27ae60;
+    color: #27ae60;
+    text-decoration: none;
+}
+
+
+</style>
+
 {% block content %}
 <section class="container text-center py-5">
     <div style="max-width: 720px; margin: 0 auto;">
@@ -51,15 +81,15 @@ Dissagram 404 page — this page has been roasted beyond recognition.
 
         <div class="mt-4 d-flex justify-content-center gap-3 flex-wrap">
             <a href="{% url 'home:home' %}" class="btn btn-warning fw-bold">
-                🔥 Back Home
+                🎯 Back Home
             </a>
 
-            <a href="{% url 'orders:packages' %}" class="btn .btn-get-pack">
+            <a href="{% url 'orders:packages' %}" class="btn-get-pack">
                 🛒 Get Packs
             </a>
 
-            <a href="{% url 'disses:diss_create' %}" class="btn btn-outline-danger fw-bold">
-                💀 Build A Diss
+            <a href="{% url 'disses:diss_create' %}" class=".btn-fire-diss">
+                🔥 Build A Diss
             </a>
         </div>
 
