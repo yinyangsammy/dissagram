@@ -754,9 +754,10 @@ or for a specific app:
 ```bash
 python manage.py test disses
 python manage.py test accounts
+python manage.py test orders
 ```
 
-Stub `tests.py` files exist in `orders`, `roasts`, `dissers` and `contact` — these are flagged as a known gap; given the project's tight timeline, testing effort was prioritised on the freemium content-locking logic (`disses`) and the newest, most recently changed area (`accounts`), with the remaining apps covered comprehensively by the manual testing below.
+Stub `tests.py` files exist in `roasts`, `dissers` and `contact` — these are flagged as a known gap; given the project's tight timeline, testing effort was prioritised on the freemium content-locking logic (`disses`) and the newest, most recently changed area (`accounts`), with the remaining apps covered comprehensively by the manual testing below.
 
 <br>
 <br>
@@ -913,13 +914,13 @@ The [W3C Markup Validator](https://validator.w3.org/#validate_by_input) and [W3C
 
 <br>
 
--   ### Homepage
+-   ### Home
 
 <h2 align="right"><img src="static/readme/home-html.png"></h2>
 
 <br>
 
--   ### How It Works Page
+-   ### How It Works
 
 <h2 align="right"><img src="static/readme/how-html.png"></h2>
 
@@ -931,13 +932,13 @@ The [W3C Markup Validator](https://validator.w3.org/#validate_by_input) and [W3C
 
 <br>
 
--   ### Build a Diss
+-   ### Build Your Diss
 
 <h2 align="right"><img src="static/readme/form-html.png"></h2>
 
 <br>
 
--   ### How It Works Page
+-   ### My Disses
 
 <h2 align="right"><img src="static/readme/disses-html.png"></h2>
 
