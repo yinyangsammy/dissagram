@@ -7,35 +7,58 @@
 Dissagram 404 page — this page has been roasted beyond recognition.
 {% endblock %}
 
+{% block extra_css %}
 <style>
-.btn-fire-diss {
-  background: linear-gradient(135deg, rgb(255, 107, 26), rgb(212, 160, 23));
+.error-actions a {
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    letter-spacing: 1.5px;
+    padding: 12px 26px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
-  .btn-fire-diss:hover {
-            background: rgb(255, 107, 26);
-            color: #fff;
-  }
-
-  
-element {
+.btn-back-home {
+    background: #ffac2b;
+    color: #111;
+    border: 1.5px solid #ffac2b;
 }
+
+.btn-back-home:hover {
+    background: #ff6b1a;
+    border-color: #ff6b1a;
+    color: #fff;
+}
+
 .btn-get-pack {
-  background: transparent;
-  color: #ffac2b;
-  
-  border: 1.5px solid #ffac2b;
-  text-decoration: none;
+    background: transparent;
+    color: #ffac2b;
+    border: 1.5px solid #ffac2b;
 }
 
 .btn-get-pack:hover {
-     border-color: #27ae60;
+    border-color: #27ae60;
     color: #27ae60;
-    text-decoration: none;
 }
 
+.btn-fire-diss {
+    background: linear-gradient(135deg, rgb(255, 107, 26), rgb(212, 160, 23));
+    color: #111;
+    border: 1.5px solid rgb(255, 107, 26);
+}
 
+.btn-fire-diss:hover {
+    background: linear-gradient(135deg, #e8621a, #c0392b);
+    border-color: #c0392b;
+    color: #fff;
+}
 </style>
+{% endblock %}
 
 {% block content %}
 <section class="container text-center py-5">
@@ -79,8 +102,8 @@ element {
             It either moved, bottled it, or got verbally destroyed.
         </p>
 
-        <div class="mt-4 d-flex justify-content-center gap-3 flex-wrap">
-            <a href="{% url 'home:home' %}" class="btn btn-warning fw-bold">
+        <div class="error-actions mt-4 d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'home:home' %}" class="btn-back-home">
                 🎯 Back Home
             </a>
 
@@ -88,7 +111,7 @@ element {
                 🛒 Get Packs
             </a>
 
-            <a href="{% url 'disses:diss_create' %}" class=".btn-fire-diss">
+            <a href="{% url 'disses:diss_create' %}" class="btn-fire-diss">
                 🔥 Build A Diss
             </a>
         </div>
