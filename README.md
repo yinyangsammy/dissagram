@@ -260,6 +260,8 @@ Full user authentication is handled by [django-allauth](https://django-allauth.r
 
 A pack store offering the Diss Pack (starter) and Roast Pack (best value), each unlocking a defined number of archetypes, roast styles, premium diss categories and Deploy Roasts. A greyed-out "Coming Soon" Roast Pack subscription card previews a planned future tier without being purchasable.
 
+### &
+
 ### Gift a Pack
 
 At the bottom of the page, users who own at least one pack can gift any pack to another registered Dissagram user by username.
@@ -284,7 +286,7 @@ A clear "Pack Unlocked" confirmation page greets the user immediately after a su
 
 A personal dashboard listing every order the user has placed, with colour-coded status pills, the ability to cancel a pending order, reinstate a cancelled order, or permanently delete failed/cancelled orders. Completed orders can never be deleted, preserving an accurate financial record.
 
-<h3 align="center"><img src="static/readme/order-orders.png"></h3>
+<h3 align="center"><img src="static/readme/orders.png"></h3>
 
 ### Build Your Diss — 5-Step Builder
 
@@ -320,7 +322,7 @@ A single click publishes a diss publicly as a "Roast" against its target archety
 
 A public, browsable feed of every archetype with at least one deployed Roast, with a stacked-card visual effect and filters by archetype and roast style.
 
-<h3 align="center"><img src="static/readme/roast-feed-page.png"></h3>
+<h3 align="center"><img src="static/readme/roast-feed.png"></h3>
 
 ### Roast Detail — Public Pile-On Page
 
@@ -331,8 +333,6 @@ A dedicated public page per archetype, aggregating every Roast the community has
 ### Global Toast Notification System
 
 A custom-built toast notification system, hooked into Django's messages framework, replaces standard Bootstrap alerts site-wide. Toasts animate in, auto-dismiss after a few seconds, and are colour-coded by message type (success / error / info / warning) — used for payment confirmation, locked-content nudges, selection-limit warnings, order actions and form feedback.
-
-<h3 align="center"><img src="static/readme/toast-notifications.png"></h3>
 
 ### Arena Profile
 
@@ -1045,19 +1045,25 @@ Dissagram was tested across the following breakpoints using Chrome DevTools devi
 
 - ### iPhone
 
-<h3 align="center"><img src="static/readme/responsive-iphone.png"></h3>
+<h3 align="center"><img src="static/readme/iphone.png"></h3>
 
 - ### iPad
 
-<h3 align="center"><img src="static/readme/responsive-ipad.png"></h3>
+<h3 align="center"><img src="static/readme/ipad.png"></h3>
 
-- ### Laptop (1366×768)
+### Nest Hub Max 
+<h2 align="center"><img src="static/readme/nest-hub-max.png"></h2>
 
-<h3 align="center"><img src="static/readme/responsive-laptop.png"></h3>
+-   I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 2160) screens to verify the web pages would work across monitor sizes. 
 
-- ### FHD (1920×1080)
+### FHD (1920x1080) 
+<h2 align="center"><img src="static/readme/full-hd.png"></h2>
 
-<h3 align="center"><img src="static/readme/responsive-fhd.png"></h3>
+### 2k (2560x1440)
+<h2 align="center"><img src="static/readme/2k.png"></h2>
+
+### 4K (3840 x 2160)
+<h2 align="center"><img src="static/readme/4k.png"></h2>
 
 <br>
 <br>
