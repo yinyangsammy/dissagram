@@ -946,7 +946,7 @@ The [W3C Markup Validator](https://validator.w3.org/#validate_by_input) and [W3C
 
 -   ### Roast Feed
 
-<h2 align="right"><img src="static/readme/feed.png"></h2>
+<h2 align="right"><img src="static/readme/feed-html.png"></h2>
 
 <br>
 
@@ -976,7 +976,36 @@ The diss builder's carousel and step-reveal logic (the most substantial JavaScri
 
 All Python code was checked for [PEP8](https://peps.python.org/pep-0008/) compliance using the [CI Python Linter](https://pep8ci.herokuapp.com/).
 
-<h2 align="center"><img src="static/readme/pep8-valid.png"></h2>
+-   ### Disses Models
+
+<h2 align="right"><img src="static/readme/disses-models.png"></h2>
+
+<br>
+
+-   ### Roasts Models
+
+<h2 align="right"><img src="static/readme/roasts-models.png"></h2>
+
+<br>
+
+-   ### Roasts Views
+
+<h2 align="right"><img src="static/readme/roasts-views.png"></h2>
+
+<br>
+
+-   ### Orders Models
+
+<h2 align="right"><img src="static/readme/orders-models.png"></h2>
+
+<br>
+
+-   ### Orders Views
+
+<h2 align="right"><img src="static/readme/orders-views.png"></h2>
+
+<br>
+
 
 <br>
 <br>
@@ -1211,7 +1240,7 @@ The following bugs were identified and fixed during development:
 |---|---|
 | Automated tests only cover `disses` and `accounts` apps — `orders`, `roasts`, `dissers` and `contact` rely on manual testing | Documented gap; comprehensive manual test coverage provided in the interim. Full automated test suite is planned post-submission |
 | Comments, flame ratings and the leaderboard are not yet implemented | Deliberately deferred to post-submission V2 — the `includes_leaderboard` flag already exists on the `Package` model as a foundation. See [Future Features](#future-features) |
-| Deploy Burn count limits are not yet enforced at the model level | The `deploy_burn_count` field exists on `Package` and is displayed on the packages page, but the enforcement logic is a planned V2 addition |
+| Deploy Burn count limits are not yet enforced at the model level | The `deploy_burn_count` field exists on `Package` and is displayed on the packages page, with a coming soon notification, but the enforcement logic is a planned V2 addition |
 | Gift a Pack currently requires the recipient to have an existing Dissagram account | A future enhancement will accept an email address and send an invitation to non-registered recipients |
 
 | Issue | Cause | Fix |
