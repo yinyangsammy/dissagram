@@ -178,7 +178,7 @@ The value proposition is threefold:
 
     Each Roast Style (Shakespearean Savage, Battle Rapper, Haughty Headmistress, etc.) is illustrated as a circular persona avatar, used throughout the diss builder and on every published diss card.
 
-    <h3 align="center"><img src="static/readme/roast-style-avatars.png"></h3>
+    <h3 align="center"><img src="static/readme/roast-avatars.png"></h3>
 
 -   ## Icons
 
@@ -191,6 +191,8 @@ The value proposition is threefold:
     ### Emoji as UI Language
 
     Emoji are used deliberately as a lightweight visual language across the site — 🔥 for fire/burns, 🔒 for locked content, 🎁 for gifting, ✅/❌ for toast states — keeping the tone playful while remaining instantly readable.
+
+    <h3 align="center"><img src="static/readme/emojis.png"></h3>
 
 <br>
 <br>
@@ -1034,7 +1036,7 @@ All Python code was checked for [PEP8](https://peps.python.org/pep-0008/) compli
 
 <h3 align="center"><img src="static/readme/dissagram-feed.png"></h3>
 
--   The Roast Feed will be improved in dissagram v2.0 by compressing all backend images uploaded through the admin panel. Owing to time constraints, this was not possible for the current iteration.
+-   The Roast Feed page performance will be improved in dissagram v2.0 by compressing all backend images uploaded through the admin panel. Owing to time constraints, this was not possible for the current iteration.
 
 <br>
 <br>
