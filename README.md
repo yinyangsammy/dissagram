@@ -4,7 +4,7 @@
 
 <br>
 
-Dissagram is a satirical “Diss card” game where users assemble premium, professionally crafted insults against a rotating cast of instantly recognisable archetypes — from the Fake Guru and Gym Narcissist to the Player, Pick-Me Bunny and Super Karen.
+Dissagram is a satirical “Diss card” game where users assemble premium, professionally crafted insults against a rotating cast of instantly recognisable archetypes — from Fake Guru and Gym Narcissist to the Player, Pick-Me Bunny and Super Karen.
 
 Users choose an archetype card, select the voice their Diss will be delivered in, pick their favourite roast lines, and add Premium Diss Categories to round off the burn.
 
@@ -123,7 +123,8 @@ The value proposition is threefold:
 - :x: *to see a leaderboard of the most-roasted archetypes and highest-rated burns*.
 - :x: *to subscribe to a monthly "Roast Pack" for unlimited access and exclusive monthly drops*.
 - :x: *to gift a pack to someone by email, even if they don't yet have an account*.
-- :x: *to reply to a Roast with a "Riposte" of my own, building a chain*.
+- :x: *to deploy the Diss / Roast as a Burn to somebody in need of a takedown*.
+- :x: *to reply to a Burn with a "Riposte" of my own, building a chain*.
 - :x: *to access a Battle Arena where users can go head-to-head*.
 - :x: *to physically purchase a Dissagram board game*.
 
