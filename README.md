@@ -374,7 +374,7 @@ Dissagram is fully responsive across mobile, tablet and desktop screen sizes, wi
 
 -   ## How It Works
 
-<h3 align="center"><img src="static/readme/wireframe-how-best.jpg"></h3>
+<h3 align="center"><img src="static/readme/wireframe-how-best.png"></h3>
 
 -   ## Build Your Diss
 
