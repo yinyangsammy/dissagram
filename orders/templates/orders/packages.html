@@ -746,43 +746,41 @@
 
     </div><!-- /pack-grid -->
 
-    <!-- GIFT A PACK -->
-    {% if user.is_authenticated %}
-    <div class="gift-section" id="gift-pack-section">
-        <h3>🎁 GIFT A PACK</h3>
-        <p>Buy a pack for mates who need to have a word.</p>
+   <!-- GIFT A PACK -->
+{% if user.is_authenticated %}
+<div class="gift-section" id="gift-pack-section">
+    <h3>🎁 GIFT A PACK</h3>
+    <p>Buy a pack for mates who need to have a word.</p>
 
-        <form method="POST" action="{% url 'orders:gift' %}" class="gift-form">
-            {% csrf_token %}
+    <form method="POST" action="{% url 'orders:gift' %}" class="gift-form">
+        {% csrf_token %}
 
-            <select title="pack-select"
-                    name="package_id"
-                    id="gift-package-select"
-                    required>
-                <option value="">— Choose a pack —</option>
-                {% for pkg in packages %}
-                <option value="">— Choose a pack —</option>
-                {% for pkg in packages %}
-                <option value="{{ pkg.pk }}">{{ pkg.name }} — £{{ pkg.price }}</option>
-                {% endfor %}
-            </select>
+        <select title="pack-select"
+                name="package_id"
+                id="gift-package-select"
+                required>
+            <option value="">— Choose a pack —</option>
+            {% for pkg in packages %}
+            <option value="{{ pkg.pk }}">{{ pkg.name }} — £{{ pkg.price }}</option>
+            {% endfor %}
+        </select>
 
-            <input type="text"
-                    id="gift-recipient-username"
-                    name="recipient_username"
-                    placeholder="Their username"
-                    maxlength="150"
-                    required>
+        <input type="text"
+               id="gift-recipient-username"
+               name="recipient_username"
+               placeholder="Their username"
+               maxlength="150"
+               required>
 
-            <input type="text"
-                   name="gift_message"
-                   placeholder="Message (optional)"
-                   maxlength="200">
+        <input type="text"
+               name="gift_message"
+               placeholder="Message (optional)"
+               maxlength="200">
 
-            <button type="submit" class="gift-btn">🎁 SEND PACK</button>
-        </form>
-    </div>
-    {% endif %}
+        <button type="submit" class="gift-btn">🎁 SEND PACK</button>
+    </form>
+</div>
+{% endif %}
 
     <!-- VIEW ORDERS LINK -->
     {% if user.is_authenticated %}
