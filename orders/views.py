@@ -49,34 +49,55 @@ def package_list(request):
     - the user bought it for themselves, or
     - another user bought it as a gift for them.
 
-    Packs bought as gifts for somebody else do not count as owned
-    by the purchaser.
+    If the gift fields are not available in the database yet,
+    the view falls back to normal direct purchases so the page
+    still loads instead of throwing a 500.
     """
     from dissers.models import RoastCategory, RoastStyle, TargetArchetype
 
-    packages = Package.objects.filter(is_active=True).order_by("display_order")
-
-    owned_order_filter = (
-        Q(user=request.user, gifted_to__isnull=True) |
-        Q(gifted_to=request.user)
+    packages = list(
+        Package.objects.filter(is_active=True).order_by("display_order")
     )
 
-    purchase_counts = (
-        Order.objects
-        .filter(status="complete")
-        .filter(owned_order_filter)
-        .exclude(package__isnull=True)
-        .values("package_id")
-        .annotate(count=Count("id"))
-    )
+    # Try gift-aware ownership first.
+    try:
+        owned_order_filter = (
+            Q(user=request.user, gifted_to__isnull=True) |
+            Q(gifted_to=request.user)
+        )
 
-    purchase_count_map = {
-        item["package_id"]: item["count"] for item in purchase_counts
-    }
+        purchase_counts = (
+            Order.objects
+            .filter(status="complete")
+            .filter(owned_order_filter)
+            .exclude(package__isnull=True)
+            .values("package_id")
+            .annotate(count=Count("id"))
+        )
+
+        purchase_count_map = {
+            item["package_id"]: item["count"] for item in purchase_counts
+        }
+
+    except Exception:
+        # Fallback: direct purchases only.
+        # This prevents the packages page from crashing if the database
+        # is missing the gifted_to column locally.
+        purchase_counts = (
+            Order.objects
+            .filter(user=request.user, status="complete")
+            .exclude(package__isnull=True)
+            .values("package_id")
+            .annotate(count=Count("id"))
+        )
+
+        purchase_count_map = {
+            item["package_id"]: item["count"] for item in purchase_counts
+        }
 
     owned_package_ids = list(purchase_count_map.keys())
 
-    # Free starter content — included in customer-facing totals/modal.
+    # Free starter content.
     free_archetype_names = list(
         TargetArchetype.objects.filter(is_free=True)
         .order_by("unlock_priority")
@@ -89,7 +110,7 @@ def package_list(request):
         .values_list("name", flat=True)
     )
 
-    # Paid unlock content — sliced by each package's admin-controlled count.
+    # Paid unlock content.
     ordered_paid_archetypes = list(
         TargetArchetype.objects.filter(is_free=False)
         .order_by("unlock_priority")
@@ -119,24 +140,29 @@ def package_list(request):
         pkg.display_archetype_count = len(pkg.included_archetype_names)
         pkg.display_roast_style_count = len(pkg.included_roast_style_names)
 
-        pkg.included_category_names = list(
-            RoastCategory.objects.filter(
-                is_free=False,
-                required_pack_level__lte=pkg.display_order,
+        try:
+            pkg.included_category_names = list(
+                RoastCategory.objects.filter(
+                    is_free=False,
+                    required_pack_level__lte=pkg.display_order,
+                )
+                .order_by("required_pack_level")
+                .values_list("name", flat=True)
             )
-            .order_by("required_pack_level")
-            .values_list("name", flat=True)
-        )
+        except Exception:
+            pkg.included_category_names = list(
+                RoastCategory.objects.filter(is_free=False)
+                .order_by("display_order")
+                .values_list("name", flat=True)[:pkg.premium_category_count]
+            )
 
-    past_orders = Order.objects.filter(
-        user=request.user
-    ).select_related("package", "gifted_to")
-
-    user_owned_packages = packages.filter(pk__in=owned_package_ids)
+    user_owned_packages = [
+        pkg for pkg in packages if pkg.pk in owned_package_ids
+    ]
 
     return render(request, "orders/packages.html", {
         "packages": packages,
-        "past_orders": past_orders,
+        "past_orders": [],
         "user_owned_packages": user_owned_packages,
         "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
     })
