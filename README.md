@@ -303,7 +303,7 @@ The centrepiece of the platform. A progressive, 5-step diss builder:
 
 ### Diss Detail — Trading Card View
 
-Each saved diss is rendered as a trading card: the archetype's full illustrated artwork, a roast-style "speech bubble" badge, traits and weaknesses, the selected burn lines (standard lines before premium), and an optional personal note.
+Each saved Diss is rendered as a collectible trading card: the archetype’s full illustrated artwork takes centre stage, featuring a satirical caricature surrounded by comedic Easter eggs. Beneath the card, users can view the archetype’s pre-loaded traits and weaknesses, followed by their selected diss lines — with standard lines displayed before premium lines — and an optional personal note for adding a final custom burn.
 
 <h3 align="center"><img src="static/readme/diss-detail.png"></h3>
 
