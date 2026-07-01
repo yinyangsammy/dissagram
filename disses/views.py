@@ -1,31 +1,58 @@
 import json
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+
 from dissers.models import RoastStyle, TargetArchetype
+
 from .forms import DissForm
-from .models import Diss, DissLine
+from .models import Diss
 
 
 # ═══════════════════════════════════════════════════════
 # HELPERS — Freemium lock logic
 # ═══════════════════════════════════════════════════════
+def _get_completed_access_orders(user):
+    """
+    Returns completed orders that should unlock content for this user.
+
+    Includes:
+    - packs the user bought for themselves
+    - packs gifted to the user by somebody else
+
+    Excludes:
+    - packs the user bought as a gift for another account
+    """
+    from orders.models import Order
+
+    if not user.is_authenticated:
+        return Order.objects.none()
+
+    return (
+        Order.objects
+        .filter(status="complete")
+        .filter(
+            Q(user=user, gifted_to__isnull=True) |
+            Q(gifted_to=user)
+        )
+        .select_related("package")
+    )
+
 
 def _get_user_unlocked_counts(user):
     """
     Returns the maximum archetype + roast_style counts
     the user has unlocked via completed orders.
-    Uses the highest pack purchased (not additive).
-    """
-    from orders.models import Order
 
+    Includes packs bought directly by the user and packs gifted to them.
+    Uses the highest pack level owned, not additive stacking.
+    """
     if not user.is_authenticated:
         return 0, 0
 
-    completed_orders = Order.objects.filter(
-        user=user,
-        status="complete"
-    ).select_related("package")
+    completed_orders = _get_completed_access_orders(user)
 
     max_archetypes = 0
     max_roast_styles = 0
@@ -48,20 +75,18 @@ def _get_user_pack_level(user):
     """
     Returns the highest pack level (display_order) the user owns.
     0 = free tier, 1 = Diss Pack, 2 = Burn Pack.
+
+    Includes packs bought directly by the user and packs gifted to them.
     Used to gate premium diss categories.
     """
-    from orders.models import Order
-
     if not user.is_authenticated:
         return 0
 
-    completed = Order.objects.filter(
-        user=user,
-        status="complete"
-    ).select_related("package")
+    completed_orders = _get_completed_access_orders(user)
 
     level = 0
-    for order in completed:
+
+    for order in completed_orders:
         if order.package:
             level = max(level, order.package.display_order)
 
@@ -411,22 +436,18 @@ def diss_delete(request, pk):
 def _get_max_line_selections(user):
     """
     Returns max disslines user can select based on pack owned.
-    Tiers: Free & Diss Pack = 2, Burn Pack = 3, Roast Pack = 4
-    (set per-package via Package.max_line_selections in admin —
-    this function just provides the free-tier baseline of 2).
+
+    Includes packs bought directly by the user and packs gifted to them.
+    Free tier baseline is 2.
     """
-    from orders.models import Order
-
     if not user.is_authenticated:
-        return 2  # free tier default
+        return 2
 
-    completed = Order.objects.filter(
-        user=user,
-        status="complete"
-    ).select_related("package")
+    completed_orders = _get_completed_access_orders(user)
 
-    max_lines = 2  # free tier default
-    for order in completed:
+    max_lines = 2
+
+    for order in completed_orders:
         if order.package and order.package.max_line_selections:
             max_lines = max(max_lines, order.package.max_line_selections)
 
@@ -443,11 +464,6 @@ def deploy_burn(request, pk):
     """
     from roasts.models import Roast
     from django.utils.text import slugify
-
-    # DEBUG — remove after fix
-    import logging
-    logger = logging.getLogger(__name__)
-    logger.warning(f"deploy_burn called — method: {request.method}, pk: {pk}, POST: {request.POST}")
 
     diss = get_object_or_404(Diss, pk=pk, author=request.user)
 

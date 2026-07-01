@@ -100,14 +100,19 @@
     border-color: #e8621a;
     box-shadow: 0 8px 32px rgba(232,98,26,0.2);
 }
+.pack-card.featured:not(.owned) {
+    border-color: #e8621a;
+}
+
 .pack-card.owned {
     border-color: #27ae60;
+    box-shadow: 0 0 0 1px rgba(39, 174, 96, 0.25);
 }
+
 .pack-card.owned:hover {
     border-color: #2ecc71;
-    box-shadow: 0 8px 32px rgba(39,174,96,0.15);
+    box-shadow: 0 8px 32px rgba(39, 174, 96, 0.18);
 }
-.pack-card.featured { border-color: #e8621a; }
 
 /* ── BADGES ── */
 .pack-featured-badge {
@@ -216,12 +221,13 @@
     color: #fff;
     text-decoration: none;
 }
-.pack-cta.buy-again-btn {
+.pack-cta.gift-pack-btn {
     background: transparent;
     color: #27ae60;
     border: 1.5px solid #27ae60;
 }
-.pack-cta.buy-again-btn:hover {
+
+.pack-cta.gift-pack-btn:hover {
     background: #27ae60;
     color: #fff;
     opacity: 1;
@@ -579,11 +585,10 @@
 
             {% if package.already_owned %}
             <button type="button"
-                    class="pack-cta buy-again-btn"
-                    data-bs-toggle="modal"
-                    data-bs-target="#packModal{{ package.pk }}"
-                    aria-label="Buy {{ package.name }} again">
-               🔄 BUY AGAIN?
+                    class="pack-cta gift-pack-btn"
+                    data-gift-package-id="{{ package.pk }}"
+                    aria-label="Gift {{ package.name }}">
+            🎁 GIFT THIS PACK
             </button>
             {% else %}
             <button type="button"
@@ -743,14 +748,19 @@
 
     <!-- GIFT A PACK -->
     {% if user.is_authenticated %}
-    <div class="gift-section">
+    <div class="gift-section" id="gift-pack-section">
         <h3>🎁 GIFT A PACK</h3>
         <p>Buy a pack for mates who need to have a word.</p>
 
         <form method="POST" action="{% url 'orders:gift' %}" class="gift-form">
             {% csrf_token %}
 
-            <select name="package_id" required>
+            <select title="pack-select"
+                    name="package_id"
+                    id="gift-package-select"
+                    required>
+                <option value="">— Choose a pack —</option>
+                {% for pkg in packages %}
                 <option value="">— Choose a pack —</option>
                 {% for pkg in packages %}
                 <option value="{{ pkg.pk }}">{{ pkg.name }} — £{{ pkg.price }}</option>
@@ -758,10 +768,11 @@
             </select>
 
             <input type="text"
-                   name="recipient_username"
-                   placeholder="Their username"
-                   maxlength="150"
-                   required>
+                    id="gift-recipient-username"
+                    name="recipient_username"
+                    placeholder="Their username"
+                    maxlength="150"
+                    required>
 
             <input type="text"
                    name="gift_message"
@@ -822,6 +833,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cards.forEach(card => {
         card.addEventListener("click", () => selectCard(card));
+    });
+
+        /* ── Gift owned pack shortcut ── */
+    const giftButtons = document.querySelectorAll("[data-gift-package-id]");
+    const giftSection = document.getElementById("gift-pack-section");
+    const giftSelect = document.getElementById("gift-package-select");
+    const giftUsername = document.getElementById("gift-recipient-username");
+
+    giftButtons.forEach(button => {
+        button.addEventListener("click", (event) => {
+            event.stopPropagation();
+
+            if (giftSelect) {
+                giftSelect.value = button.dataset.giftPackageId;
+            }
+
+            if (giftSection) {
+                giftSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            }
+
+            if (giftUsername) {
+                setTimeout(() => giftUsername.focus(), 450);
+            }
+        });
     });
 
     /* ── Toast auto-dismiss ── */
