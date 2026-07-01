@@ -1238,6 +1238,12 @@ body.home-page .hero-tagline i {
         margin-right: auto;
         justify-content: center;
     }
+
+     body.home-page .hero-overlay {
+        background:
+            radial-gradient(circle at center, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.28)),
+            linear-gradient(rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.28));
+    }
 }
 
 
