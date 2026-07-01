@@ -66,15 +66,15 @@ Get started right here: ([Dissagram](https://dissagram-75687e7c9019.herokuapp.co
 
 # Purpose & Value
 
-Dissagram exists for a very specific, very human reason: sometimes you need to say something cutting about the Fake Guru charging £400 for a silence retreat, or the LinkedIn thought-leader who turns redundancy into a "growth chapter" — and you'd like it to sound *good* when you say it.
+Dissagram exists for a very specific, very human reason: sometimes the Fake Guru charging £400 for a silence retreat, the Gym Narcissist filming curls in a public walkway, or the LinkedIn thought-leader turning redundancy into a "growth chapter" deserves a beautifully crafted verbal warning.
 
-Rather than leaving users to compose their own insults (badly, in the heat of the moment), Dissagram hands them a curated arsenal: pre-written, professionally "savage" lines, organised by target archetype and delivery style, that can be assembled into a shareable diss card in under two minutes.
+Rather than leaving users to improvise insults in the emotional fog of mild-to-severe irritation, Dissagram gives them a curated roast arsenal: professionally written diss lines, illustrated archetype cards, distinctive delivery voices and premium comedy extras — all assembled into a shareable Diss in under two minutes.
 
 The value proposition is threefold:
 
-- **For the user** — a satisfying, funny, low-stakes creative outlet, with a freemium structure that lets them try the product for free before unlocking the full roster of archetypes, voices and premium categories.
-- **For the community** — a public Roast Feed where published Roasts pile up against each archetype, turning individual disses into a shared, crowd-sourced takedown.
-- **For the business model** — a one-off pack-purchase structure (rather than only subscription) keeps the barrier to entry low, with gifting built in to encourage organic, social growth.
+- **For the user** — a funny, satisfying, low-stakes creative outlet, with a freemium structure that lets them try the experience before unlocking the full roster of archetypes, roast styles and premium categories.
+- **For the community** — a public Roast Feed where individual Disses become a shared, crowd-sourced pile-on against instantly recognisable archetypes.
+- **For the business model** — one-off pack purchases keep the barrier to entry low, while gifting encourages organic growth and gives the product a built-in social loop.
 
 <br>
 <br>
@@ -135,7 +135,7 @@ The value proposition is threefold:
 
 -   ## Colour Scheme
 
-    -   Dissagram's palette is built around a near-black background with hot orange, ember-gold and crimson accents — designed to feel like a late-night roast battle: punchy, a little dangerous, but legible and confident rather than garish. Off-white text keeps body copy comfortable to read against the dark base.
+    -   Dissagram's palette is built around a near-black base with hot orange, ember-gold and crimson accents — a late-night roast-battle look: fiery, bold and just dangerous enough, while still staying clean and readable. Off-white body text keeps longer sections comfortable against the dark background.
 
     <h3 align="center"><img src="static/readme/palette.png"></h3>
 
@@ -145,19 +145,19 @@ The value proposition is threefold:
 
     1) **Display / Brand Font**
 
-         -   [Bangers](https://fonts.google.com/specimen/Bangers), a bold comic-style display font, is used for the logo, headings, buttons and badges — reinforcing the punchy, comic-book "roast" tone across the entire site.
+         -   [Bangers](https://fonts.google.com/specimen/Bangers), a bold comic-style display font, is used for the logo, headings, buttons and badges — giving Dissagram its loud, collectible-card energy and making the interface feel playful from the first click.
 
         <h3 align="center"><img src="static/readme/bangers.png"></h3>
 
     2) **Heading Accent Font**
 
-         -   [DM Serif Display](https://fonts.google.com/specimen/DM+Serif+Display) is used sparingly for selected editorial headings, lending a touch of mock-seriousness that plays against the comic tone.
+         -   [DM Serif Display](https://fonts.google.com/specimen/DM+Serif+Display) is used sparingly for selected editorial headings, adding a touch of mock-serious grandeur that contrasts with the site's deliberately ridiculous subject matter.
 
         <h3 align="center"><img src="static/readme/dmserifdisplay.jpg"></h3>
 
     3) **Body Font**
 
-         -   [Lato](https://fonts.google.com/specimen/Lato) is used for all body text, form labels, descriptions and navigation — a clean, highly-readable sans-serif that keeps long-form content (diss lines, traits, custom notes) comfortable to read.
+         -   [Lato](https://fonts.google.com/specimen/Lato) handles body copy, form labels, descriptions and navigation — keeping diss lines, traits, weaknesses and custom notes sharp, readable and easy to scan on every device.
 
         <h3 align="center"><img src="static/readme/lato.png"></h3>
 
@@ -165,19 +165,19 @@ The value proposition is threefold:
 
     ### Homepage Hero
 
-    The homepage features a bold, fire-themed hero image introducing the Dissagram concept, leading straight into a call to action.
+    The homepage opens with a bold, fire-themed hero image that immediately sets the tone: playful, confrontational and ready to roast. The visual leads users straight into the main call to action.
 
     <h3 align="center"><img src="static/readme/dissagram-home-hero.png"></h3>
 
     ### Archetype Trading Cards
 
-    Each Target Archetype (Fake Guru, Gym Narcissist, Pick-Me Bunny, etc.) is illustrated as a full trading-card-style artwork, complete with traits, weaknesses and a catchphrase — these form the visual core of the Build Your Diss carousel and the Diss Detail page.
+    Each Target Archetype (Fake Guru, Gym Narcissist, Pick-Me Bunny, etc.) is presented as full trading-card artwork, complete with a satirical caricature, background Easter eggs, traits, weaknesses and a catchphrase. These cards form the visual heart of the Build Your Diss carousel and the Diss Detail page.
 
     <h3 align="center"><img src="static/readme/archetype-cards.png"></h3>
 
     ### Roast Style Avatars
 
-    Each Roast Style (Shakespearean Savage, Battle Rapper, Haughty Headmistress, etc.) is illustrated as a circular persona avatar, used throughout the diss builder and on every published diss card.
+    Each Roast Style (Shakespearean Savage, Battle Rapper, Haughty Headmistress, etc.) has its own circular persona avatar, turning "tone of voice" into something visual, characterful and instantly recognisable throughout the builder and published Diss cards.
 
     <h3 align="center"><img src="static/readme/roast-avatars.png"></h3>
 
@@ -185,13 +185,13 @@ The value proposition is threefold:
 
     ### Font Awesome Icons
 
-    [Font Awesome](https://fontawesome.com/) icons are used throughout the navbar, page headers, action buttons and footer social links, to improve clarity and reduce visual clutter.
+    [Font Awesome](https://fontawesome.com/) icons are used throughout the navbar, page headers, action buttons and footer links, giving users quick visual cues without overcrowding the interface.
 
     <h3 align="center"><img src="static/readme/font-awesome.png"></h3>
 
     ### Emoji as UI Language
 
-    Emoji are used deliberately as a lightweight visual language across the site — 🔥 for fire/burns, 🔒 for locked content, 🎁 for gifting, ✅/❌ for toast states — keeping the tone playful while remaining instantly readable.
+    Emoji are used as a lightweight visual language across the site — 🔥 for burns, 🔒 for locked content, 🎁 for gifting, ✅/❌ for toast states — keeping the tone playful while making key states instantly understandable.
 
     <h3 align="center"><img src="static/readme/emojis.png"></h3>
 
@@ -200,7 +200,7 @@ The value proposition is threefold:
 
 # Structure
 
--   Dissagram is structured as a Django full-stack web application, with the following main sections:
+-   Dissagram is structured as a Django full-stack web application, with each major user journey separated into clear, purpose-built sections:
 
 <br>
 
@@ -230,7 +230,7 @@ The value proposition is threefold:
 
 ## Embedded CSS
 
-Most page-specific CSS lives in `{% block extra_css %}` within individual templates rather than the global stylesheet. This was a deliberate choice for pages with highly distinct visual treatments (the diss builder, the diss detail trading card, the packages page) so that styles stay co-located with the markup they affect, and so the global `style.css` stays focused on shared, site-wide rules (navbar, footer, base typography).
+Most page-specific CSS lives inside `{% block extra_css %}` within individual templates rather than being forced into the global stylesheet. This was deliberate: pages such as the diss builder, trading-card detail view and pack store each have highly distinct visual layouts, so keeping their styles close to their markup made them easier to tune, debug and maintain. The global `style.css` remains focused on shared site-wide rules such as the navbar, footer and base typography.
 
 <br>
 <br>
@@ -241,63 +241,61 @@ Most page-specific CSS lives in `{% block extra_css %}` within individual templa
 
 ### Landing Page
 
-The homepage introduces Dissagram with a bold hero image and a clear call to action, immediately communicating the site's purpose to a first-time visitor.
+The homepage introduces Dissagram with a bold hero image, a sharp tagline and a clear call to action, so first-time visitors immediately understand the premise and know where to start.
 
 <h3 align="center"><img src="static/readme/landing-page.png"></h3>
 
 ### How It Works
 
-A dedicated explainer page breaks down the diss-building process step by step for new users before they commit to registering.
+A dedicated explainer page breaks the diss-building journey into simple steps, helping new users understand the game loop before they register or unlock content.
 
 <h3 align="center"><img src="static/readme/how-it-works.png"></h3>
 
 ### Authentication
 
-Full user authentication is handled by [django-allauth](https://django-allauth.readthedocs.io/), with custom-styled login, signup and logout templates matching Dissagram's dark, fire-themed aesthetic rather than allauth's plain defaults.
+Full user authentication is handled by [django-allauth](https://django-allauth.readthedocs.io/), with custom login, signup and logout templates restyled to match Dissagram's dark, fire-themed identity rather than the default allauth look.
 
 <h3 align="center"><img src="static/readme/login.png"></h3>
 
 ### Get Your Pack — Freemium Store
 
-A pack store offering the Diss Pack (starter) and Roast Pack (best value), each unlocking a defined number of archetypes, roast styles, premium diss categories and Deploy Roasts. A greyed-out "Coming Soon" Roast Pack subscription card previews a planned future tier without being purchasable.
-
-### &
+The pack store presents Dissagram's freemium model clearly: users can start free, then unlock additional archetypes, roast styles, premium diss categories and Deploy Roasts through paid packs. A greyed-out "Coming Soon" subscription card also previews the planned future Roast Pack tier without allowing premature checkout.
 
 ### Gift a Pack
 
-At the bottom of the page, users who own at least one pack can gift any pack to another registered Dissagram user by username.
+Users who own at least one pack can gift a pack to another registered Dissagram user by username, turning content unlocks into a simple social growth loop.
 
 <h3 align="center"><img src="static/readme/packages.png"></h3>
 
-Already-purchased packs are clearly marked with a green border and a "Purchased" badge, with the call-to-action button switching to "Gift This Pack" — encouraging organic growth rather than confusing repeat-purchase prompts.
+Already-purchased packs are marked with a green border and a "Purchased" badge, while the button switches to "Gift This Pack" — avoiding repeat-purchase confusion and nudging users toward sharing Dissagram with someone else.
 
 <h3 align="center"><img src="static/readme/packages-owned.png"></h3>
 
 ### Stripe Checkout & Order Confirmation
 
-Purchases are processed through [Stripe Checkout](https://stripe.com/payments/checkout) (hosted), with order creation handled **exclusively inside the Stripe webhook handler** — never on the client-facing success URL. This is a deliberate security improvement: it means an order can never be marked "complete" by a user simply visiting a success URL without an actual confirmed payment from Stripe.
+Purchases are processed through hosted [Stripe Checkout](https://stripe.com/payments/checkout), with order creation handled **exclusively inside the Stripe webhook handler** — never on the client-facing success URL. This is a deliberate security choice: a user cannot mark an order as complete simply by visiting a success page without Stripe first confirming the payment.
 
 <h3 align="center"><img src="static/readme/checkout.png"></h3>
 
-A clear "Pack Unlocked" confirmation page greets the user immediately after a successful payment, and an order confirmation email is sent automatically (printed to console in development, sent via SMTP in production).
+After successful payment, users land on a clear "Pack Unlocked" confirmation page, and an order confirmation email is triggered automatically — printed to console in development and sent via SMTP in production.
 
 <h3 align="center"><img src="static/readme/pack-unlocked.png"></h3>
 
 ### Order History
 
-A personal dashboard listing every order the user has placed, with colour-coded status pills, the ability to cancel a pending order, reinstate a cancelled order, or permanently delete failed/cancelled orders. Completed orders can never be deleted, preserving an accurate financial record.
+The Order History dashboard gives users a clean record of every pack purchase, with colour-coded status pills and actions to cancel pending orders, reinstate failed ones or remove failed/cancelled records. Completed orders cannot be deleted, preserving a reliable financial history.
 
 <h3 align="center"><img src="static/readme/orders.png"></h3>
 
 ### Build Your Diss — 5-Step Builder
 
-The centrepiece of the platform. A progressive, 5-step diss builder:
+The centrepiece of the platform is a progressive, 5-step builder that turns a blank idea into a fully assembled Diss card:
 
-1. **Pick Your Target** — a dual carousel (♂ Male Archetypes / ♀ Female Archetypes) of illustrated trading-card archetypes, with locked archetypes clearly greyed out and a friendly toast nudging the user toward the pack store.
-2. **Roast Style** — a grid of illustrated persona avatars representing the voice the diss will be delivered in.
-3. **Pick Your Roast Lines** — standard diss lines for the chosen archetype + roast style combination, with a live selection counter respecting the user's pack-tier limit.
-4. **Pick Your Extra Diss Category** — premium categories (LinkedIn Endorsement, Internal Monologue, etc.), shown only when the user has unlocked them and only when premium lines actually exist for that archetype.
-5. **Final Touches** — an optional custom note and a Draft / Published visibility toggle.
+1. **Pick Your Target** — a dual carousel (♂ Male Archetypes / ♀ Female Archetypes) of illustrated trading-card archetypes, with locked cards greyed out and a friendly toast pointing users toward the pack store.
+2. **Roast Style** — a grid of illustrated persona avatars that lets users choose the voice their Diss will be delivered in.
+3. **Pick Your Roast Lines** — standard diss lines filtered by archetype and roast style, with a live counter enforcing the user's pack-tier selection limit.
+4. **Pick Your Extra Diss Category** — premium categories such as LinkedIn Endorsement and Internal Monologue, shown only when unlocked and only when matching premium lines exist.
+5. **Final Touches** — an optional custom note and a Draft / Published toggle before saving.
 
 <h3 align="center"><img src="static/readme/diss-builder.png"></h3>
 
@@ -309,60 +307,61 @@ Each saved Diss is rendered as a collectible trading card: the archetype’s ful
 
 ### My Disses Dashboard
 
-A personal dashboard listing every diss the user has created, with inline View / Edit / Deploy / Recall / Delete actions.
+The My Disses dashboard gives users one place to manage their private and public burns, with quick View, Edit, Deploy, Recall and Delete actions directly on each card.
 
 <h3 align="center"><img src="static/readme/my-disses.png"></h3>
 
 ### Deploy Roast / Recall Roast
 
-A single click publishes a diss publicly as a "Roast" against its target archetype. The first Roast deployed against any archetype automatically creates a public Roast page for that archetype; subsequent Roasts simply join the existing pile-on. Roasts can be recalled back to draft at any time.
+A single click deploys a Diss publicly as a Roast against its target archetype. The first deployed Roast for an archetype automatically creates that archetype's public Roast page; every later Roast joins the same pile-on. Users can recall a Roast back to draft at any time.
 
 <h3 align="center"><img src="static/readme/unleash_roast.png"></h3>
 
 ### Roast Feed
 
-A public, browsable feed of every archetype with at least one deployed Roast, with a stacked-card visual effect and filters by archetype and roast style.
+The Roast Feed acts as the public arena: every archetype with at least one deployed Roast appears in a stacked-card layout, with filters for archetype and roast style.
 
 <h3 align="center"><img src="static/readme/roast-feed.png"></h3>
 
 ### Roast Detail — Public Pile-On Page
 
-A dedicated public page per archetype, aggregating every Roast the community has deployed against them, filterable by roast style.
+Each archetype has a dedicated public pile-on page, collecting every community Roast deployed against them and allowing visitors to filter the burn archive by roast style.
 
 <h3 align="center"><img src="static/readme/roast-detail.png"></h3>
 
 ### Global Toast Notification System
 
-A custom-built toast notification system, hooked into Django's messages framework, replaces standard Bootstrap alerts site-wide. Toasts animate in, auto-dismiss after a few seconds, and are colour-coded by message type (success / error / info / warning) — used for payment confirmation, locked-content nudges, selection-limit warnings, order actions and form feedback.
+A custom toast notification system, connected to Django's messages framework, replaces standard Bootstrap alerts across the site. Toasts animate in, stack cleanly, auto-dismiss after a few seconds and use colour-coded borders for success, error, info and warning states — covering payments, locked-content nudges, selection limits, order actions and form feedback.
 
 ### Arena Profile
 
-Every registered user has an extended "Disser" profile — a bio, avatar and favourite roast style — viewable and editable separately from their core account details.
+Every registered user receives an extended "Disser" profile with a bio, avatar and favourite roast style, giving the account area a more characterful arena identity while keeping profile details separate from core authentication data.
 
 <h3 align="center"><img src="static/readme/profile.png"></h3>
 
 ### Contact Page
 
-A categorised contact form (general enquiry, account issue, packs/orders, payment problem, bug report, safety/moderation, collab, other) allowing any visitor to get in touch, with submissions stored in the database for follow-up.
+The contact page gives visitors a categorised route into the project team — general enquiry, account issue, packs/orders, payment problem, bug report, safety/moderation, collaboration or other — with all submissions stored in the database for follow-up.
 
 <h3 align="center"><img src="static/readme/contact.png"></h3>
 
 ### Responsive Design
 
-Dissagram is fully responsive across all screen sizes — mobile, tablet and desktop. Please see screenshots under [Responsiveness](#responsiveness).
+Dissagram is fully responsive across mobile, tablet and desktop screen sizes, with the main cards, forms, navigation and builder flow tested under [Responsiveness](#responsiveness).
 
 <br>
 
 -   ## Future Features
 
-- :x: *Comments on public Roasts — short community reactions on deployed disses*
-- :x: *A 1–5 flame rating system on Roasts, feeding into a community leaderboard*
-- :x: *A leaderboard ranking the most-roasted archetypes and highest-rated Roasts*
-- :x: *A monthly "Roast Pack" subscription tier with unlimited Deploy Roasts and exclusive monthly archetype drops*
-- :x: *Gifting a pack by email address, so the recipient doesn't need an existing account*
-- :x: *Riposte chains — replying to a Roast with a Roast of your own*
-- :x: *A Battle Arena for head-to-head roast contests*
-- :x: *A physical Dissagram card/board game, building on the digital archetype roster*
+- :x: *Comments on public Roasts — quick community reactions beneath deployed burns*
+- :x: *A 1–5 flame rating system, feeding into reputation and leaderboard logic*
+- :x: *Leaderboards ranking the most-roasted archetypes and highest-rated Roasts*
+- :x: *A monthly Roast Pack subscription with expanded access and exclusive archetype drops*
+- :x: *Email-based gifting, allowing users to send packs to people who have not registered yet*
+- :x: *Deploying the Diss / Roast as a Burn to somebody in need of a takedown*.
+- :x: *Riposte chains, letting users answer a Roast with a counter-Roast of their own*
+- :x: *A Battle Arena for structured head-to-head roast contests*
+- :x: *A physical Dissagram card/board game built from the digital archetype roster*
 
 <br>
 <br>
@@ -373,19 +372,19 @@ Dissagram is fully responsive across all screen sizes — mobile, tablet and des
 
 <h3 align="center"><img src="static/readme/wireframe-home-best.png"></h3>
 
--   ## Homepage
+-   ## How It Works
 
 <h3 align="center"><img src="static/readme/wireframe-how-best.jpg"></h3>
 
--   ## Homepage
+-   ## Build Your Diss
 
 <h3 align="center"><img src="static/readme/wireframe-form-best.png"></h3>
 
--   ## Homepage
+-   ## Roast Feed
 
 <h3 align="center"><img src="static/readme/wireframe-feed-best.png"></h3>
 
--   ## Homepage
+-   ## Get Your Pack
 
 <h3 align="center"><img src="static/readme/wireframe-store-best.jpg"></h3>
 
@@ -396,21 +395,21 @@ Dissagram is fully responsive across all screen sizes — mobile, tablet and des
 
 ## Schema Rationale
 
-Dissagram's data model is built around a clear separation between **content** (archetypes, roast styles, diss lines — all admin-managed) and **user-generated assembly** (a Diss is simply a user's chosen combination of that content). Sitting alongside this is a commerce layer (Package / Order) that gates access to content via a freemium pack system, and a publishing layer (Roast) that aggregates user-generated Disses into public, archetype-level pages.
+Dissagram's data model is built around a clean separation between **admin-managed content** (archetypes, roast styles and diss lines) and **user-generated assembly** (a Diss is the user's chosen combination of that content). Alongside this sits a commerce layer (Package / Order) for freemium access control, and a publishing layer (Roast) that turns private Disses into public archetype-level pile-ons.
 
 This approach allows:
 
-- admins to expand the archetype/roast-style/diss-line roster without touching code,
-- users to freely build and re-build private disses without affecting anything public,
-- a single click to "publish" a diss as a community-visible Roast,
-- and a clean freemium boundary that can be checked from a handful of small, reusable helper functions rather than scattered permission checks.
+- admins to expand the archetype, roast-style and diss-line roster without touching code,
+- users to build, edit and rebuild private Disses without affecting public content,
+- a single click to publish a Diss as a community-visible Roast,
+- and a clean freemium boundary handled by small reusable helper functions rather than scattered permission checks.
 
 The database structure prioritises:
 
-- a tight content/assembly separation (so freemium logic only has to live in one place),
-- ownership security (every CRUD operation is filtered by `request.user`),
-- zero-cost extensibility for premium content (via a proxy model, not a new table),
-- and a clean foundation for the planned ratings/leaderboard system.
+- tight content/assembly separation, so freemium logic remains centralised,
+- ownership security, with every private CRUD operation filtered by `request.user`,
+- zero-cost extensibility for premium content through a proxy model rather than a new table,
+- and a clean foundation for future ratings, leaderboards and battle-style features.
 
 ---
 
@@ -550,11 +549,11 @@ An `Order` is only ever created or marked `"complete"` inside the Stripe webhook
 
 ### Rationale
 
-This is a direct, deliberate improvement over the Boutique Ado walkthrough pattern, where order confirmation can be more tightly coupled to the client redirect. By moving order creation entirely server-side and triggering it only from a **signature-verified** Stripe event:
+This is a deliberate improvement over the Boutique Ado walkthrough pattern, where order confirmation can sit closer to the client redirect. By moving order creation fully server-side and triggering it only from a **signature-verified** Stripe event:
 
-- a user cannot manufacture a "successful" order by visiting `/orders/success/` directly without paying,
-- a dropped connection on the user's side after payment still results in a correctly recorded order,
-- and the success page becomes purely a UX confirmation, with zero responsibility for actual order state.
+- a user cannot manufacture a "successful" order by visiting `/orders/success/` directly,
+- a dropped browser connection after payment still results in a correctly recorded order,
+- and the success page remains purely a UX confirmation, with no responsibility for financial state.
 
 ---
 
@@ -564,7 +563,7 @@ This is a direct, deliberate improvement over the Boutique Ado walkthrough patte
 
 ### Rationale
 
-Standard diss lines (tied to a specific archetype + roast style) and premium diss lines (category-only, applicable to any roast style) are conceptually different content types for admin users, but identical in data shape. Rather than duplicating the table or forcing admins to manage both content types through one confusing form, the proxy model gives Premium content its own dedicated "Add" entry point in Django admin — with `roast_style` hidden and force-saved as `None` — while `DissLine` itself keeps `roast_style` required. This is purely an admin-UX decision with no schema cost.
+Standard diss lines (tied to a specific archetype and roast style) and premium diss lines (category-based, usable across roast styles) behave differently in the admin, but share the same underlying data shape. Instead of duplicating tables or forcing both content types through one cluttered form, the proxy model gives premium content its own dedicated Django admin entry point — with `roast_style` hidden and saved as `None` — while standard `DissLine` entries keep `roast_style` required. The result is cleaner admin UX with no schema cost.
 
 ---
 
@@ -574,7 +573,7 @@ Freemium logic (which archetypes/styles/categories a user can see) lives entirel
 
 ### Rationale
 
-This keeps the "what has this user unlocked?" question answerable from one place. Every part of the diss builder — the archetype carousel, the roast style grid, the diss line list, the selection limit — calls into the same small set of functions, so a future change to pack tiers only needs to happen once.
+This keeps the "what has this user unlocked?" question answerable from one place. The archetype carousel, roast-style grid, diss-line list and selection limit all use the same helper layer, so future pack-tier changes can be made once instead of chased through multiple templates and views.
 
 ---
 
@@ -584,7 +583,7 @@ A `Roast` is not a copy of diss content — it's a thin, auto-created public pag
 
 ### Rationale
 
-This mirrors the principle (used previously in Hip Trip Hooray's Trip → Itinerary split) of keeping private, editable user content separate from its public representation — but adapted here to a many-to-one relationship: many private Disses can feed into one public Roast page per archetype, rather than each Diss generating its own separate public copy. This avoids data duplication and means the Roast page is always live and current.
+This mirrors the same principle used in Hip Trip Hooray's Trip → Itinerary split: private editable content stays separate from its public representation. Dissagram adapts that idea to a many-to-one structure, where many private Disses can feed one public Roast page per archetype. That avoids duplicated content and keeps each Roast page live, current and easy to extend.
 
 ---
 
@@ -594,7 +593,7 @@ All Django `messages` framework output renders through a custom CSS-animated toa
 
 ### Rationale
 
-This removes a dependency on Bootstrap's JavaScript bundle for a purely cosmetic feature, gives full control over animation timing and auto-dismiss behaviour, and keeps the visual language consistent with Dissagram's bespoke dark theme rather than Bootstrap's default alert styling.
+This removes reliance on Bootstrap's JavaScript alerts for a purely cosmetic feature, gives full control over animation timing and auto-dismiss behaviour, and keeps feedback messages aligned with Dissagram's bespoke dark theme instead of Bootstrap's default visual language.
 
 <br>
 <br>
@@ -619,7 +618,7 @@ Unauthenticated users are redirected to the login page when attempting to access
 
 ## Ownership-Based Permissions
 
-Every object a user can edit or delete is fetched filtered by ownership — a non-admin user can never retrieve, view, edit or delete another user's private content via URL manipulation.
+Every editable or deletable object is fetched through an ownership filter, preventing non-admin users from viewing, editing or deleting another user's private content by manipulating URLs.
 
 ### Example Logic
 
@@ -633,16 +632,16 @@ order = get_object_or_404(Order, pk=order_id, user=request.user)
 ## Payment Security
 
 - The Stripe **secret key** and **webhook signing secret** are never exposed client-side.
-- Every incoming webhook event is verified using `stripe.Webhook.construct_event()` against the signing secret — a request claiming to be a Stripe event without a valid signature is rejected with a `400` before any database write occurs.
+- Every incoming webhook event is verified using `stripe.Webhook.construct_event()` against the signing secret; any request without a valid Stripe signature is rejected with a `400` before database writes are attempted.
 - Order status is set server-side only, inside the webhook handler (see [Core Architectural Decisions](#core-architectural-decisions)).
 
 ---
 
 ## Secrets Management
 
-- All secret keys (`SECRET_KEY`, Stripe keys, email credentials, Cloudinary credentials) are stored in environment variables, loaded locally via a git-ignored `env.py` and set as Config Vars on Heroku in production.
-- `db.sqlite3`, `env.py`, `media/`, and `venv/` are all excluded via `.gitignore` — no secrets or local data are ever committed to the repository.
-- `DEBUG` is controlled entirely via an environment variable and **must be set to `False`** in the production Heroku Config Vars.
+- Secret values (`SECRET_KEY`, Stripe keys, email credentials and Cloudinary credentials) are stored in environment variables, loaded locally through a git-ignored `env.py` and configured as Heroku Config Vars in production.
+- `db.sqlite3`, `env.py`, `media/` and `venv/` are excluded via `.gitignore`, keeping local data and secrets out of the repository.
+- `DEBUG` is controlled entirely by an environment variable and **must be set to `False`** in production.
 
 <br>
 <br>
@@ -681,7 +680,7 @@ order = get_object_or_404(Order, pk=order_id, user=request.user)
 
 # Testing
 
-The Dissagram website has been tested throughout development using a mixture of automated Django tests, manual user-flow testing, code validation, Lighthouse audits and responsive/device checks.
+Dissagram was tested throughout development using automated Django tests, manual user-flow checks, code validation, Lighthouse audits and responsive/device testing.
 
 - [Testing User Stories](#testing-user-stories)
 - [Automated Tests](#automated-tests)
@@ -900,11 +899,11 @@ Stub `tests.py` files exist in `roasts`, `dissers` and `contact`. These are docu
 
 ## Code Validation
 
-Rendered browser output was validated rather than raw Django template files, because raw templates can trigger false-positive validator errors from Django template syntax.
+Rendered browser output was validated rather than raw Django templates, because unrendered Django syntax can trigger false-positive validator errors.
 
 ### W3C HTML Validator
 
-The [W3C Markup Validator](https://validator.w3.org/#validate_by_input) was used to validate the rendered HTML of the main public, account and diss-building pages.
+The [W3C Markup Validator](https://validator.w3.org/#validate_by_input) was used to validate rendered HTML across the main public, account and diss-building pages.
 
 <br>
 
@@ -961,7 +960,7 @@ The [W3C CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_input) 
 
 ### JSHint JavaScript Validator
 
-The diss builder's carousel and step-reveal logic — the most substantial JavaScript on the site — was validated using [JSHint](https://jshint.com/). Only an unused-variable warning for future functionality was reported; no JavaScript errors were found.
+The diss builder's carousel and step-reveal logic — the most substantial JavaScript on the site — was validated using [JSHint](https://jshint.com/). Only an unused-variable warning for planned future functionality was reported; no JavaScript errors were found.
 
 <h2 align="center"><img src="static/readme/jshint.png"></h2>
 
@@ -1005,7 +1004,7 @@ Python code was checked for [PEP8](https://peps.python.org/pep-0008/) compliance
 
 ## Lighthouse
 
-[Google Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/) was used to review Performance, Accessibility, Best Practices and SEO on the project's key pages.
+[Google Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/) was used to review Performance, Accessibility, Best Practices and SEO across the project's key pages.
 
 ### Homepage
 
@@ -1027,14 +1026,14 @@ Python code was checked for [PEP8](https://peps.python.org/pep-0008/) compliance
 
 <h3 align="center"><img src="static/readme/dissagram-feed.png"></h3>
 
-The Roast Feed page performance will be improved in Dissagram v2.0 by compressing all backend images uploaded through the admin panel. Due to the project deadline, this optimisation was documented for the next iteration rather than added to the current submission.
+Roast Feed performance is earmarked for Dissagram v2.0, where backend/admin-uploaded images will be compressed more aggressively. Due to the project deadline, this optimisation was documented as a next-iteration task rather than added to the submitted build.
 
 <br>
 <br>
 
 ## Responsiveness
 
-Dissagram was tested across common device sizes using Chrome DevTools device emulation and custom high-resolution viewport checks. The main layout, navigation, cards, forms, carousels and CTA buttons remained usable across mobile, tablet and desktop screen sizes.
+Dissagram was tested across common device sizes using Chrome DevTools emulation and custom high-resolution viewport checks. The layout, navigation, cards, forms, carousels and CTA buttons remained usable across mobile, tablet and desktop screens.
 
 ### iPhone
 
@@ -1109,7 +1108,7 @@ The following bugs were identified and fixed during development:
 
 ## Heroku
 
-Dissagram is deployed to [Heroku](https://www.heroku.com/), with a [Neon](https://neon.tech/) PostgreSQL database in production and [Cloudinary](https://cloudinary.com/) for media storage.
+Dissagram is deployed on [Heroku](https://www.heroku.com/), using [Neon](https://neon.tech/) PostgreSQL for the production database and [Cloudinary](https://cloudinary.com/) for media storage.
 
 ### Prerequisites
 
@@ -1178,7 +1177,7 @@ Dissagram is deployed to [Heroku](https://www.heroku.com/), with a [Neon](https:
     - Visit the deployed app and confirm the homepage loads.
     - Complete a test purchase using a Stripe test card and confirm the order appears in **My Orders**.
 
-The deployed version was tested to confirm it matches the development version in functionality.
+The deployed version was tested after release to confirm that the production build matched the development version's core functionality.
 
 <br>
 
@@ -1253,14 +1252,14 @@ To clone this repository:
 
 ## Code
 
--   [Code Institute](https://codeinstitute.net/): I referred back to tutorial videos and my other projects throughout developing dissagram.
-    -   The overall project structure, Stripe integration approach, and CRUD patterns were informed by Code Institute's **Boutique Ado** walkthrough project, with deliberate, documented improvements made throughout — most notably webhook-only order confirmation (vs. client-side confirmation), a custom CSS toast notification system (vs. Bootstrap JS alerts), and a freemium content-locking layer with no Boutique Ado equivalent.
+-   [Code Institute](https://codeinstitute.net/): I referred back to tutorial videos and previous projects throughout the development of Dissagram.
+    -   The overall project structure, Stripe integration approach and CRUD patterns were informed by Code Institute's **Boutique Ado** walkthrough project, with deliberate, documented improvements made throughout — most notably webhook-only order confirmation, a custom CSS toast notification system and a freemium content-locking layer with no Boutique Ado equivalent.
 
--   [Django Documentation](https://docs.djangoproject.com/): The official Django docs were referenced extensively throughout development, particularly for formsets, model relationships, authentication and deployment.
+-   [Django Documentation](https://docs.djangoproject.com/): The official Django docs were referenced throughout development, particularly for model relationships, authentication, forms, testing and deployment.
 
 -   [django-allauth](https://django-allauth.readthedocs.io/) provided authentication, restyled with custom templates to match the Dissagram aesthetic.
 
--   [Stripe Documentation](https://docs.stripe.com/): Used throughout the checkout implementation.
+-   [Stripe Documentation](https://docs.stripe.com/): Used throughout the checkout and webhook implementation.
 
 -   [Stack Overflow](https://stackoverflow.com/): Referenced for numerous specific implementation questions throughout development.
 
@@ -1268,15 +1267,15 @@ To clone this repository:
 
 -   [Mozilla Developer Network](https://developer.mozilla.org/): Referenced for JavaScript, CSS and HTML questions.
 
--   [dbdiagram.io](https://dbdiagram.io/home): ERD diagram creator
+-   [dbdiagram.io](https://dbdiagram.io/home): Used to create the original ERD diagram.
 
 <br>
 
 ## Media
 
--   Colour Palette was generated by [Coolors](https://coolors.co/).
+-   The colour palette was generated using [Coolors](https://coolors.co/).
 
--   All images and artwork on this site were created by yinyangsammy, using his own creations alongside collaborations with different AI art generators, predominantly [ChatGPT](https://chatgpt.com/).
+-   All images and artwork on this site were created by yinyangsammy, using original concepts and iterative collaboration with AI art tools, predominantly [ChatGPT](https://chatgpt.com/).
 
 - Icons: [Font Awesome](https://fontawesome.com/).
 - Fonts: [Google Fonts](https://fonts.google.com/) — Bangers, DM Serif Display, Lato.
@@ -1312,7 +1311,7 @@ To clone this repository:
 
 # Root
 
-Dissagram has been created as part of the developer's portfolio, and will continue being developed with new features added in the near future.
+Dissagram was created as part of the developer's portfolio and will continue to evolve with new archetypes, roast styles and community features in future releases.
 
 <h4 align="center">©️ yinyangsammy 2026</h4>
 
