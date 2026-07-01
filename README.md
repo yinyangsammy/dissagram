@@ -74,7 +74,7 @@ The value proposition is threefold:
 
 - **For the user** — a funny, satisfying, low-stakes creative outlet, with a freemium structure that lets them try the experience before unlocking the full roster of archetypes, roast styles and premium categories.
 - **For the community** — a public Roast Feed where individual Disses become a shared, crowd-sourced pile-on against instantly recognisable archetypes.
-- **For the business model** — one-off pack purchases keep the barrier to entry low, while gifting encourages organic growth and gives the product a built-in social loop.
+- **For the business model** — one-off pack purchases keep the barrier to entry low, while gifting gives users a simple reason to bring someone else into the joke.
 
 <br>
 <br>
@@ -200,7 +200,7 @@ The value proposition is threefold:
 
 # Structure
 
--   Dissagram is structured as a Django full-stack web application, with each major user journey separated into clear, purpose-built sections:
+-   Dissagram is structured as a Django full-stack web application, with each main user journey split into clear sections:
 
 <br>
 
@@ -395,20 +395,20 @@ Dissagram is fully responsive across mobile, tablet and desktop screen sizes, wi
 
 ## Schema Rationale
 
-Dissagram's data model is built around a clean separation between **admin-managed content** (archetypes, roast styles and diss lines) and **user-generated assembly** (a Diss is the user's chosen combination of that content). Alongside this sits a commerce layer (Package / Order) for freemium access control, and a publishing layer (Roast) that turns private Disses into public archetype-level pile-ons.
+Dissagram's data model keeps **admin-managed content** (archetypes, roast styles and diss lines) separate from the **Disses users create** (their chosen combination of that content). Alongside this, Package and Order models handle paid unlocks, while the Roast model turns private Disses into public archetype-level pile-ons.
 
 This approach allows:
 
 - admins to expand the archetype, roast-style and diss-line roster without touching code,
 - users to build, edit and rebuild private Disses without affecting public content,
 - a single click to publish a Diss as a community-visible Roast,
-- and a clean freemium boundary handled by small reusable helper functions rather than scattered permission checks.
+- and pack/unlock checks are kept in small reusable helper functions rather than repeated across the project.
 
 The database structure prioritises:
 
-- tight content/assembly separation, so freemium logic remains centralised,
+- a clear split between reusable content and user-created Disses, so unlock logic stays in one place,
 - ownership security, with every private CRUD operation filtered by `request.user`,
-- zero-cost extensibility for premium content through a proxy model rather than a new table,
+- premium content that can be expanded through a proxy model without creating a new database table,
 - and a clean foundation for future ratings, leaderboards and battle-style features.
 
 ---
@@ -549,11 +549,11 @@ An `Order` is only ever created or marked `"complete"` inside the Stripe webhook
 
 ### Rationale
 
-This is a deliberate improvement over the Boutique Ado walkthrough pattern, where order confirmation can sit closer to the client redirect. By moving order creation fully server-side and triggering it only from a **signature-verified** Stripe event:
+This is a deliberate improvement over the Boutique Ado walkthrough pattern, where order confirmation can sit closer to the client redirect. By creating orders fully on the server, and only after Stripe sends a **signature-verified** event:
 
 - a user cannot manufacture a "successful" order by visiting `/orders/success/` directly,
 - a dropped browser connection after payment still results in a correctly recorded order,
-- and the success page remains purely a UX confirmation, with no responsibility for financial state.
+- and the success page remains purely a user-facing confirmation, with no responsibility for the real payment/order state.
 
 ---
 
@@ -563,27 +563,27 @@ This is a deliberate improvement over the Boutique Ado walkthrough pattern, wher
 
 ### Rationale
 
-Standard diss lines (tied to a specific archetype and roast style) and premium diss lines (category-based, usable across roast styles) behave differently in the admin, but share the same underlying data shape. Instead of duplicating tables or forcing both content types through one cluttered form, the proxy model gives premium content its own dedicated Django admin entry point — with `roast_style` hidden and saved as `None` — while standard `DissLine` entries keep `roast_style` required. The result is cleaner admin UX with no schema cost.
+Standard diss lines (tied to a specific archetype and roast style) and premium diss lines (category-based, usable across roast styles) behave differently in the admin, but use the same basic fields. Instead of duplicating tables or forcing both content types through one cluttered form, the proxy model gives premium content its own Django admin entry point — with `roast_style` hidden and saved as `None` — while standard `DissLine` entries keep `roast_style` required. This keeps the admin cleaner without adding another database table.
 
 ---
 
 ## 3. Freemium Gating via Small, Reusable Helpers
 
-Freemium logic (which archetypes/styles/categories a user can see) lives entirely in a handful of small helper functions in `disses/views.py` — `_get_user_pack_level`, `_get_accessible_category_names`, `_get_user_unlocked_counts`, `_get_max_line_selections` — rather than being checked inline, repeatedly, across templates and views.
+Freemium logic (which archetypes/styles/categories a user can see) is handled through a small group of helper functions in `disses/views.py` — `_get_user_pack_level`, `_get_accessible_category_names`, `_get_user_unlocked_counts`, `_get_max_line_selections` — rather than being checked repeatedly inside templates and views.
 
 ### Rationale
 
-This keeps the "what has this user unlocked?" question answerable from one place. The archetype carousel, roast-style grid, diss-line list and selection limit all use the same helper layer, so future pack-tier changes can be made once instead of chased through multiple templates and views.
+This keeps the freemium logic easier to manage, because the same helper functions are reused wherever the app needs to check what a user has unlocked. The archetype carousel, roast-style grid, diss-line list and selection limit all use those same helpers, so future pack-tier changes can be made once instead of chased through multiple templates and views.
 
 ---
 
 ## 4. Roast as an Aggregation Layer, Not a Duplicate of Diss
 
-A `Roast` is not a copy of diss content — it's a thin, auto-created public page per `TargetArchetype` that queries and aggregates all public, published `Diss` objects targeting that archetype on demand.
+A `Roast` is not a copy of diss content — it is an auto-created public page for each `TargetArchetype` that collects and displays all public, published `Diss` objects targeting that archetype.
 
 ### Rationale
 
-This mirrors the same principle used in Hip Trip Hooray's Trip → Itinerary split: private editable content stays separate from its public representation. Dissagram adapts that idea to a many-to-one structure, where many private Disses can feed one public Roast page per archetype. That avoids duplicated content and keeps each Roast page live, current and easy to extend.
+This mirrors the same principle used in Hip Trip Hooray's Trip → Itinerary split: private editable content stays separate from its public version. Dissagram adapts that idea so many private Disses can sit under one public Roast page per archetype. This avoids duplicated content and keeps each Roast page live and current.
 
 ---
 
@@ -593,7 +593,7 @@ All Django `messages` framework output renders through a custom CSS-animated toa
 
 ### Rationale
 
-This removes reliance on Bootstrap's JavaScript alerts for a purely cosmetic feature, gives full control over animation timing and auto-dismiss behaviour, and keeps feedback messages aligned with Dissagram's bespoke dark theme instead of Bootstrap's default visual language.
+This means the app does not need Bootstrap's JavaScript alerts for simple feedback messages. It also gives better control over animation timing, auto-dismiss behaviour and the look of each message, so the toasts fit Dissagram's custom dark theme.
 
 <br>
 <br>
@@ -618,7 +618,7 @@ Unauthenticated users are redirected to the login page when attempting to access
 
 ## Ownership-Based Permissions
 
-Every editable or deletable object is fetched through an ownership filter, preventing non-admin users from viewing, editing or deleting another user's private content by manipulating URLs.
+Every object a user can edit or delete is fetched through an ownership filter, so a non-admin user cannot view, edit or delete another user's private content by changing the URL.
 
 ### Example Logic
 
@@ -632,7 +632,7 @@ order = get_object_or_404(Order, pk=order_id, user=request.user)
 ## Payment Security
 
 - The Stripe **secret key** and **webhook signing secret** are never exposed client-side.
-- Every incoming webhook event is verified using `stripe.Webhook.construct_event()` against the signing secret; any request without a valid Stripe signature is rejected with a `400` before database writes are attempted.
+- Every incoming webhook event is verified using `stripe.Webhook.construct_event()` against the signing secret. Any request without a valid Stripe signature is rejected with a `400` before the order logic can run.
 - Order status is set server-side only, inside the webhook handler (see [Core Architectural Decisions](#core-architectural-decisions)).
 
 ---
@@ -1177,7 +1177,7 @@ Dissagram is deployed on [Heroku](https://www.heroku.com/), using [Neon](https:/
     - Visit the deployed app and confirm the homepage loads.
     - Complete a test purchase using a Stripe test card and confirm the order appears in **My Orders**.
 
-The deployed version was tested after release to confirm that the production build matched the development version's core functionality.
+The deployed version was tested after release to confirm that the main features worked the same way in production as they did locally.
 
 <br>
 
@@ -1253,7 +1253,7 @@ To clone this repository:
 ## Code
 
 -   [Code Institute](https://codeinstitute.net/): I referred back to tutorial videos and previous projects throughout the development of Dissagram.
-    -   The overall project structure, Stripe integration approach and CRUD patterns were informed by Code Institute's **Boutique Ado** walkthrough project, with deliberate, documented improvements made throughout — most notably webhook-only order confirmation, a custom CSS toast notification system and a freemium content-locking layer with no Boutique Ado equivalent.
+    -   The overall project structure, Stripe integration approach and CRUD patterns were informed by Code Institute's **Boutique Ado** walkthrough project, with documented improvements made throughout — most notably webhook-only order confirmation, a custom CSS toast notification system and a freemium content-locking layer beyond the walkthrough scope.
 
 -   [Django Documentation](https://docs.djangoproject.com/): The official Django docs were referenced throughout development, particularly for model relationships, authentication, forms, testing and deployment.
 
