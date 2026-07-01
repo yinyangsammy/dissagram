@@ -531,9 +531,13 @@
                     <span class="order-status-badge badge-{{ order.status }}">
                         {{ order.get_status_display }}
                     </span>
-                    {% if order.gifted_to %}
+                    {% if order.gifted_to and order.user == request.user %}
                     <span class="gifted-tag">
                         🎁 Gifted to {{ order.gifted_to.username }}
+                    </span>
+                    {% elif order.gifted_to == request.user %}
+                    <span class="gifted-tag">
+                        🎁 Gifted by {{ order.user.username }}
                     </span>
                     {% endif %}
                 </div>

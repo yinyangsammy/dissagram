@@ -478,6 +478,22 @@
     </div>
     {% endif %}
 
+    {% if received_gift_orders %}
+    <div class="gift-section" style="border-color:#27ae60;">
+        <h3>🎁 GIFT RECEIVED</h3>
+
+        {% for gift in received_gift_orders %}
+        <p>
+            {{ gift.user.username }} gifted you
+            <strong style="color:#27ae60;">
+                {{ gift.package.name }}
+            </strong>
+            — your arsenal has been upgraded.
+        </p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <!-- PACK GRID -->
     <div class="pack-grid">
 

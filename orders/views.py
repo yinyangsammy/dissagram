@@ -46,12 +46,11 @@ def package_list(request):
     Show available packages with locked/unlocked state.
 
     A package counts as owned when:
-    - the user bought it for themselves, or
-    - another user bought it as a gift for them.
+    - the user bought it for themselves
+    - another user bought it as a gift for them
 
-    If the gift fields are not available in the database yet,
-    the view falls back to normal direct purchases so the page
-    still loads instead of throwing a 500.
+    Packs bought as gifts for somebody else do not count as owned
+    by the purchaser.
     """
     from dissers.models import RoastCategory, RoastStyle, TargetArchetype
 
@@ -59,45 +58,26 @@ def package_list(request):
         Package.objects.filter(is_active=True).order_by("display_order")
     )
 
-    # Try gift-aware ownership first.
-    try:
-        owned_order_filter = (
-            Q(user=request.user, gifted_to__isnull=True) |
-            Q(gifted_to=request.user)
-        )
+    owned_order_filter = (
+        Q(user=request.user, gifted_to__isnull=True) |
+        Q(gifted_to=request.user)
+    )
 
-        purchase_counts = (
-            Order.objects
-            .filter(status="complete")
-            .filter(owned_order_filter)
-            .exclude(package__isnull=True)
-            .values("package_id")
-            .annotate(count=Count("id"))
-        )
+    purchase_counts = (
+        Order.objects
+        .filter(status="complete")
+        .filter(owned_order_filter)
+        .exclude(package__isnull=True)
+        .values("package_id")
+        .annotate(count=Count("id"))
+    )
 
-        purchase_count_map = {
-            item["package_id"]: item["count"] for item in purchase_counts
-        }
-
-    except Exception:
-        # Fallback: direct purchases only.
-        # This prevents the packages page from crashing if the database
-        # is missing the gifted_to column locally.
-        purchase_counts = (
-            Order.objects
-            .filter(user=request.user, status="complete")
-            .exclude(package__isnull=True)
-            .values("package_id")
-            .annotate(count=Count("id"))
-        )
-
-        purchase_count_map = {
-            item["package_id"]: item["count"] for item in purchase_counts
-        }
+    purchase_count_map = {
+        item["package_id"]: item["count"] for item in purchase_counts
+    }
 
     owned_package_ids = list(purchase_count_map.keys())
 
-    # Free starter content.
     free_archetype_names = list(
         TargetArchetype.objects.filter(is_free=True)
         .order_by("unlock_priority")
@@ -110,7 +90,6 @@ def package_list(request):
         .values_list("name", flat=True)
     )
 
-    # Paid unlock content.
     ordered_paid_archetypes = list(
         TargetArchetype.objects.filter(is_free=False)
         .order_by("unlock_priority")
@@ -140,30 +119,57 @@ def package_list(request):
         pkg.display_archetype_count = len(pkg.included_archetype_names)
         pkg.display_roast_style_count = len(pkg.included_roast_style_names)
 
-        try:
-            pkg.included_category_names = list(
-                RoastCategory.objects.filter(
-                    is_free=False,
-                    required_pack_level__lte=pkg.display_order,
-                )
-                .order_by("required_pack_level")
-                .values_list("name", flat=True)
+        pkg.included_category_names = list(
+            RoastCategory.objects.filter(
+                is_free=False,
+                required_pack_level__lte=pkg.display_order,
             )
-        except Exception:
-            pkg.included_category_names = list(
-                RoastCategory.objects.filter(is_free=False)
-                .order_by("display_order")
-                .values_list("name", flat=True)[:pkg.premium_category_count]
-            )
+            .order_by("required_pack_level")
+            .values_list("name", flat=True)
+        )
 
     user_owned_packages = [
         pkg for pkg in packages if pkg.pk in owned_package_ids
     ]
 
+    past_orders = (
+        Order.objects
+        .filter(user=request.user)
+        .select_related("package", "gifted_to")
+        .order_by("-created_on")
+    )
+
+    received_gift_orders = (
+        Order.objects
+        .filter(gifted_to=request.user, status="complete")
+        .select_related("package", "user")
+        .order_by("-created_on")
+    )
+
+    seen_gift_ids = request.session.get("seen_gift_order_ids", [])
+
+    new_gift_orders = received_gift_orders.exclude(pk__in=seen_gift_ids)
+
+    if new_gift_orders.exists():
+        latest_gift = new_gift_orders.first()
+
+        messages.success(
+            request,
+            f"🎁 {latest_gift.user.username} gifted you "
+            f"{latest_gift.package.name}! Your arsenal has been upgraded."
+        )
+
+        request.session["seen_gift_order_ids"] = (
+            seen_gift_ids +
+            list(new_gift_orders.values_list("pk", flat=True))
+        )
+        request.session.modified = True
+
     return render(request, "orders/packages.html", {
         "packages": packages,
-        "past_orders": [],
+        "past_orders": past_orders,
         "user_owned_packages": user_owned_packages,
+        "received_gift_orders": received_gift_orders,
         "stripe_public_key": settings.STRIPE_PUBLIC_KEY,
     })
 
@@ -185,6 +191,13 @@ def checkout(request, package_id):
 
     gift_recipient_id = request.session.get("gift_recipient_id", "")
     gift_message = request.session.get("gift_message", "")
+
+    gift_metadata = {
+        "user_id": str(request.user.pk),
+        "package_id": str(package.pk),
+        "gift_recipient_id": str(gift_recipient_id or ""),
+        "gift_message": str(gift_message or "")[:200],
+    }
 
     try:
         success_url = (
@@ -208,11 +221,9 @@ def checkout(request, package_id):
             "mode": "payment",
             "success_url": success_url,
             "cancel_url": request.build_absolute_uri("/orders/cancel/"),
-            "metadata": {
-                "user_id": str(request.user.pk),
-                "package_id": str(package.pk),
-                "gift_recipient_id": str(gift_recipient_id or ""),
-                "gift_message": str(gift_message or "")[:200],
+            "metadata": gift_metadata,
+            "payment_intent_data": {
+                "metadata": gift_metadata,
             },
         }
 
@@ -223,7 +234,6 @@ def checkout(request, package_id):
             **checkout_session_data
         )
 
-        # Clear gift session data once Stripe has safely received it.
         request.session.pop("gift_recipient_id", None)
         request.session.pop("gift_message", None)
 
@@ -242,16 +252,25 @@ def checkout_success(request):
     Order status is updated via webhook — this is UX confirmation only.
     """
     order = (
-        Order.objects.filter(
-            Q(user=request.user) | Q(gifted_to=request.user),
-            status="complete",
-        )
+        Order.objects
+        .filter(user=request.user, status="complete")
         .select_related("package", "gifted_to")
         .order_by("-created_on")
         .first()
     )
 
-    messages.success(request, "🔥 Pack unlocked! Your arsenal is ready.")
+    if order and order.gifted_to:
+        messages.success(
+            request,
+            f"🎁 Gift sent to {order.gifted_to.username}! "
+            "Their arsenal has been upgraded."
+        )
+    else:
+        messages.success(
+            request,
+            "🔥 Pack unlocked! Your arsenal is ready."
+        )
+
     return render(request, "orders/success.html", {"order": order})
 
 
@@ -429,39 +448,67 @@ def order_history(request):
     """
     Full order history for the logged-in user.
 
-    Shows orders the user purchased.
-    Gifted packs sent to another user appear here as sent gifts.
+    Shows:
+    - packs the user purchased
+    - packs gifted to the user
+    - packs the user gifted to somebody else
     """
-    past_orders = Order.objects.filter(
-        user=request.user
-    ).select_related("package", "gifted_to")
-
-    complete_orders = past_orders.filter(status="complete")
-
-    total_spent = sum(
-        o.amount_paid for o in complete_orders if o.amount_paid
+    past_orders = (
+        Order.objects
+        .filter(
+            Q(user=request.user) | Q(gifted_to=request.user)
+        )
+        .select_related("package", "gifted_to", "user")
+        .distinct()
+        .order_by("-created_on")
     )
 
-    gifted_count = past_orders.filter(
-        gifted_to__isnull=False
+    purchased_orders = past_orders.filter(user=request.user)
+    complete_purchased_orders = purchased_orders.filter(status="complete")
+
+    owned_complete_orders = past_orders.filter(
+        status="complete"
+    ).filter(
+        Q(user=request.user, gifted_to__isnull=True) |
+        Q(gifted_to=request.user)
+    )
+
+    total_spent = sum(
+        o.amount_paid
+        for o in complete_purchased_orders
+        if o.amount_paid
+    )
+
+    gifted_count = purchased_orders.filter(
+        gifted_to__isnull=False,
+        status="complete",
     ).count()
+
+    received_gift_count = past_orders.filter(
+        gifted_to=request.user,
+        status="complete",
+    ).exclude(user=request.user).count()
 
     return render(request, "orders/order_history.html", {
         "past_orders": past_orders,
         "total_orders": past_orders.count(),
-        "complete_orders": complete_orders.count(),
+        "complete_orders": owned_complete_orders.count(),
         "total_spent": total_spent,
         "gifted_count": gifted_count,
+        "received_gift_count": received_gift_count,
     })
 
 
 @login_required
 def order_detail(request, order_id):
-    """View a single order — reuses success template."""
+    """View a single order — available to purchaser or gift recipient."""
     order = get_object_or_404(
-        Order.objects.select_related("package", "gifted_to"),
+        Order.objects
+        .select_related("package", "gifted_to", "user")
+        .filter(
+            Q(user=request.user) | Q(gifted_to=request.user)
+        ),
         pk=order_id,
-        user=request.user,
     )
 
     return render(request, "orders/success.html", {"order": order})
@@ -596,11 +643,6 @@ def gift_pack(request):
         request.session["gift_recipient_id"] = recipient.pk
         request.session["gift_message"] = gift_message[:200]
         request.session.modified = True
-
-        messages.info(
-            request,
-            f"Gift ready for {recipient.username}. Continue to payment.",
-        )
 
         return redirect("orders:checkout", package_id=package.pk)
 
