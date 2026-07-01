@@ -1004,6 +1004,8 @@ Python code was checked for [PEP8](https://peps.python.org/pep-0008/) compliance
 
 ## Lighthouse
 
+## Desktop
+
 [Google Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/) was used to review Performance, Accessibility, Best Practices and SEO across the project's key pages.
 
 ### Homepage
@@ -1027,6 +1029,24 @@ Python code was checked for [PEP8](https://peps.python.org/pep-0008/) compliance
 <h3 align="center"><img src="static/readme/dissagram-feed.png"></h3>
 
 Roast Feed performance is earmarked for Dissagram v2.0, where backend/admin-uploaded images will be compressed more aggressively. Due to the project deadline, this optimisation was documented as a next-iteration task rather than added to the submitted build.
+
+<br>
+
+## Mobile
+
+### Homepage
+
+<h3 align="center"><img src="static/readme/home-mob.png"></h3>
+
+### How It Works
+
+<h3 align="center"><img src="static/readme/how-mob.png"></h3>
+
+### My Disses
+
+<h3 align="center"><img src="static/readme/disses-mob.png"></h3>
+
+Mobile performance is earmarked for Dissagram v2.0, where embedded images will be compressed more aggressively. Due to the project deadline, this optimisation was documented as a next-iteration task rather than added to the submitted build.
 
 <br>
 <br>
