@@ -516,7 +516,8 @@ def deploy_burn(request, pk):
         messages.success(
             request,
             f"🔥Roast unleashed! "
-            f"{diss.target_archetype.name} is now awaiting a public pile-on in the Roast Feed."
+            f"{diss.target_archetype.name} is now awaiting a public "
+            f"pile-on in the Roast Feed."
         )
         return redirect("roasts:roast_detail", slug=roast.slug)
 

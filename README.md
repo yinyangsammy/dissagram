@@ -977,6 +977,12 @@ Python code was checked for [PEP8](https://peps.python.org/pep-0008/) compliance
 
 <br>
 
+#### Disses Views
+
+<h2 align="right"><img src="static/readme/disses-views.png"></h2>
+
+<br>
+
 #### Roasts Models
 
 <h2 align="right"><img src="static/readme/roasts-models.png"></h2>
