@@ -395,8 +395,13 @@ def stripe_webhook(request):
 
 
 def _send_order_confirmation(order, fallback_email=None):
+
     """
     Send order confirmation email to the purchasing user.
+
+    If the order was bought as a gift, send gift-specific copy.
+    Otherwise, send the normal pack-unlocked confirmation.
+    Email errors must never affect order processing.
 
     Uses the user's account email first, then falls back to the email
     entered during Stripe Checkout.
@@ -404,6 +409,7 @@ def _send_order_confirmation(order, fallback_email=None):
     Returns True if an email was sent, otherwise False.
     Email errors must never affect order processing.
     """
+
     recipient_email = (
         order.user.email
         or fallback_email
@@ -414,14 +420,20 @@ def _send_order_confirmation(order, fallback_email=None):
         return False
 
     try:
-        subject = f"🔥 Your {order.package.name} is Locked and Loaded!"
+        if order.gifted_to:
+            subject = f"🎁 Your {order.package.name} gift has been sent!"
+            template_name = "orders/email/gift_confirmation.txt"
+        else:
+            subject = f"🔥 Your {order.package.name} is Locked and Loaded!"
+            template_name = "orders/email/order_confirmation.txt"
 
         message = render_to_string(
-            "orders/email/order_confirmation.txt",
+            template_name,
             {
                 "order": order,
                 "user": order.user,
                 "package": order.package,
+                "recipient": order.gifted_to,
             },
         )
 

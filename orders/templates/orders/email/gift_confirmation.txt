@@ -1,0 +1,20 @@
+Hi {{ user.username }},
+
+🎁 Your {{ package.name }} gift has been sent to {{ recipient.username }}!
+
+They can now log in to Dissagram and start using their upgraded arsenal.
+
+Order #{{ order.pk }}
+Package: {{ package.name }}
+Amount paid: £{{ order.amount_paid }}
+Status: {{ order.get_status_display }}
+Gifted to: {{ recipient.username }}
+
+{% if order.gift_message %}
+Your gift message:
+"{{ order.gift_message }}"
+{% endif %}
+
+Thanks for dragging someone else into the joke.
+
+The Dissagram Team 🔥
