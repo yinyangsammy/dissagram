@@ -64,17 +64,22 @@ Get started right here: ([Dissagram](https://dissagram-75687e7c9019.herokuapp.co
 <br>
 <br>
 
+
 # Purpose & Value
 
-Dissagram exists for a very specific, very human reason: sometimes the Fake Guru charging £400 for a silence retreat, the Gym Narcissist filming curls in a public walkway, or the LinkedIn thought-leader turning redundancy into a "growth chapter" deserves a beautifully crafted verbal warning.
+Dissagram exists for a very specific, very human reason: sometimes the Fake Guru charging £400 for a silence retreat, the Gym Narcissist filming curls in a public walkway, or the LinkedIn thought-leader turning redundancy into a "growth chapter" deserves a beautifully crafted verbal takedown.
+
+At its heart, Dissagram turns everyday irritation into collectible comedy. The idea grew from the familiar satisfaction of opening card packs, discovering strange characters, comparing favourites, chasing missing pieces and laughing at the ridiculous personalities everyone recognises but cannot always openly call out.
 
 Rather than leaving users to improvise insults in the emotional fog of mild-to-severe irritation, Dissagram gives them a curated roast arsenal: professionally written diss lines, illustrated archetype cards, distinctive delivery voices and premium comedy extras — all assembled into a shareable Diss in under two minutes.
 
 The value proposition is threefold:
 
-- **For the user** — a funny, satisfying, low-stakes creative outlet, with a freemium structure that lets them try the experience before unlocking the full roster of archetypes, roast styles and premium categories.
-- **For the community** — a public Roast Feed where individual Disses become a shared, crowd-sourced pile-on against instantly recognisable archetypes.
-- **For the business model** — one-off pack purchases keep the barrier to entry low, while gifting gives users a simple reason to bring someone else into the joke.
+- **For the user** — a funny, satisfying, low-stakes creative outlet, with a freemium structure that lets them try the experience before unlocking the full roster of archetypes, roast styles and premium categories. Dissagram also taps into the nostalgia of collectible card packs: unlocking new characters, discovering new roast material and building a growing personal collection. Future versions will expand this through rotating monthly content, repeat-swapping and collection-completion features.
+
+- **For the community** — a public Roast Feed where individual Disses become a shared, crowd-sourced pile-on against instantly recognisable archetypes. Future community features will allow users to suggest their own archetypes, roast styles and diss lines, with voting helping decide which ideas enter the official Dissagram universe. Planned leaderboards and competitions will also give users a reason to become the most prolific, creative and fearsome Dissers in the arena.
+
+- **For the business model** — one-off pack purchases keep the barrier to entry low, while gifting gives users a simple reason to bring someone else into the joke. The collectible structure also creates room for future monthly drops, seasonal packs and larger spin-offs, including a physical board/card game with crossover potential between the digital and analogue versions of Dissagram. Longer-term, the archetypes could also support wider comedy content, such as animated shorts or a mockumentary-style series following their chaotic little lives beyond the cards.
 
 <br>
 <br>
@@ -1299,16 +1304,17 @@ To clone this repository:
 
 ## Media
 
+-   Icons: [Font Awesome](https://fontawesome.com/).
+
 -   The colour palette was generated using [Coolors](https://coolors.co/).
+
+-   Fonts: [Google Fonts](https://fonts.google.com/) — Bangers, DM Serif Display, Lato.
 
 -   All images and artwork on this site were created by yinyangsammy, using original concepts and iterative collaboration with AI art tools, predominantly [ChatGPT](https://chatgpt.com/).
 
-- Icons: [Font Awesome](https://fontawesome.com/).
-- Fonts: [Google Fonts](https://fonts.google.com/) — Bangers, DM Serif Display, Lato.
-
 ## Content
 
-- All diss lines, archetype copy, roast style personas and site copy were written by the developer.
+-   All diss lines, archetype copy, roast style personas and site copy were written by yinyangsammy, the developer, and will keep being improved upon each iteration.
 
 <br>
 
