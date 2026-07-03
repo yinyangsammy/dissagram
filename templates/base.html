@@ -9,24 +9,11 @@
     <meta name="description" content="{% block meta_description %}Dissagram — professional diss delivery for every occasion.{% endblock %}">
     <title>{% block title %}Dissagram 🔥{% endblock %}</title>
 
-    <!-- Preload hero for home page only -->
-    {% if request.resolver_match.url_name == 'home' %}
-    <link rel="preload" as="image"
-        href="{% static 'images/dissagram-home-hero-mob.webp' %}"
-        media="(max-width: 768px)">
-    <link rel="preload" as="image"
-        href="{% static 'images/dissagram-home-hero-sharp.webp' %}"
-        media="(min-width: 769px)">
-    {% endif %}
-
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Font Awesome -->
-    <!-- Font Awesome — load normally, not deferred -->
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -531,7 +518,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </footer>
 
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js " defer></script>
 
 {% block extra_js %}{% endblock %}
 
