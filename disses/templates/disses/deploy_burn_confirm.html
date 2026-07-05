@@ -181,9 +181,9 @@
     <!-- WARNING -->
     <div class="deploy-warning">
         <strong>⚠️ HEADS UP</strong>
-        Once deployed, your burn appears on the public Roast Feed.
+        Once unleashed, your Roast appears on the public Roast Feed.
         Other users can see it. You can recall it at any time
-        from the diss detail page.
+        from your My Disses or My Roasts page.
     </div>
 
     <!-- ACTIONS -->
@@ -194,7 +194,7 @@
             {% csrf_token %}
             <input type="hidden" name="action" value="deploy">
             <button type="submit" class="btn-fire-burn">
-                🔥 FIRE THE BURN
+                🔥 UNLEASH THE ROAST
             </button>
         </form>
         <a href="{% url 'disses:diss_detail' diss.pk %}"
