@@ -375,23 +375,23 @@ Dissagram is fully responsive across mobile, tablet and desktop screen sizes, wi
 
 -   ## Homepage
 
-<h3 align="center"><img src="static/readme/wireframe-home-best.png"></h3>
+<h3 align="center"><img src="static/readme/wireframe-home.png"></h3>
 
 -   ## How It Works
 
-<h3 align="center"><img src="static/readme/wireframe-how-best.png"></h3>
+<h3 align="center"><img src="static/readme/wireframe-how.png"></h3>
 
 -   ## Build Your Diss
 
-<h3 align="center"><img src="static/readme/wireframe-form-best.png"></h3>
+<h3 align="center"><img src="static/readme/wireframe-form.png"></h3>
 
 -   ## Roast Feed
 
-<h3 align="center"><img src="static/readme/wireframe-feed-best.png"></h3>
+<h3 align="center"><img src="static/readme/wireframe-feed.png"></h3>
 
 -   ## Get Your Pack
 
-<h3 align="center"><img src="static/readme/wireframe-store-best.jpg"></h3>
+<h3 align="center"><img src="static/readme/wireframe-store.jpg"></h3>
 
 <br>
 <br>

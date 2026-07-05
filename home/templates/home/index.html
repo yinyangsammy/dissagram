@@ -36,6 +36,134 @@
     box-shadow: 0 14px 34px rgba(255, 90, 31, 0.32);
 }
 
+body.home-page .roast-feed-btn {
+    color: #f2f2f2 !important;
+    background:
+        linear-gradient(
+            135deg,
+            #2f3438 0%,
+            #151719 42%,
+            #3f454a 55%,
+            #101112 100%
+        ) !important;
+        color: #ffffff !important;
+    background:
+        linear-gradient(
+            135deg,
+            #444b50 0%,
+            #191b1e 38%,
+            #5b6369 55%,
+            #121416 100%
+        ) !important;
+        color: #fff !important;
+    border: 1px solid rgba(220, 220, 220, 0.45) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.75),
+        0 0 14px rgba(255, 255, 255, 0.06);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+     background: linear-gradient(
+            135deg,
+             #fcf9f1 0%,
+             #ffffff 24%,
+             #5b6369 55%
+             #5b6369 100%
+        ) !important;;
+        background: linear-gradient( 135deg, #2f3030 0%, #40444a 38%, #414547 55%, #494a4b 100% ) !important;
+        background: linear-gradient( 135deg, #2f3030 0%, #40444a 38%, #585c5e 55%, #787a7c 100% ) !important;
+    border-color: #111 !important;
+    font-size: 1.2rem;
+    text-shadow: none !important;
+    box-shadow: none;
+}
+
+body.home-page .roast-feed-btn:hover,
+body.home-page .roast-feed-btn:focus {
+    color: #f2f2f2 !important;
+    background:
+        linear-gradient(
+            135deg,
+            #2f3438 0%,
+            #151719 42%,
+            #3f454a 55%,
+            #101112 100%
+        ) !important;
+    background: #ffffff !important;
+    color: #111 !important;
+    font-weight: 550;
+    text-shadow: none !important;
+    border: 1px solid #ffffff !important;
+    box-shadow: none;
+}
+
+body.home-page .how-it-works-btn {
+    color: #fff !important;
+    background:
+        linear-gradient(
+            135deg,
+            #ff3b4f 0%,
+            #dc3545 42%,
+            #b31828 100%
+        ) !important;
+        background:
+        linear-gradient(
+            135deg,
+            #ff5265 0%,
+            #e33345 38%,
+            #8f121f 100%
+        ) !important;
+    border: 1px solid rgba(255, 90, 105, 0.75) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 0 12px rgba(220, 53, 69, 0.18);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+    text-shadow: none;
+    box-shadow: none !important;
+    border: none !important;
+    font-size: 1.2rem;
+}
+
+body.home-page .how-it-works-btn:hover,
+body.home-page .how-it-works-btn:focus {
+    color: #d42536 !important;
+    background: #fff !important;
+    border-color: #d42536!important;
+    text-shadow: none !important;
+    font-weight: 550;
+    box-shadow:none !important;
+}
+
+body.home-page .manifesto-section {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+body.home-page .hero-tagline {
+    margin-top: 5.5rem !important;
+    margin-bottom: 4.5rem !important;
+}
+
+body.home-page .hero-tagline {
+    display: inline-block;
+    color: #f4f4f4;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.16) 0%,
+            rgba(55, 60, 64, 0.88) 18%,
+            rgba(18, 20, 22, 0.96) 48%,
+            rgba(80, 86, 92, 0.72) 62%,
+            rgba(14, 15, 17, 0.96) 100%
+        );
+    border: 1px solid rgba(230, 230, 230, 0.22);
+    border-radius: 12px;
+    padding: 0.7rem 1.2rem;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.75),
+        0 0 18px rgba(255, 255, 255, 0.05);
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.85);
+}
+
 </style>
 {% endblock %}
 
@@ -48,6 +176,15 @@
 
     <div class="hero-content container">
 
+       
+
+    </div>
+
+</section>
+
+<section class="manifesto-section">
+
+    <div class="container text-center">
 
         <h2 class="hero-tagline">
     <span class="tagline-line">
@@ -64,16 +201,6 @@
         <i class="fa-solid fa-fire"></i>
     </span>
 </h2>
-
-       
-
-    </div>
-
-</section>
-
-<section class="manifesto-section">
-
-    <div class="container text-center">
 
         <p>
             You can't diss your boss . . .
@@ -116,7 +243,7 @@
          <br>
 
          <div class="hero-buttons">
-            <a href="{% url 'home:how_it_works' %}" class="btn btn-danger">
+            <a href="{% url 'home:how_it_works' %}" class="btn btn-danger how-it-works-btn">
                 How It Works 🎯
             </a>
 
@@ -132,7 +259,7 @@
     </a>
     {% endif %}
 
-            <a href="{% url 'roasts:roast_feed' %}" class="btn btn-outline-light">
+            <a href="{% url 'roasts:roast_feed' %}" class="btn btn-outline-light roast-feed-btn">
                 Check Roast Feed 💀
             </a>
         </div>

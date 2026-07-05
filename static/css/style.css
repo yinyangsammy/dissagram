@@ -70,10 +70,10 @@ font-size: 2.2rem;
 
     background:
         linear-gradient(
-            rgba(0,0,0,0.45),
-            rgba(0,0,0,0.45)
+            rgba(0,0,0,0.2),
+            rgba(0,0,0,0.1)
         ),
-        url("../images/dissagram-home-hero.webp");
+        url("../images/home-hero-final-sharp.webp");
 
     background-size: cover;
     background-position: center;
@@ -85,8 +85,25 @@ font-size: 2.2rem;
 
 @media (max-width: 768px) {
     .hero-section {
-        background-image: url("../images/dissagram-home-hero-mob.webp");
+         position: relative;
+    min-height: 150vh;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,0.2),
+            rgba(0,0,0,0.1)
+        ),
+        url("../images/dissagram-home-hero-mob.webp");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
     }
+
+    
 }
 
 .hero-content {
@@ -1191,9 +1208,9 @@ body.home-page .hero-overlay {
     position: absolute;
     inset: 0;
     z-index: 1;
-    background:
-        radial-gradient(circle at center, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.58)),
-        linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.52));
+     background:
+            radial-gradient(circle at center, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.28)),
+            linear-gradient(rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.28));
     pointer-events: none;
 }
 
@@ -1241,9 +1258,18 @@ body.home-page .hero-tagline i {
 
      body.home-page .hero-overlay {
         background:
-            radial-gradient(circle at center, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.28)),
-            linear-gradient(rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.28));
+            radial-gradient(circle at center, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02)),
+            linear-gradient(rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02));
     }
+      body.home-page .hero-overlay {
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.0)), linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+  }
+  
+
+  body.home-page .hero-overlay {
+    background: linear-gradient( to top, rgba(0, 0, 0, 0.58) 0%, rgba(0, 0, 0, 0.29) 8%, rgba(0, 0, 0, 0.16) 20%, rgba(0, 0, 0, 0.04) 28%, rgba(0, 0, 0, 0) 33% );
+  }
+
 }
 
 
@@ -1255,6 +1281,12 @@ body.home-page .hero-tagline i {
 
     body.home-page .hero-content {
         min-height: 52svh;
+    }
+
+      body.home-page .hero-overlay {
+        background:
+            radial-gradient(circle at center, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.28)),
+            linear-gradient(rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.28));
     }
 }
 
@@ -1444,7 +1476,7 @@ body.home-page .hero-tagline {
 /* FINAL HERO TAGLINE PANEL TRIM */
 body.home-page .hero-tagline {
     width: fit-content !important;
-    max-width: min(92vw, 680px) !important;
+    max-width: min(150vw, 1000px) !important;
 
     padding: clamp(0.45rem, 1vw, 0.75rem)
              clamp(0.75rem, 2vw, 1.25rem) !important;
@@ -1488,6 +1520,394 @@ body.home-page .hero-tagline .tagline-line {
 
 body.home-page .hero-tagline .tagline-line i {
     flex: 0 0 auto;
+}
+
+/* =====================================================
+   HOME MANIFESTO POSITION PATCH
+   Brings the manifesto copy closer to the hero.
+===================================================== */
+
+body.home-page .manifesto-section {
+    padding-top: clamp(2rem, 4vw, 3.5rem);
+    padding-bottom: clamp(5rem, 8vw, 8rem);
+}
+
+body.home-page .manifesto-section p {
+    margin-top: 0;
+    margin-bottom: 1.6rem;
+}
+
+/* =====================================================
+   HOME MANIFESTO TAGLINE
+   Moves slogan from hero overlay into manifesto intro.
+===================================================== */
+
+body.home-page .hero-content {
+    display: none;
+}
+
+body.home-page .manifesto-tagline {
+    width: min(100%, 760px);
+    margin: 0 auto clamp(2.5rem, 5vw, 4rem);
+    padding: clamp(0.85rem, 2vw, 1.35rem);
+    font-size: clamp(1.85rem, 4.2vw, 4rem);
+    line-height: 1.2;
+    font-weight: 700;
+    text-align: center;
+    color: #f0f2f5;
+    text-shadow: 2px 2px 0 #000;
+    background: rgba(18, 18, 18, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 14px;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+body.home-page .manifesto-tagline i {
+    font-size: 0.86em;
+    vertical-align: middle;
+}
+
+body.home-page .manifesto-section {
+    padding-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+
+/* =====================================================
+   FINAL HOME HERO / MANIFESTO SPACING
+   Pulls manifesto higher while keeping clean breathing gaps.
+===================================================== */
+
+/* Shorten the hero section so the next section starts higher */
+body.home-page .hero-section {
+    min-height: clamp(500px, 58vw, 760px) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    background-position: center top !important;
+}
+
+/* Keep a deliberate gap after the hero image */
+body.home-page .manifesto-section {
+    padding-top: clamp(2rem, 3.5vw, 3.5rem) !important;
+    padding-bottom: clamp(5rem, 8vw, 8rem) !important;
+}
+
+/* Slogan sits clearly below image, but not miles away */
+body.home-page .manifesto-tagline {
+    margin-top: 0 !important;
+    margin-bottom: clamp(1.6rem, 3vw, 2.4rem) !important;
+
+    box-shadow:
+        0 0 16px rgba(255, 69, 0, 0.16),
+        0 0 30px rgba(255, 172, 43, 0.08),
+        0 12px 30px rgba(0, 0, 0, 0.42);
+}
+
+/* Good gap between slogan and first manifesto line */
+body.home-page .manifesto-section p:first-of-type {
+    margin-top: 0 !important;
+}
+
+/* Consistent spacing between manifesto lines */
+body.home-page .manifesto-section p {
+    margin-bottom: 1.45rem !important;
+}
+
+/* ── Scale h2, h1 logo and buttons below 1050px only ── */
+@media (max-width: 1050px) {
+
+    body.home-page .manifesto-section h2 {
+        font-size: clamp(1.8rem, 6vw, 3.5rem) !important;
+    }
+
+    body.home-page .hero-logo {
+        font-size: clamp(2rem, 7vw, 4rem) !important;
+    }
+
+    body.home-page .hero-buttons {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+    }
+
+    body.home-page .hero-buttons .btn,
+    body.home-page .hero-buttons .hero-cta-main {
+        width: min(100%, 340px) !important;
+        text-align: center !important;
+        justify-content: center !important;
+    }
+}
+
+/* ── 900px and below: tighten h2 + h1 spacing ── */
+@media (max-width: 900px) {
+    body.home-page .manifesto-section h2 {
+        font-size: clamp(1.6rem, 5.5vw, 2.8rem) !important;
+        margin-top: 1.5rem !important;
+    }
+
+    body.home-page .hero-logo {
+        font-size: clamp(1.8rem, 6vw, 3rem) !important;
+    }
+}
+
+/* ── 595px and below: reduce button height + padding ── */
+@media (max-width: 595px) {
+    body.home-page .hero-buttons .btn,
+    body.home-page .hero-buttons .hero-cta-main {
+        padding: 10px 20px !important;
+        font-size: 1rem !important;
+        width: min(100%, 280px) !important;
+    }
+
+    body.home-page .manifesto-section h2 {
+        font-size: clamp(1.4rem, 7vw, 2rem) !important;
+    }
+
+    body.home-page .hero-logo {
+        font-size: clamp(1.6rem, 8vw, 2.5rem) !important;
+    }
+}
+
+
+/* =====================================================
+   FINAL HOME HERO / MANIFESTO SPACING
+   Pulls manifesto higher while keeping clean breathing gaps.
+===================================================== */
+
+/* Shorten the hero section so the next section starts higher */
+body.home-page .hero-section {
+    min-height: clamp(500px, 58vw, 760px) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    background-position: center top !important;
+}
+
+/* Keep a deliberate gap after the hero image */
+body.home-page .manifesto-section {
+    padding-top: clamp(2rem, 3.5vw, 3.5rem) !important;
+    padding-bottom: clamp(5rem, 8vw, 8rem) !important;
+}
+
+/* Slogan sits clearly below image, but not miles away */
+body.home-page .manifesto-tagline {
+    margin-top: 0 !important;
+    margin-bottom: clamp(1.6rem, 3vw, 2.4rem) !important;
+
+    box-shadow:
+        0 0 16px rgba(255, 69, 0, 0.16),
+        0 0 30px rgba(255, 172, 43, 0.08),
+        0 12px 30px rgba(0, 0, 0, 0.42);
+}
+
+/* Good gap between slogan and first manifesto line */
+body.home-page .manifesto-section p:first-of-type {
+    margin-top: 0 !important;
+}
+
+/* Consistent spacing between manifesto lines */
+body.home-page .manifesto-section p {
+    margin-bottom: 1.45rem !important;
+}
+
+/* ── Scale h2, h1 logo and buttons below 1050px only ── */
+@media (max-width: 1050px) {
+
+    body.home-page .manifesto-section h2 {
+        font-size: clamp(1.8rem, 6vw, 3.5rem) !important;
+    }
+
+    body.home-page .hero-logo {
+        font-size: clamp(2rem, 7vw, 4rem) !important;
+    }
+
+    body.home-page .hero-buttons {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+    }
+
+    body.home-page .hero-buttons .btn,
+    body.home-page .hero-buttons .hero-cta-main {
+        width: min(100%, 340px) !important;
+        text-align: center !important;
+        justify-content: center !important;
+    }
+}
+
+/* ── 900px and below: tighten h2 + h1 spacing ── */
+@media (max-width: 900px) {
+    body.home-page .manifesto-section h2 {
+        font-size: clamp(1.6rem, 5.5vw, 2.8rem) !important;
+        margin-top: 3.5rem !important;
+    }
+
+    body.home-page .hero-logo {
+        font-size: clamp(1.8rem, 6vw, 3rem) !important;
+    }
+}
+
+/* ── 595px and below: reduce button height + padding ── */
+@media (max-width: 595px) {
+    body.home-page .hero-buttons .btn,
+    body.home-page .hero-buttons .hero-cta-main {
+        padding: 10px 20px !important;
+        font-size: 1rem !important;
+        width: min(100%, 280px) !important;
+    }
+
+    body.home-page .manifesto-section h2 {
+        font-size: clamp(1.4rem, 7vw, 2rem) !important;
+    }
+
+    body.home-page .hero-logo {
+        font-size: clamp(1.6rem, 8vw, 2.5rem) !important;
+    }
+}
+
+/* =====================================================
+   DEFINITIVE HERO + TAGLINE FIX
+   Must sit at the bottom of style.css to win all battles
+===================================================== */
+
+/* 1. Hero always shows full image — no cropping ever */
+body.home-page .hero-section {
+    height: auto !important;
+    min-height: unset !important;
+    max-height: none !important;
+    padding: 0 !important;
+    aspect-ratio: 1448 / 1086 !important; /* ← replace with YOUR image dimensions */
+    background-size: cover !important;
+    background-position: top center !important;
+}
+
+/* 2. Hero content is empty — hide it cleanly */
+body.home-page .hero-content {
+    display: none !important;
+}
+
+/* 3. No gap between image and tagline */
+body.home-page .manifesto-section {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* 4. Tagline: exact equal gap above AND below, every screen size */
+body.home-page .hero-tagline {
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+    text-transform: capitalize !important;
+}
+
+/* ── Under 768px: much smaller tagline ── */
+@media (max-width: 768px) {
+
+    body.home-page .hero-tagline {
+        font-size: clamp(0.75rem, 3.5vw, 1rem) !important;
+        padding: 0.75rem 0.75rem !important;
+        margin-top: 0.75rem !important;
+        margin-bottom: 0.75rem !important;
+        max-width: 92vw !important;
+        white-space: normal !important;
+        line-height: 1.3 !important;
+    }
+
+    body.home-page .hero-tagline .tagline-line {
+        white-space: normal !important;
+        word-break: break-word !important;
+        gap: 0.35rem !important;
+    }
+
+    body.home-page .hero-tagline .tagline-divider {
+        margin: 0.25rem auto !important;
+    }
+
+    body.home-page .manifesto-section p {
+        font-size: clamp(0.9rem, 3.8vw, 1.15rem) !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    body.home-page .manifesto-section h2 {
+        font-size: clamp(1.4rem, 6.5vw, 2rem) !important;
+    }
+
+    body.home-page .hero-logo {
+        font-size: clamp(1.5rem, 7.5vw, 2.5rem) !important;
+    }
+}
+
+/* ── Under 768px: much smaller tagline ── */
+@media (max-width: 1050px) {
+
+        body.home-page .hero-tagline .tagline-line {
+        font-size: clamp(0.75rem, 3.5vw, 1rem) !important;
+        padding: 0.5rem 0.65rem !important;
+        margin-top: 0.75rem !important;
+        margin-bottom: 0.75rem !important;
+        max-width: 92vw !important;
+        white-space: normal !important;
+        line-height: 1.3 !important;
+    }
+
+    body.home-page .hero-tagline .tagline-line {
+        white-space: normal !important;
+        word-break: break-word !important;
+        gap: 0.35rem !important;
+    }
+
+    body.home-page .hero-tagline .tagline-divider {
+        margin: 0.25rem auto !important;
+    }
+
+    body.home-page .manifesto-section p {
+        font-size: clamp(0.9rem, 3.8vw, 1.15rem) !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    body.home-page .manifesto-section h2 {
+        font-size: clamp(1.4rem, 6.5vw, 2rem) !important;
+    }
+
+    body.home-page .hero-logo {
+        font-size: clamp(1.5rem, 7.5vw, 2.5rem) !important;
+    }
+}
+
+/* ── Buttons: 3-in-a-row above 480px, stack only on small phones ── */
+@media (min-width: 481px) and (max-width: 1050px) {
+    body.home-page .hero-buttons {
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important;
+        gap: 0.6rem !important;
+    }
+
+    body.home-page .hero-buttons .btn,
+    body.home-page .hero-buttons .hero-cta-main {
+        width: auto !important;
+        min-width: unset !important;
+        padding: 10px 16px !important;
+        font-size: clamp(0.8rem, 2vw, 1.1rem) !important;
+        white-space: nowrap !important;
+    }
+}
+
+/* ── Under 480px: stack vertically, full width ── */
+@media (max-width: 480px) {
+    body.home-page .hero-buttons {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0.6rem !important;
+    }
+
+    body.home-page .hero-buttons .btn,
+    body.home-page .hero-buttons .hero-cta-main {
+        width: min(100%, 280px) !important;
+        padding: 10px 16px !important;
+        font-size: 1rem !important;
+        text-align: center !important;
+        justify-content: center !important;
+    }
 }
 
 
