@@ -391,7 +391,7 @@ Dissagram is fully responsive across mobile, tablet and desktop screen sizes, wi
 
 -   ## Get Your Pack
 
-<h3 align="center"><img src="static/readme/wireframe-store.jpg"></h3>
+<h3 align="center"><img src="static/readme/wireframe-store.png"></h3>
 
 <br>
 <br>
