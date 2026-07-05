@@ -172,7 +172,7 @@ The value proposition is threefold:
 
     The homepage opens with a bold, fire-themed hero image that immediately sets the tone: playful, confrontational and ready to roast. The visual leads users straight into the main call to action.
 
-    <h3 align="center"><img src="static/readme/dissagram-home-hero.png"></h3>
+    <h3 align="center"><img src="static/readme/home-hero-final.png"></h3>
 
     ### Archetype Trading Cards
 
