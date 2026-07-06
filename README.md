@@ -170,7 +170,7 @@ The value proposition is threefold:
 
     ### Homepage Hero
 
-    The homepage opens with a bold, fire-themed hero image that immediately sets the tone: playful, confrontational and ready to roast. The visual leads users straight into the main call to action.
+    The homepage opens with a bold, colourful hero image that immediately sets the tone: playful, confrontational and ready to roast. It features a dartboard surrounded by teaser versions of the archetype cards the user will get to diss. The visual leads users straight into the main call to action below.
 
     <h3 align="center"><img src="static/readme/home-hero-final.png"></h3>
 
@@ -182,7 +182,7 @@ The value proposition is threefold:
 
     ### Roast Style Avatars
 
-    Each Roast Style (Shakespearean Savage, Battle Rapper, Haughty Headmistress, etc.) has its own circular persona avatar, turning "tone of voice" into something visual, characterful and instantly recognisable throughout the builder and published Diss cards.
+    Each Roast Style (Shakespearean Savage, Battle Rapper, Haughty Headmistress, etc.) has its own circular persona avatar, turning "tone of voice" into something visual, characterful and instantly recognizable throughout the builder and published Diss cards.
 
     <h3 align="center"><img src="static/readme/roast-avatars.png"></h3>
 
@@ -1135,6 +1135,12 @@ The following bugs were identified and fixed during development:
 | Published itinerary not updating after trip edit | The `Itinerary` object was only written once at publication time and never resynced when the source `Trip` was edited | Added a sync block at the end of `trip_edit` that detects a linked itinerary via `trip.published_itineraries.first()`, updates its fields and rebuilds all items from the current trip state |
 | `DissLine` admin fields referenced non-existent fields after model refactor | `disses/admin.py` still listed `opener`, `trait`, `ending`, `full_line` as inline fields after the `DissLine` model was refactored to use `content`, `line_type` and `status` | Updated `DissLineAdmin` to reflect the new field names; replaced `DissLineInline` on `Diss` with a standalone `DissLineAdmin` since lines are now a shared library rather than children of a specific diss |
 | `Disser` model import error in `dissers/admin.py` | `Disser` was imported and registered in admin before its model definition had been added to `dissers/models.py` | Added the `Disser` class to `dissers/models.py` ensuring it appears after `RoastStyle` which it references as a ForeignKey; re-ran migrations |
+| Contact form returned `500` on Heroku but worked locally | Heroku was running the current `ContactMessage` model code, but the external PostgreSQL table still had an older schema from a previously applied `0001_initial` migration (`created_at`, no `reason`, no `is_resolved`, no `user_id`) | Confirmed the mismatch by comparing Django model fields against live database columns in the Heroku shell; created a safe `0002` database-only repair migration using `SeparateDatabaseAndState` to rename `created_at` to `created_on` and add the missing `reason`, `is_resolved` and `user_id` columns |
+| Contact Message admin page returned `500` on Heroku | The admin list and detail views referenced current model fields (`reason`, `is_resolved`, `created_on`) that did not yet exist in the live Heroku PostgreSQL table | Applied the same `0002_sync_contactmessage_schema` repair migration on Heroku, then verified with `showmigrations` and direct database column inspection that the live table matched the current model |
+| Heroku showed `No planned migration operations` even after the migration was committed locally | The new migration existed only in the local Git commit and had not yet been deployed to Heroku; Heroku could not plan a migration file it had not received | Added/restored the Heroku Git remote, pushed the committed migration to Heroku, then re-ran `python manage.py migrate contact --plan` before applying the migration |
+| Heroku `pg:backups:capture` returned “app has no databases” | The app was using an external Neon PostgreSQL database supplied through `DATABASE_URL`, not a Heroku Postgres add-on, so Heroku's own Postgres backup command did not apply | Verified the active database engine and host through Django's `connection.settings_dict`; used direct SQL checks in the Heroku shell instead of Heroku Postgres backup tooling |
+| Existing applied migration did not update after deploying changed `0001_initial.py` | Django tracks migrations by app/name in the `django_migrations` table and does not re-run an already-applied migration just because the file contents later changed | Left `0001_initial.py` untouched and created a new forward-only `0002` repair migration; documented the rule that once a migration has reached production, future schema changes should always be made with a new migration |
+
 
 <br>
 
@@ -1146,7 +1152,7 @@ The following bugs were identified and fixed during development:
 | Comments, flame ratings and leaderboards are not yet implemented | Deliberately deferred to Dissagram v2.0 — see [Future Features](#future-features) |
 | Deploy Burn count limits are not yet enforced at model level | The `deploy_burn_count` field exists and is displayed, but enforcement is planned for v2.0 |
 | Gift a Pack currently requires the recipient to have an existing Dissagram account | Future enhancement will allow gifting by email and invite non-registered recipients |
-| Heroku dyno cold start causes FCP/LCP scores of 3.8–4.7s on PageSpeed Insights mobile | The free/eco Heroku dyno spins down after 30 minutes of inactivity; the first request after sleep includes dyno wake-up time which PageSpeed measures as part of page load. Total Blocking Time is 0ms confirming the issue is server response not render blocking. Mitigated with UptimeRobot ping every 25 minutes |
+| Heroku dyno cold start causes FCP/LCP scores of 3.8–4.7s on PageSpeed Insights mobile | The free/eco Heroku dyno spins down after 30 minutes of inactivity; the first request after sleep includes dyno wake-up time which PageSpeed measures as part of page load. Total Blocking Time is 0ms confirming the issue is server response not render blocking. Mitigated with UptimeRobot ping every 25 minutes | Occasionally this results in a 500 server error - please refresh the page until th dyno is up and running again.
 
 <br>
 <br>
