@@ -140,7 +140,7 @@ The value proposition is threefold:
 
 -   ## Colour Scheme
 
-    -   Dissagram's palette is built around a near-black base with hot orange, ember-gold and crimson accents — a late-night roast-battle look: fiery, bold and just dangerous enough, while still staying clean and readable. Off-white body text keeps longer sections comfortable against the dark background.
+    -   Dissagram's palette is built around a near-black base with hot orange, ember-gold and crimson accents — a late-night roast-battle look: fiery, bold and just dangerous enough, while still staying clean and readable. Off-white body text keeps longer sections comfortable against the dark background. RGB blues and greens are used to differentiate the packs, orders and payments pages, whilst adhering to the retro 80s & 90s arcade theme.  
 
     <h3 align="center"><img src="static/readme/palette.png"></h3>
 
